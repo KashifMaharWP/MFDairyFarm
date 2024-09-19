@@ -1,6 +1,8 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
+import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TextFieldWidget1 extends StatefulWidget {
   TextFieldWidget1(
@@ -30,7 +32,7 @@ class TextFieldWidget1State extends State<TextFieldWidget1> {
     return Material(
       elevation: 4,
       borderRadius: BorderRadius.circular(8),
-      color: Colors.white.withOpacity(0.92),
+      color: Colors.white,
       shadowColor: darkGreenColor.withOpacity(0.3),
       child: TextFormField(
         obscureText: widget.isPasswordField
@@ -43,6 +45,12 @@ class TextFieldWidget1State extends State<TextFieldWidget1> {
         controller: widget.widgetcontroller,
         decoration: InputDecoration(
           //prefixIcon: Icon(widget.widgeticon),
+          hintStyle:GoogleFonts.nunito(
+            textStyle: TextStyle(
+                color: lightBlackColor,
+                fontSize: paragraph-3
+            ),
+          ),
             suffixIcon: widget.isPasswordField
                 ? GestureDetector(
                 onTap: () {
@@ -57,7 +65,7 @@ class TextFieldWidget1State extends State<TextFieldWidget1> {
             hintText: widget.fieldName,
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: Colors.grey, width: 1))
+                borderSide:  BorderSide(color: greyGreenColor, width: 1))
           //label: Text(widget.fieldName),
         ),
         validator: (value) {

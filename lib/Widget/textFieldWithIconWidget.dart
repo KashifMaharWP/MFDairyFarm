@@ -30,7 +30,7 @@ class textFieldWithIconWidgetState extends State<textFieldWithIconWidget> {
     return Material(
       elevation: 4,
       borderRadius: BorderRadius.circular(8),
-      color: Colors.white.withOpacity(0.92),
+      color: Colors.white,
       shadowColor: darkGreenColor.withOpacity(0.3),
       child: TextFormField(
         obscureText: widget.isPasswordField

@@ -5,7 +5,6 @@ import 'package:dairyfarmflow/Screens/Home/Home.dart';
 import 'package:dairyfarmflow/Screens/Login/Screen/loginPage.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../Screens/Home/Home.dart';
 
 class myRoutes{
   static const String login="/login";
@@ -16,7 +15,7 @@ class myRoutes{
 
   static Map<String, WidgetBuilder> getRoutes(){
     return {
-      login: (context) => const loginPage(),
+      login: (context) => const LoginPage(),
       homePage: (context) =>  home(),
       dashboard: (context) =>  Dashboard(),
       animalRegistration: (context) => const animalRegistrationPage(),

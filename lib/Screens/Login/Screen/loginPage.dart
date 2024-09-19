@@ -1,7 +1,7 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
+import 'package:dairyfarmflow/Screens/Dashboard/Dashboard.dart';
 import 'package:dairyfarmflow/Widget/customRoundButton.dart';
-import 'package:dairyfarmflow/Widget/textFieldWidget1.dart';
 import 'package:dairyfarmflow/Widget/textFieldWithIconWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,14 +9,14 @@ import 'package:flutter/material.dart';
 import '../../../Class/textSizing.dart';
 import '../../../Widget/Text1.dart';
 
-class loginPage extends StatefulWidget {
-  const loginPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<loginPage> createState() => _loginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _loginPageState extends State<loginPage> {
+class _LoginPageState extends State<LoginPage>{
   TextEditingController email=TextEditingController();
   TextEditingController password=TextEditingController();
   bool isLoading=false;
@@ -30,14 +30,20 @@ class _loginPageState extends State<loginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: greyGreenColor,
-      body: SafeArea(
-        child: Column(
-          children: [
-            pageHeaderContainer(),
-            SizedBox(height:screenHeight/15,),
-            pageBodyContainer()
-          ],
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(image: AssetImage("lib/assets/mfBackground.png"),fit: BoxFit.cover)
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                pageHeaderContainer(),
+                SizedBox(height:screenHeight/15,),
+                pageBodyContainer(),
+              ],
+            ),
+          ),
         ),
       )
     );
@@ -56,38 +62,38 @@ class _loginPageState extends State<loginPage> {
   }
   
   Widget pageBodyContainer(){
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.all(header1),
-        width:double.infinity,
-        height: screenHeight/1.5,
-        decoration: BoxDecoration(
-            color: darkGreenColor,
-          borderRadius: BorderRadius.only(topLeft:Radius.circular(screenWidth/8),topRight: Radius.circular(screenWidth/8)),
-        ),
-        child: Column(
-          children: [
-            Text1(fontColor: whiteColor, fontSize: header1, text: "Sign In to MF Dairy"),
-            SizedBox(height: screenHeight/15,),
-            customFormLabel("Email"),
-            textFieldWithIconWidget(
-                widgetcontroller: email,
-                fieldName: AutofillHints.email,
-                widgeticon: Icons.email_sharp,
-                isPasswordField: false
-            ),
-            SizedBox(height: paragraph,),
-            customFormLabel("Password"),
-            textFieldWithIconWidget(
-                widgetcontroller: password,
-                fieldName: "password",
-                widgeticon: Icons.lock,
-                isPasswordField: true
-            ),
-            SizedBox(height: header1,),
-            customButton("Sign in")
-          ],
-        ),
+    return Container(
+      padding: EdgeInsets.all(header1),
+      width:double.infinity,
+      height: screenHeight/1.8,
+      decoration: BoxDecoration(
+          color: transGreenColor,
+        borderRadius: BorderRadius.only(topLeft:Radius.circular(screenWidth/8),topRight: Radius.circular(screenWidth/8)),
+      ),
+      child: Column(
+        children: [
+          Text1(fontColor: whiteColor, fontSize: header1, text: "Sign in"),
+          SizedBox(height: screenHeight/15,),
+          customFormLabel("Email"),
+          textFieldWithIconWidget(
+              widgetcontroller: email,
+              fieldName: AutofillHints.email,
+              widgeticon: Icons.email_sharp,
+              isPasswordField: false
+          ),
+          SizedBox(height: paragraph,),
+          customFormLabel("Password"),
+          textFieldWithIconWidget(
+              widgetcontroller: password,
+              fieldName: "password",
+              widgeticon: Icons.lock,
+              isPasswordField: true
+          ),
+          SizedBox(height: header1,),
+          customRoundedButton(title: "Sign in", on_Tap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
+          })
+        ],
       ),
     );
   }
@@ -106,33 +112,5 @@ class _loginPageState extends State<loginPage> {
     );
   }
 
-customButton(String title){
-    return  InkWell(
-        onTap: (){
-          isLoading=true;
-        },
-        splashColor: darkGreenColor,
-        child: Material(
-          elevation: 3,
-          borderRadius: BorderRadius.circular(20),
-          child: Container(
-            width: MediaQuery.of(context).size.width / 2,
-            height: MediaQuery.of(context).size.height / 17,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: greyGreenColor,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              title,
-              style: TextStyle(
-                  color: darkGreenColor,
-                  fontSize: paragraph,
-                  fontWeight: FontWeight.w400),
-            ),
-          ),
-        ),
-      );
-  }
 
 }

@@ -1,7 +1,14 @@
+import 'package:dairyfarmflow/Functions/customPopUp.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/AnimalRegistration/animalRegistrationPage.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/FeedEntry/feedEntryPage.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/WorkerRegistration/workerRegistrationPage.dart';
 import 'package:dairyfarmflow/Screens/SampleScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../../Class/colorPallete.dart';
+import '../../../Class/screenMediaQuery.dart';
+import '../../../Class/textSizing.dart';
+import '../../../Widget/Text1.dart';
 import '../../../Widget/customDashboardButton.dart';
 
 
@@ -18,48 +25,51 @@ class _AdminDashboardButtons extends State<AdminDashboardButtons> {
     return Expanded(
         child: GridView(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+              crossAxisCount: 3,
               mainAxisSpacing: 15,
               crossAxisSpacing: 15,
               mainAxisExtent: 110),
           children: [
-            CustomDashboardButton(
-                colors: Colors.orange,
-                btnName: "Add Animal",
-                customIcon: "lib/assets/cow.png",
-                ontap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => animalRegistrationPage()));
-
-                }),
-            CustomDashboardButton(
-                colors: Colors.pink,
-                btnName: "Add Feed",
-                customIcon: "lib/assets/wanda.png",
-                ontap: () {
-
-                }),
-
-            CustomDashboardButton(
-                colors: Colors.green,
-                btnName: "Dairy Record",
-                customIcon: "lib/assets/dairyfarm.png",
-                ontap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => sampleScreen(backgroundColor: Colors.deepOrange)));
-
-                }),
-            CustomDashboardButton(
-                colors: Colors.cyan,
-                btnName: "Medical Record",
-                customIcon: "lib/assets/medical.png",
-                ontap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => sampleScreen(backgroundColor: Colors.cyan)));
-                }),
-
+            viewContainer("Animal", "lib/assets/cowEntry.png",animalRegistrationPage(),screenHeight/2),
+            viewContainer("Wanda", "lib/assets/wanda.png",feedEntryPage(),screenHeight/3),
+            viewContainer("Worker", "lib/assets/farmWorker.png",workerRegistrationPage(),screenHeight/2),
           ],
         ),
       );
+  }
+
+  Widget viewContainer(String text, iconPath,Widget widget,double height){
+    return InkWell(
+      onTap: (){
+        customPopUp(context, widget,height);
+      },
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(paragraph),
+            width: screenWidth/5,
+            height: screenWidth/5,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(screenWidth/5),
+                boxShadow: [
+                  BoxShadow(
+                      color: greyGreenColor,
+                      offset: Offset(2, 2),
+                      blurRadius: 6
+                  ),
+                ]
+            ),
+            child: Center(
+                child: Image(image: AssetImage(iconPath),width: screenWidth/4,)
+            ),
+          ),
+
+          Text1(
+              fontColor: lightBlackColor,
+              fontSize: paragraph, text: text)
+        ],
+      ),
+    );
   }
 }

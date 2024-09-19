@@ -1,4 +1,5 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
+import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:dairyfarmflow/Widget/customRoundButton.dart';
@@ -17,18 +18,40 @@ class _animalRegistrationPageState extends State<animalRegistrationPage> {
   TextEditingController tagId=TextEditingController();
   TextEditingController purchasedPrice=TextEditingController();
   TextEditingController breadType=TextEditingController();
+  List<String> tagIDList=["1", "2", "3", "4"];
+  String? dropDownItem;
+  String animalIdDropDownValue="1";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body:Container(
+      backgroundColor: Colors.white,
+      body:SingleChildScrollView(
         child: Column(
           children: [
+            Text1(fontColor: darkGreenColor, fontSize: paragraph, text: "Register Animal"),
+            SizedBox(height: paragraph/6,),
+            Container(
+              margin: EdgeInsets.all(paragraph/6),
+              padding: EdgeInsets.only(right: 10,left: 10),
+              width: screenWidth,
+              height: screenHeight/16,
+              decoration: BoxDecoration(
+                border: Border.all(color: darkGreenColor, width: 1),
+                borderRadius: BorderRadius.all(Radius.circular(paragraph/6))
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text1(fontColor: lightBlackColor, fontSize: paragraph/1.2, text: "No Picture Selected"),
+                  Align(
+                      alignment: Alignment.centerRight,
+                      child: Icon(CupertinoIcons.camera_fill,color: darkGreenColor,size: header1*1.5,)),
+
+                ],
+              ),
+            ),
+            SizedBox(height: paragraph/2,),
             customForm(),
-            customRoundedButton(
-                title: "Save",
-                on_Tap: (){}
-            )
           ],
         ),
       )
@@ -36,7 +59,7 @@ class _animalRegistrationPageState extends State<animalRegistrationPage> {
   }
 
   Widget customForm(){
-    return Padding(padding: EdgeInsets.all(paragraph),
+    return Padding(padding: EdgeInsets.all(paragraph/6),
       child: Form(
         child: Container(
         child: Column(
@@ -44,10 +67,26 @@ class _animalRegistrationPageState extends State<animalRegistrationPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             customTextFormField("Animal Id",CupertinoIcons.tag_fill ),
-            TextFieldWidget1(
-                widgetcontroller: tagId,
-                fieldName: "Animal Id or Name",
-                isPasswordField: false
+            DropdownButtonFormField(
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                          width: 1,
+                          color: Colors.grey,
+                        ))),
+                value: animalIdDropDownValue,
+                items: tagIDList.map((String item){
+                  return DropdownMenuItem(
+                      value: item,
+                      child: Text(item)
+                  );
+                }).toList(),
+                onChanged: (String? newValue){
+                  setState(() {
+                    dropDownItem=newValue;
+                  });
+                }
             ),
             SizedBox(height: paragraph,),
             customTextFormField("Breed Type",CupertinoIcons.arrow_3_trianglepath),

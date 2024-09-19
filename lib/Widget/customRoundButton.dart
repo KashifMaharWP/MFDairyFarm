@@ -1,7 +1,8 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:flutter/material.dart';
-class customRoundedButton extends StatelessWidget {
+import 'package:google_fonts/google_fonts.dart';
+class customRoundedButton extends StatefulWidget {
   customRoundedButton(
       {super.key,
         required this.title,
@@ -12,9 +13,14 @@ class customRoundedButton extends StatelessWidget {
   VoidCallback on_Tap;
 
   @override
+  State<customRoundedButton> createState() => _customRoundedButtonState();
+}
+
+class _customRoundedButtonState extends State<customRoundedButton> {
+  @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: on_Tap,
+      onTap: widget.on_Tap,
       child: Material(
         elevation: 3,
         borderRadius: BorderRadius.circular(20),
@@ -27,12 +33,14 @@ class customRoundedButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(
-            title,
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: paragraph,
-                fontWeight: FontWeight.w400),
-          ),
+            widget.title,
+            style: GoogleFonts.nunito(
+              textStyle:TextStyle(
+                  color: Colors.white,
+                  fontSize: paragraph,
+                  fontWeight: FontWeight.w400),
+            ),
+            )
         ),
       ),
     );
