@@ -16,10 +16,10 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage>{
-  TextEditingController email=TextEditingController();
-  TextEditingController password=TextEditingController();
-  bool isLoading=false;
+class _LoginPageState extends State<LoginPage> {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -30,87 +30,92 @@ class _LoginPageState extends State<LoginPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage("lib/assets/mfBackground.png"),fit: BoxFit.cover)
-        ),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                pageHeaderContainer(),
-                SizedBox(height:screenHeight/15,),
-                pageBodyContainer(),
-              ],
-            ),
+        body: Container(
+      decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage("lib/assets/mfBackground.png"),
+              fit: BoxFit.cover)),
+      child: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              pageHeaderContainer(),
+              SizedBox(
+                height: screenHeight / 15,
+              ),
+              pageBodyContainer(),
+            ],
           ),
         ),
-      )
-    );
+      ),
+    ));
   }
-  Widget pageHeaderContainer(){
+
+  Widget pageHeaderContainer() {
     return Center(
       child: Container(
-        margin: EdgeInsets.only(top: screenHeight/5),
-        child: Image(
+          margin: EdgeInsets.only(top: screenHeight / 5),
+          child: Image(
             image: AssetImage("lib/assets/Logo.png"),
-          width: screenWidth/3,
-
-        )
-      ),
+            width: screenWidth / 3,
+          )),
     );
   }
-  
-  Widget pageBodyContainer(){
+
+  Widget pageBodyContainer() {
     return Container(
       padding: EdgeInsets.all(header1),
-      width:double.infinity,
-      height: screenHeight/1.8,
+      width: double.infinity,
+      height: screenHeight / 1.8,
       decoration: BoxDecoration(
-          color: transGreenColor,
-        borderRadius: BorderRadius.only(topLeft:Radius.circular(screenWidth/8),topRight: Radius.circular(screenWidth/8)),
+        color: transGreenColor,
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(screenWidth / 8),
+            topRight: Radius.circular(screenWidth / 8)),
       ),
       child: Column(
         children: [
           Text1(fontColor: whiteColor, fontSize: header1, text: "Sign in"),
-          SizedBox(height: screenHeight/15,),
+          SizedBox(
+            height: screenHeight / 15,
+          ),
           customFormLabel("Email"),
           textFieldWithIconWidget(
               widgetcontroller: email,
               fieldName: AutofillHints.email,
               widgeticon: Icons.email_sharp,
-              isPasswordField: false
+              isPasswordField: false),
+          SizedBox(
+            height: paragraph,
           ),
-          SizedBox(height: paragraph,),
           customFormLabel("Password"),
           textFieldWithIconWidget(
               widgetcontroller: password,
               fieldName: "password",
               widgeticon: Icons.lock,
-              isPasswordField: true
+              isPasswordField: true),
+          SizedBox(
+            height: header1,
           ),
-          SizedBox(height: header1,),
-          customRoundedButton(title: "Sign in", on_Tap: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
-          })
+          customRoundedButton(
+              title: "Sign in",
+              on_Tap: () {
+                print("Tapped");
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Dashboard()));
+              })
         ],
       ),
     );
   }
 
-  Widget customFormLabel(String text){
-    return  Row(
+  Widget customFormLabel(String text) {
+    return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text1(
-            fontColor: whiteColor,
-            fontSize: header6,
-            text: text
-        ),
+        Text1(fontColor: whiteColor, fontSize: header6, text: text),
       ],
     );
   }
-
-
 }

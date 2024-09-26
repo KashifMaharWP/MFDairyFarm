@@ -7,8 +7,8 @@ plugins {
 
 android {
     namespace = "com.example.dairyfarmflow"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    compileSdk = 33  // Replace with your compileSdkVersion, typically 33 for the latest version
+    ndkVersion = "21.4.7075529"  // Replace with the NDK version you are using
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -16,24 +16,19 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
+        jvmTarget = "1.8"
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.dairyfarmflow"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        minSdk = 21  // Replace with your minimum SDK version
+        targetSdk = 33  // Replace with your target SDK version
+        versionCode = 1  // Replace with the version code of your app
+        versionName = "1.0"  // Replace with the version name of your app
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.debug
         }
     }
