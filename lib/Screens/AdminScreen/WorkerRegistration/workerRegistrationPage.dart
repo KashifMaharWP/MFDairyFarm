@@ -24,19 +24,17 @@ class _workerRegistrationPageState extends State<workerRegistrationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Material(
-          color: Colors.white,
-          child:SingleChildScrollView(
-            child: Column(
-              children: [
-                Text1(fontColor: darkGreenColor, fontSize: paragraph, text: "Register Worker"),
-                SizedBox(height: paragraph/6,),
-                customForm(),
-              ],
-            ),
-          )
-      ),
+    return Material(
+        color: Colors.white,
+        child:SingleChildScrollView(
+          child: Column(
+            children: [
+              Text1(fontColor: darkGreenColor, fontSize: paragraph, text: "Register Worker"),
+              SizedBox(height: paragraph/6,),
+              customForm(),
+            ],
+          ),
+        )
     );
   }
 
@@ -68,7 +66,7 @@ class _workerRegistrationPageState extends State<workerRegistrationPage> {
                 customTextFormField("Password",Icons.lock ),
                 TextFieldWidget1(
                     widgetcontroller: password,
-                    fieldName: "Passwor",
+                    fieldName: "Password",
                     isPasswordField: true
                 ),
               ],

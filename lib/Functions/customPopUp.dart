@@ -11,7 +11,7 @@ customPopUp(BuildContext context, Widget widget,double height){
     backgroundColor: Colors.white,
     content: Container(
       width:screenWidth*0.85,
-      height: height,
+      constraints: BoxConstraints(maxHeight: height),
       child: Center(
         child: widget,
       ),

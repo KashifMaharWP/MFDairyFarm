@@ -1,9 +1,11 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/AnimalRecord/animalRecord.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/adminDashboard/adminDashboard.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/workerDashboard/workerDashboard.dart';
 import 'package:dairyfarmflow/Screens/Home/Home.dart';
+import 'package:dairyfarmflow/Screens/SampleScreen.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,13 +24,25 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.grey.shade100,
-           body: Column(
-      children: [
-        pageHeaderContainer(),
-        pageBodyContainer(),
-      ],
-    ),
+           body: LayoutBuilder(
+             builder: (context,constraints){
+               return SingleChildScrollView(
+                 child: ConstrainedBox(constraints: BoxConstraints(
+                   maxHeight: constraints.maxHeight
+                 ),
+                     child: Column(
+                       children: [
+                         pageHeaderContainer(),
+                         Expanded(child: pageBodyContainer()),
+                       ],
+                     ),
+                 ),
+               );
+             },
+
+           ),
     );
   }
 
@@ -111,10 +125,10 @@ class _DashboardState extends State<Dashboard> {
                   )
                 ]
               ),
-              child: Center(
-                child: Row(
-                  children: [
-                    Column(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         wrapCircleContainer("25", "Animal"),
@@ -128,46 +142,46 @@ class _DashboardState extends State<Dashboard> {
                         wrapCircleContainer("5", "Baby"),
                       ],
                     ),
-                    Container(
-                      height: screenHeight/4,
-                      width: 1,
-                      color: CupertinoColors.systemGrey6,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        wrapCircleContainer("200", "Wanda"),
-                        SizedBox(height: paragraph/4,),
-                        Container(
-                          height: 1,
-                          width: screenWidth/3.2,
-                          color: CupertinoColors.systemGrey6,
-                        ),
-                        SizedBox(height: paragraph/2,),
-                        wrapCircleContainer("12", "Vacinated"),
-                      ],
-                    ),
-                    Container(
-                      height: screenHeight/4,
-                      width: 1,
-                      color: CupertinoColors.systemGrey6,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        wrapCircleContainer("5", "Pregnent"),
-                        SizedBox(height: paragraph/4,),
-                        Container(
-                          height: 1,
-                          width: screenWidth/3.4,
-                          color: CupertinoColors.systemGrey6,
-                        ),
-                        SizedBox(height: paragraph/2,),
-                        wrapCircleContainer("3", "Sell"),
-                      ],
-                    )
-                  ],
-                ),
+                  ),
+                  Container(
+                    height: screenHeight/4,
+                    width: 1,
+                    color: CupertinoColors.systemGrey6,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      wrapCircleContainer("200", "Wanda"),
+                      SizedBox(height: paragraph/4,),
+                      Container(
+                        height: 1,
+                        width: screenWidth/3.2,
+                        color: CupertinoColors.systemGrey6,
+                      ),
+                      SizedBox(height: paragraph/2,),
+                      wrapCircleContainer("12", "Vacinated"),
+                    ],
+                  ),
+                  Container(
+                    height: screenHeight/4,
+                    width: 1,
+                    color: CupertinoColors.systemGrey6,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      wrapCircleContainer("5", "Pregnent"),
+                      SizedBox(height: paragraph/4,),
+                      Container(
+                        height: 1,
+                        width: screenWidth/3.4,
+                        color: CupertinoColors.systemGrey6,
+                      ),
+                      SizedBox(height: paragraph/2,),
+                      wrapCircleContainer("3", "Sell"),
+                    ],
+                  )
+                ],
               ),
             ),
       
@@ -178,29 +192,29 @@ class _DashboardState extends State<Dashboard> {
               children: [
                 Column(
                   children: [
-                    viewContainer("Animal", "lib/assets/cow.png"),
+                    viewContainer("Animal", "lib/assets/cow.png",AnimalRecord()),
                     SizedBox(height: paragraph,),
-                    viewContainer("Daily Record", "lib/assets/dairyfarm.png"),
+                    viewContainer("Daily Record", "lib/assets/dairyfarm.png",sampleScreen(backgroundColor: greyGreenColor)),
                   ],
                 ),
                 Column(
                   children: [
-                    viewContainer("Vacination", "lib/assets/medical.png"),
+                    viewContainer("Vacination", "lib/assets/medical.png",sampleScreen(backgroundColor: Colors.yellow)),
                     SizedBox(height: paragraph,),
-                    viewContainer("Unkown", "lib/assets/babyCow.jpg"),
+                    viewContainer("Unkown", "lib/assets/babyCow.jpg",sampleScreen(backgroundColor: Colors.red)),
                   ],
                 ),
                 Column(
                   children: [
-                    viewContainer("Milk(ltr)", "lib/assets/milk.png"),
+                    viewContainer("Milk(ltr)", "lib/assets/milk.png",sampleScreen(backgroundColor: Colors.pink)),
                     SizedBox(height: paragraph,),
-                    viewContainer("Wanda(kg)", "lib/assets/feed.png"),
+                    viewContainer("Wanda(kg)", "lib/assets/feed.png",sampleScreen(backgroundColor: Colors.purple)),
                   ],
                 )
               ],
             )
-
-
+      
+      
       
           ],
         ),
@@ -247,32 +261,37 @@ class _DashboardState extends State<Dashboard> {
 }
 
   //ViewContainer
-  Widget viewContainer(String text, iconPath){
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.all(paragraph),
-          width: screenWidth/5,
-          height: screenWidth/4.5,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(paragraph),
-              boxShadow: [
-                BoxShadow(
-                    color: greyGreenColor,
-                    offset: Offset(2, 2),
-                    blurRadius: 6
-                ),
-              ]
+  Widget viewContainer(String text, iconPath,Widget widget){
+    return InkWell(
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>widget));
+      },
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(paragraph),
+            width: screenWidth/5,
+            height: screenWidth/4.5,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(paragraph),
+                boxShadow: [
+                  BoxShadow(
+                      color: greyGreenColor,
+                      offset: Offset(2, 2),
+                      blurRadius: 6
+                  ),
+                ]
+            ),
+            child: Center(
+                child: Image(image: AssetImage(iconPath),width: screenWidth/8,)
+            ),
           ),
-          child: Center(
-              child: Image(image: AssetImage(iconPath),width: screenWidth/8,)
-          ),
-        ),
-        Text1(
-            fontColor: lightBlackColor,
-            fontSize: paragraph, text: text)
-      ],
+          Text1(
+              fontColor: lightBlackColor,
+              fontSize: paragraph, text: text)
+        ],
+      ),
     );
   }
 

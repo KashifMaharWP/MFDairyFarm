@@ -43,31 +43,44 @@ class _AdminDashboardButtons extends State<AdminDashboardButtons> {
       onTap: (){
         customPopUp(context, widget,height);
       },
-      child: Column(
+      child: Stack(
         children: [
-          Container(
-            padding: EdgeInsets.all(paragraph),
-            width: screenWidth/5,
-            height: screenWidth/5,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(screenWidth/5),
-                boxShadow: [
-                  BoxShadow(
-                      color: greyGreenColor,
-                      offset: Offset(2, 2),
-                      blurRadius: 6
-                  ),
-                ]
-            ),
-            child: Center(
-                child: Image(image: AssetImage(iconPath),width: screenWidth/4,)
-            ),
+          Column(
+            children: [
+              Container(
+                padding: EdgeInsets.all(paragraph),
+                width: screenWidth/5,
+                height: screenWidth/5,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(screenWidth/5),
+                    boxShadow: [
+                      BoxShadow(
+                          color: greyGreenColor,
+                          offset: Offset(2, 2),
+                          blurRadius: 6
+                      ),
+                    ]
+                ),
+                child: Center(
+                    child: Image(image: AssetImage(iconPath),width: screenWidth/4,)
+                ),
+              ),
+          
+              Text1(
+                  fontColor: lightBlackColor,
+                  fontSize: paragraph, text: text)
+            ],
           ),
-
-          Text1(
-              fontColor: lightBlackColor,
-              fontSize: paragraph, text: text)
+          Positioned(
+            top: header1*1.8,
+            left: header1*2,
+              child: Icon(
+                  CupertinoIcons.plus_circle_fill,
+                  size: header1*1.2,
+                color: darkGreenColor,
+              )
+          )
         ],
       ),
     );

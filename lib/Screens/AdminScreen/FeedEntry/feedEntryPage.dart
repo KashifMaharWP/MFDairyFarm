@@ -30,17 +30,15 @@ class _feedEntryPageState extends State<feedEntryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Material(
-        color: Colors.white,
-          child:Column(
-            children: [
-              Text1(fontColor: darkGreenColor, fontSize: paragraph, text: "Add Feed"),
-              SizedBox(height: paragraph/6,),
-              customForm(),
-            ],
-          )
-      ),
+    return Material(
+      color: Colors.white,
+        child:Column(
+          children: [
+            Text1(fontColor: darkGreenColor, fontSize: paragraph, text: "Add Feed"),
+            SizedBox(height: paragraph/6,),
+            customForm(),
+          ],
+        )
     );
   }
 
