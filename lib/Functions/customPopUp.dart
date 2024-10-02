@@ -1,16 +1,15 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
-import 'package:dairyfarmflow/Widget/customRoundButton.dart';
 import 'package:flutter/material.dart';
 
 import '../Class/screenMediaQuery.dart';
 
-customPopUp(BuildContext context, Widget widget,double height){
+customPopUp(BuildContext context, Widget widget, double height) {
   AlertDialog alert = AlertDialog(
     backgroundColor: Colors.white,
     content: Container(
-      width:screenWidth*0.85,
+      width: screenWidth * 0.85,
       constraints: BoxConstraints(maxHeight: height),
       child: Center(
         child: widget,
@@ -18,45 +17,45 @@ customPopUp(BuildContext context, Widget widget,double height){
     ),
     actions: [
       InkWell(
-        onTap: (){
+        onTap: () {
           Navigator.pop(context);
         },
         child: Container(
-          width: screenWidth/3.5,
-          height: screenHeight/20,
+          width: screenWidth / 3.5,
+          height: screenHeight / 20,
           decoration: BoxDecoration(
               color: Colors.red,
-              borderRadius: BorderRadius.circular(paragraph/4),
+              borderRadius: BorderRadius.circular(paragraph / 4),
               boxShadow: [
                 BoxShadow(
                     color: greyGreenColor,
                     blurRadius: 6,
-                    offset: Offset(2, 2)
-                )
-              ]
-          ),
-          child: Center(child: Text1(fontColor: Colors.white, fontSize: paragraph, text: "Cancel")),
+                    offset: const Offset(2, 2))
+              ]),
+          child: Center(
+              child: Text1(
+                  fontColor: Colors.white,
+                  fontSize: paragraph,
+                  text: "Cancel")),
         ),
       ),
       InkWell(
-        onTap: (){
+        onTap: () {
           Navigator.pop(context);
         },
         child: Container(
-          width: screenWidth/3.5,
-          height: screenHeight/20,
+          width: screenWidth / 3.5,
+          height: screenHeight / 20,
           decoration: BoxDecoration(
               color: darkGreenColor,
-              borderRadius: BorderRadius.circular(paragraph/4),
+              borderRadius: BorderRadius.circular(paragraph / 4),
               boxShadow: [
                 BoxShadow(
-                    color: greyGreenColor,
-                    blurRadius: 6,
-                    offset: Offset(2, 2)
-                )
-              ]
-          ),
-          child: Center(child: Text1(fontColor: Colors.white, fontSize: paragraph, text: "Save")),
+                    color: greyGreenColor, blurRadius: 6, offset: Offset(2, 2))
+              ]),
+          child: Center(
+              child: Text1(
+                  fontColor: Colors.white, fontSize: paragraph, text: "Save")),
         ),
       )
     ],

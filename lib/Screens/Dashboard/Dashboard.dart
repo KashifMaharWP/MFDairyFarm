@@ -2,6 +2,9 @@ import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/AnimalRecord/animalRecord.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/FeedEntry/feed_record.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/milk_record.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/VacinationScreen/vacination_record.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/adminDashboard/adminDashboard.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/workerDashboard/workerDashboard.dart';
 import 'package:dairyfarmflow/Screens/SampleScreen.dart';
@@ -202,7 +205,7 @@ class _DashboardState extends State<Dashboard> {
                 Column(
                   children: [
                     viewContainer(
-                        "Animal", "lib/assets/cow.png", AnimalRecord()),
+                        "Animal", "lib/assets/cow.png", const AnimalRecord()),
                     SizedBox(
                       height: paragraph,
                     ),
@@ -213,7 +216,7 @@ class _DashboardState extends State<Dashboard> {
                 Column(
                   children: [
                     viewContainer("Vacination", "lib/assets/medical.png",
-                        sampleScreen(backgroundColor: Colors.yellow)),
+                        const VacinationRecord()),
                     SizedBox(
                       height: paragraph,
                     ),
@@ -224,12 +227,12 @@ class _DashboardState extends State<Dashboard> {
                 Column(
                   children: [
                     viewContainer("Milk(ltr)", "lib/assets/milk.png",
-                        sampleScreen(backgroundColor: Colors.pink)),
+                        const MilkRecordScreen()),
                     SizedBox(
                       height: paragraph,
                     ),
-                    viewContainer("Wanda(kg)", "lib/assets/feed.png",
-                        sampleScreen(backgroundColor: Colors.purple)),
+                    viewContainer(
+                        "Wanda(kg)", "lib/assets/feed.png", const FeedRecord()),
                   ],
                 )
               ],

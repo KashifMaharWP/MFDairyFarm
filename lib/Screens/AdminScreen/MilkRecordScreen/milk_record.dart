@@ -7,14 +7,14 @@ import 'package:dairyfarmflow/Widget/custom_filter_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class AnimalRecord extends StatefulWidget {
-  const AnimalRecord({super.key});
+class MilkRecordScreen extends StatefulWidget {
+  const MilkRecordScreen({super.key});
 
   @override
-  State<AnimalRecord> createState() => _AnimalRecordState();
+  State<MilkRecordScreen> createState() => _MilkRecordScreenState();
 }
 
-class _AnimalRecordState extends State<AnimalRecord> {
+class _MilkRecordScreenState extends State<MilkRecordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +25,7 @@ class _AnimalRecordState extends State<AnimalRecord> {
         foregroundColor: Colors.white,
         centerTitle: true,
         shadowColor: Colors.black,
-        title: const Text("Animal Record"),
+        title: const Text("Milk Record"),
       ),
       body: Column(
         children: [
@@ -57,7 +57,7 @@ class _AnimalRecordState extends State<AnimalRecord> {
                         },
                         child: Container(
                           width: screenWidth * 0.95,
-                          height: screenHeight / 3.5,
+                          height: screenHeight / 3.2,
                           padding: EdgeInsets.all(paragraph),
                           decoration: BoxDecoration(
                               color: Colors.white,
@@ -93,57 +93,87 @@ class _AnimalRecordState extends State<AnimalRecord> {
                               SizedBox(
                                 height: screenHeight * .025,
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                              Column(
                                 children: [
                                   Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Icon(
-                                        CupertinoIcons.tag_fill,
-                                        color: darkGreenColor,
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            CupertinoIcons.tag_fill,
+                                            color: darkGreenColor,
+                                          ),
+                                          SizedBox(
+                                            width: screenWidth * .007,
+                                          ),
+                                          Text1(
+                                              fontColor: lightBlackColor,
+                                              fontSize: screenWidth * .044,
+                                              text: "Animal"),
+                                        ],
                                       ),
-                                      SizedBox(
-                                        width: screenWidth * .007,
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            CupertinoIcons.add,
+                                            color: darkGreenColor,
+                                          ),
+                                          SizedBox(
+                                            width: screenWidth * .007,
+                                          ),
+                                          Text1(
+                                              fontColor: lightBlackColor,
+                                              fontSize: screenWidth * .044,
+                                              text: "Total"),
+                                        ],
                                       ),
-                                      Text1(
-                                          fontColor: lightBlackColor,
-                                          fontSize: screenWidth * .05,
-                                          text: "Animal"),
                                     ],
+                                  ),
+                                  SizedBox(
+                                    height: screenHeight * .001,
                                   ),
                                   Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Image(
-                                        image: const AssetImage(
-                                            "lib/assets/cowbreed.png"),
-                                        width: screenWidth * .055,
-                                        height: screenWidth * .055,
+                                      Row(
+                                        children: [
+                                          Image(
+                                            image: const AssetImage(
+                                                "lib/assets/sun.png"),
+                                            width: screenWidth * .055,
+                                            height: screenWidth * .055,
+                                          ),
+                                          SizedBox(
+                                            width: screenWidth * .007,
+                                          ),
+                                          Text1(
+                                              fontColor: lightBlackColor,
+                                              fontSize: screenWidth * .044,
+                                              text: "Morning"),
+                                        ],
                                       ),
-                                      SizedBox(
-                                        width: screenWidth * .007,
+                                      Row(
+                                        children: [
+                                          Image(
+                                            image: const AssetImage(
+                                                "lib/assets/moon.png"),
+                                            width: screenWidth * .055,
+                                            height: screenWidth * .055,
+                                          ),
+                                          SizedBox(
+                                            width: screenWidth * .007,
+                                          ),
+                                          Text1(
+                                              fontColor: lightBlackColor,
+                                              fontSize: screenWidth * .044,
+                                              text: "Evening"),
+                                        ],
                                       ),
-                                      Text1(
-                                          fontColor: lightBlackColor,
-                                          fontSize: screenWidth * .05,
-                                          text: "Breed Type"),
                                     ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        CupertinoIcons.money_dollar_circle_fill,
-                                        color: darkGreenColor,
-                                      ),
-                                      SizedBox(
-                                        width: screenWidth * .007,
-                                      ),
-                                      Text1(
-                                          fontColor: lightBlackColor,
-                                          fontSize: screenWidth * .05,
-                                          text: "Price"),
-                                    ],
-                                  ),
+                                  )
                                 ],
                               )
                             ],
