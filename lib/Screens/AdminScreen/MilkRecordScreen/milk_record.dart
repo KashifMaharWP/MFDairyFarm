@@ -6,6 +6,7 @@ import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:dairyfarmflow/Widget/custom_filter_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class MilkRecordScreen extends StatefulWidget {
   const MilkRecordScreen({super.key});
@@ -29,17 +30,31 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
       ),
       body: Column(
         children: [
+          pageHeaderContainer(),
           SizedBox(
             height: screenHeight * .015,
           ),
           Container(
-              width: screenWidth * 0.95,
-              height: screenHeight * .07,
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
-              child: Center(child: customFiltersWidget())),
+            padding: const EdgeInsets.only(left: 10),
+            child: Align(
+              alignment: Alignment.bottomLeft,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.calendar_month_sharp,
+                    color: darkGreenColor,
+                  ),
+                  Text1(
+                      fontColor: lightBlackColor,
+                      fontSize: paragraph,
+                      text: DateFormat("MMMM yyyy").format(DateTime.now())),
+                ],
+              ),
+            ),
+          ),
           SizedBox(
-            height: screenHeight * .015,
+            height: paragraph / 4,
           ),
           Container(
             child: Expanded(
@@ -49,15 +64,9 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
                     return Padding(
                       padding: const EdgeInsets.all(5),
                       child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const AnimalDetail()));
-                        },
                         child: Container(
                           width: screenWidth * 0.95,
-                          height: screenHeight / 3.2,
+                          height: screenHeight / 3.5,
                           padding: EdgeInsets.all(paragraph),
                           decoration: BoxDecoration(
                               color: Colors.white,
@@ -84,8 +93,8 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
                                           "https://static.vecteezy.com/system/resources/thumbnails/023/651/804/small/dairy-cow-on-transparent-background-created-with-generative-ai-png.png"),
                                       fit: BoxFit.fill,
                                     ),
-                                    height: screenHeight * .18,
-                                    width: screenWidth * .8,
+                                    height: screenHeight * .13,
+                                    width: screenWidth * .7,
                                     //color: Colors.red,
                                   ),
                                 ],
@@ -132,7 +141,7 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
                                     ],
                                   ),
                                   SizedBox(
-                                    height: screenHeight * .001,
+                                    height: screenHeight * .015,
                                   ),
                                   Row(
                                     mainAxisAlignment:
@@ -190,4 +199,125 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
   }
 
   //Wrap Text Container
+}
+
+Widget pageHeaderContainer() {
+  return Material(
+      elevation: 6,
+      borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40)),
+      child: Container(
+          height: screenHeight / 5,
+          width: double.infinity,
+          decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(40),
+                  bottomRight: Radius.circular(40)),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                    color: greyGreenColor, blurRadius: 6, offset: Offset(2, 2))
+              ]),
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: screenHeight * .02,
+                ),
+
+                //here is the code for the custom gridview boxes
+
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        wrapCircleContainer(
+                            "225", "Total", 'lib/assets/milk.png'),
+                        SizedBox(
+                          height: paragraph / 4,
+                        ),
+                        Container(
+                          width: 1,
+                          height: screenWidth / 3.5,
+                          color: CupertinoColors.systemGrey6,
+                        ),
+                        wrapCircleContainer(
+                            "150", "Morning", 'lib/assets/sun.png'),
+                        SizedBox(
+                          height: paragraph / 4,
+                        ),
+                        Container(
+                          width: 1,
+                          height: screenWidth / 3.8,
+                          color: CupertinoColors.systemGrey6,
+                        ),
+                        wrapCircleContainer(
+                            "75", "Evening", 'lib/assets/moon.png'),
+                        SizedBox(
+                          height: paragraph / 4,
+                        ),
+                        Container(
+                          width: 1,
+                          height: screenWidth / 3.8,
+                          color: CupertinoColors.systemGrey6,
+                        ),
+                      ],
+                    )
+                  ],
+                )
+              ],
+            ),
+          )));
+}
+
+Widget wrapCircleContainer(String text, label, url) {
+  return Container(
+    margin: EdgeInsets.symmetric(
+        vertical: paragraph / 2, horizontal: paragraph / 12),
+    padding: EdgeInsets.symmetric(horizontal: paragraph),
+    child: Column(
+      children: [
+        circleContainer(text),
+        const SizedBox(
+          height: 2,
+        ),
+        Row(
+          children: [
+            Image(
+              image: AssetImage(url),
+              width: screenWidth * .05,
+              height: screenWidth * .05,
+            ),
+            SizedBox(
+              width: screenWidth * .005,
+            ),
+            Text1(fontColor: lightBlackColor, fontSize: paragraph, text: label),
+          ],
+        )
+      ],
+    ),
+  );
+}
+
+Widget circleContainer(String text) {
+  return Container(
+    width: screenWidth / 7,
+    height: screenWidth / 7,
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(screenWidth / 4),
+      boxShadow: [
+        BoxShadow(
+            color: greyGreenColor,
+            offset: Offset(2, 2),
+            blurRadius: 2,
+            spreadRadius: 2)
+      ],
+    ),
+    child: Center(
+        child:
+            Text1(fontColor: blackColor, fontSize: paragraph, text: "${text}")),
+  );
 }

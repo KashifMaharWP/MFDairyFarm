@@ -5,6 +5,7 @@ import 'package:dairyfarmflow/Screens/AdminScreen/AnimalRecord/animalRecord.dart
 import 'package:dairyfarmflow/Screens/AdminScreen/FeedEntry/feed_record.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/milk_record.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/VacinationScreen/vacination_record.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/WorkerRegistration/workers_record.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/adminDashboard/adminDashboard.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/workerDashboard/workerDashboard.dart';
 import 'package:dairyfarmflow/Screens/SampleScreen.dart';
@@ -220,8 +221,8 @@ class _DashboardState extends State<Dashboard> {
                     SizedBox(
                       height: paragraph,
                     ),
-                    viewContainer("Unkown", "lib/assets/babyCow.jpg",
-                        sampleScreen(backgroundColor: Colors.red)),
+                    viewContainer("Workers", "lib/assets/farmWorker.png",
+                        const WorkersRecord()),
                   ],
                 ),
                 Column(
