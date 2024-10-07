@@ -2,6 +2,7 @@ import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/AnimalRecord/animalRecord.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/DailyRecord/daily_record_screen.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/FeedEntry/feed_record.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/milk_record.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/VacinationScreen/vacination_record.dart';
@@ -211,7 +212,7 @@ class _DashboardState extends State<Dashboard> {
                       height: paragraph,
                     ),
                     viewContainer("Daily Record", "lib/assets/dairyfarm.png",
-                        sampleScreen(backgroundColor: greyGreenColor)),
+                        const DailyRecordScreen()),
                   ],
                 ),
                 Column(
