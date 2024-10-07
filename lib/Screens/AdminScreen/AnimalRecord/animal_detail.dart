@@ -30,7 +30,7 @@ class _AnimalDetailState extends State<AnimalDetail> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 20),
+            padding: const EdgeInsets.only(top: 21),
             child: Center(
               child: Container(
                 height: screenHeight / 3,
