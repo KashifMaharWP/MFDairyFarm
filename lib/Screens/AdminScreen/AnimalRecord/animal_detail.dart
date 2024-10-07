@@ -110,7 +110,7 @@ class _AnimalDetailState extends State<AnimalDetail> {
             child: const Divider(),
           ),
           SizedBox(
-            height: screenHeight * .020,
+            height: screenHeight * .010,
           ),
           Expanded(
               child: ListView.builder(
