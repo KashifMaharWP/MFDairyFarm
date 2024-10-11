@@ -1,8 +1,8 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/VacinationScreen/medical_detail.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
-import 'package:dairyfarmflow/Widget/custom_filter_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +24,7 @@ class _VacinationRecordState extends State<VacinationRecord> {
         foregroundColor: Colors.white,
         centerTitle: true,
         shadowColor: Colors.black,
-        title: const Text("Vacination Record"),
+        title: const Text("Medical Record"),
       ),
       body: Column(
         children: [
@@ -66,18 +66,28 @@ class _VacinationRecordState extends State<VacinationRecord> {
                           children: [
                             Column(
                               children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                      //color: const Color.fromARGB(255, 210, 203, 203),
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: Image(
-                                    image: NetworkImage(
-                                        "https://static.vecteezy.com/system/resources/thumbnails/023/651/804/small/dairy-cow-on-transparent-background-created-with-generative-ai-png.png"),
-                                    fit: BoxFit.fill,
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const MedicalDetail()));
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        //color: const Color.fromARGB(255, 210, 203, 203),
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    child: Image(
+                                      image: NetworkImage(
+                                          "https://static.vecteezy.com/system/resources/thumbnails/023/651/804/small/dairy-cow-on-transparent-background-created-with-generative-ai-png.png"),
+                                      fit: BoxFit.fill,
+                                    ),
+                                    height: screenHeight * .18,
+                                    width: screenWidth * .8,
+                                    //color: Colors.red,
                                   ),
-                                  height: screenHeight * .18,
-                                  width: screenWidth * .8,
-                                  //color: Colors.red,
                                 ),
                               ],
                             ),

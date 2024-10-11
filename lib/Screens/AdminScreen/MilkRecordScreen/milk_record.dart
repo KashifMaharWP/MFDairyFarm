@@ -249,7 +249,7 @@ Widget pageHeaderContainer() {
                           height: paragraph / 4,
                         ),
                         Container(
-                          width: 1,
+                          width: 01,
                           height: screenWidth / 3.8,
                           color: CupertinoColors.systemGrey6,
                         ),
@@ -259,7 +259,7 @@ Widget pageHeaderContainer() {
                           height: paragraph / 4,
                         ),
                         Container(
-                          width: 1,
+                          width: 0,
                           height: screenWidth / 3.8,
                           color: CupertinoColors.systemGrey6,
                         ),

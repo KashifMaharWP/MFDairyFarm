@@ -1,19 +1,21 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
+import 'package:dairyfarmflow/ReuseableWidgets/row_withtext_andimage.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/DailyRecord/daily_record_screen.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class FeedRecord extends StatefulWidget {
-  const FeedRecord({super.key});
+class WorkerTask extends StatefulWidget {
+  const WorkerTask({super.key});
 
   @override
-  State<FeedRecord> createState() => _FeedRecordState();
+  State<WorkerTask> createState() => _WorkerTaskState();
 }
 
-class _FeedRecordState extends State<FeedRecord> {
+class _WorkerTaskState extends State<WorkerTask> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +26,7 @@ class _FeedRecordState extends State<FeedRecord> {
           foregroundColor: Colors.white,
           centerTitle: true,
           shadowColor: Colors.black,
-          title: const Text("Feed Record"),
+          title: const Text("Worker Tasks"),
         ),
         body: Padding(
           padding: EdgeInsets.only(
@@ -59,45 +61,85 @@ class _FeedRecordState extends State<FeedRecord> {
                   child: ListView.builder(
                       itemCount: 8,
                       itemBuilder: (context, index) {
-                        return Card(
-                          color: Colors.white,
-                          elevation: 2.0,
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                top: screenHeight * .025,
-                                bottom: screenHeight * .025,
-                                left: screenWidth * .025,
-                                right: screenWidth * .025),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      height: screenHeight * .035,
-                                      width: screenHeight * .035,
-                                      child: const Image(
-                                        image:
-                                            AssetImage("lib/assets/wanda.png"),
-                                        fit: BoxFit.fill,
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                              width: screenWidth * 0.95,
+                              height: screenHeight / 4,
+                              padding: EdgeInsets.all(paragraph),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                      BorderRadius.circular(paragraph),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: greyGreenColor,
+                                        blurRadius: 6,
+                                        spreadRadius: 3,
+                                        offset: const Offset(2, 0)),
+                                  ]),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      const Column(
+                                        children: [
+                                          const CircleAvatar(
+                                              radius: 55,
+                                              backgroundImage: AssetImage(
+                                                  "lib/assets/farmWorker.png")),
+                                        ],
                                       ),
-                                    ),
-                                    SizedBox(
-                                      width: screenWidth * .015,
-                                    ),
-                                    Text1(
-                                        fontColor: lightBlackColor,
-                                        fontSize: screenWidth * .05,
-                                        text: "Date"),
-                                  ],
-                                ),
-                                Text1(
-                                    fontColor: lightBlackColor,
-                                    fontSize: screenWidth * .05,
-                                    text: "KG"),
-                              ],
-                            ),
-                          ),
+                                      SizedBox(
+                                        width: screenWidth * .05,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 4),
+                                              child: Text1(
+                                                  fontColor: blackColor,
+                                                  fontSize: screenWidth * .055,
+                                                  text: "Worker Name"),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 4),
+                                              child: RowWithTextAndImage(
+                                                  text1: "Total",
+                                                  imgUrl:
+                                                      "lib/assets/builder.png"),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 4),
+                                              child: RowWithTextAndImage(
+                                                  text1: "Complete",
+                                                  imgUrl:
+                                                      "lib/assets/Check.png"),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 4),
+                                              child: RowWithTextAndImage(
+                                                  text1: "Not Complete",
+                                                  imgUrl:
+                                                      "lib/assets/cross.png"),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )),
                         );
                       }),
                 ),
@@ -140,7 +182,7 @@ Widget pageHeaderContainer() {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        wrapCircleContainer("225", "Available"),
+                        wrapCircleContainer("5", "Available"),
                         SizedBox(
                           height: paragraph / 4,
                         ),
@@ -149,7 +191,7 @@ Widget pageHeaderContainer() {
                           height: screenWidth / 3.8,
                           color: CupertinoColors.systemGrey6,
                         ),
-                        wrapCircleContainer("25", "Used"),
+                        wrapCircleContainer("2", "Completed"),
                         SizedBox(
                           height: paragraph / 4,
                         ),
@@ -158,7 +200,7 @@ Widget pageHeaderContainer() {
                           height: screenWidth / 3.8,
                           color: CupertinoColors.systemGrey6,
                         ),
-                        wrapCircleContainer("250", "Total"),
+                        wrapCircleContainer("7", "Total"),
                         SizedBox(
                           height: paragraph / 4,
                         ),
@@ -213,4 +255,3 @@ Widget circleContainer(String text) {
             Text1(fontColor: blackColor, fontSize: paragraph, text: "${text}")),
   );
 }
-//https://www.behance.net/gallery/187496733/Dairy-Farm-Management-Mobile-App-UI-Design?tracking_source=search_projects|Dairy+Management&l=0

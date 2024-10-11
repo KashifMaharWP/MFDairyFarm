@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:flutter/cupertino.dart';
+import 'package:dairyfarmflow/ReuseableWidgets/reuse_row.dart';
+import 'package:dairyfarmflow/ReuseableWidgets/row_withtext_andimage.dart';
 import 'package:flutter/material.dart';
-
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
@@ -109,10 +109,15 @@ Widget pageHeaderContainer() {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                    color: greyGreenColor, blurRadius: 6, offset: Offset(2, 2))
+                    color: greyGreenColor,
+                    blurRadius: 6,
+                    offset: const Offset(2, 2))
               ]),
           child: Padding(
-            padding: const EdgeInsets.all(15.0),
+            padding: EdgeInsets.only(
+                top: screenHeight * .02,
+                left: screenWidth * .02,
+                right: screenWidth * .02),
             child: Column(
               children: [
                 SizedBox(
@@ -125,7 +130,7 @@ Widget pageHeaderContainer() {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 14),
+                      padding: EdgeInsets.only(left: screenWidth * .045),
                       child: Row(
                         children: [
                           Image(
@@ -153,6 +158,8 @@ Widget pageHeaderContainer() {
                       text4: "Evening",
                       text5: "250",
                       text6: "Total",
+                      img1: "lib/assets/sun.png",
+                      img2: "lib/assets/moon.png",
                     ),
                     const SizedBox(
                       height: 15,
@@ -162,11 +169,11 @@ Widget pageHeaderContainer() {
                       height: 15,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 14),
+                      padding: EdgeInsets.only(left: screenWidth * .045),
                       child: Row(
                         children: [
                           Image(
-                            image: AssetImage("lib/assets/wanda.png"),
+                            image: const AssetImage("lib/assets/wanda.png"),
                             width: screenHeight * .040,
                             height: screenHeight * .040,
                           ),
@@ -195,70 +202,49 @@ Widget pageHeaderContainer() {
           )));
 }
 
-class ReuseRow extends StatelessWidget {
-  String text1, text2, text3, text4, text5, text6;
-  ReuseRow(
-      {Key? key,
-      required this.text1,
-      required this.text2,
-      required this.text3,
-      required this.text4,
-      required this.text5,
-      required this.text6})
-      : super(key: key);
+// Widget wrapCircleContainer(String text, label) {
+//   return
+// }
+class WrapCircleContainer extends StatelessWidget {
+  String text, label;
+  String? optional;
+
+  WrapCircleContainer({
+    required this.text,
+    required this.label,
+    this.optional,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        wrapCircleContainer(text1, text2),
-        SizedBox(
-          height: paragraph / 4,
-        ),
-        Container(
-          width: 1,
-          height: screenWidth / 3.8,
-          color: CupertinoColors.systemGrey6,
-        ),
-        wrapCircleContainer(text3, text4),
-        SizedBox(
-          height: paragraph / 4,
-        ),
-        Container(
-          width: 1,
-          height: screenWidth / 3.8,
-          color: CupertinoColors.systemGrey6,
-        ),
-        wrapCircleContainer(text5, text6),
-        SizedBox(
-          height: paragraph / 4,
-        ),
-        Container(
-          width: 1,
-          height: screenWidth / 3.8,
-          color: CupertinoColors.systemGrey6,
-        ),
-      ],
+    return Container(
+      margin: EdgeInsets.symmetric(
+          vertical: paragraph / 2, horizontal: paragraph / 12),
+      padding: EdgeInsets.symmetric(horizontal: paragraph),
+      child: Column(
+        children: [
+          circleContainer(text),
+          const SizedBox(
+            height: 2,
+          ),
+          Row(
+            children: [
+              optional == null
+                  ? Center()
+                  : Image(
+                      image: AssetImage(optional.toString()),
+                      width: screenHeight * .025,
+                      height: screenHeight * .025,
+                    ),
+              Text1(
+                  fontColor: lightBlackColor, fontSize: paragraph, text: label),
+            ],
+          )
+        ],
+      ),
     );
   }
-}
-
-Widget wrapCircleContainer(String text, label) {
-  return Container(
-    margin: EdgeInsets.symmetric(
-        vertical: paragraph / 2, horizontal: paragraph / 12),
-    padding: EdgeInsets.symmetric(horizontal: paragraph),
-    child: Column(
-      children: [
-        circleContainer(text),
-        const SizedBox(
-          height: 2,
-        ),
-        Text1(fontColor: lightBlackColor, fontSize: paragraph, text: label)
-      ],
-    ),
-  );
 }
 
 Widget circleContainer(String text) {
@@ -280,29 +266,4 @@ Widget circleContainer(String text) {
         child:
             Text1(fontColor: blackColor, fontSize: paragraph, text: "${text}")),
   );
-}
-
-class RowWithTextAndImage extends StatelessWidget {
-  String text1, imgUrl;
-  RowWithTextAndImage({required this.text1, required this.imgUrl, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Image(
-          image: AssetImage(imgUrl),
-          width: screenHeight * .030,
-          height: screenHeight * .030,
-        ),
-        SizedBox(
-          width: screenWidth * .015,
-        ),
-        Text1(
-            fontColor: lightBlackColor,
-            fontSize: screenWidth * .05,
-            text: text1),
-      ],
-    );
-  }
 }

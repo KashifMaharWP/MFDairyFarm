@@ -9,8 +9,6 @@ import '../../../Class/colorPallete.dart';
 import '../../../Class/screenMediaQuery.dart';
 import '../../../Class/textSizing.dart';
 import '../../../Widget/Text1.dart';
-import '../../../Widget/customDashboardButton.dart';
-
 
 class AdminDashboardButtons extends StatefulWidget {
   const AdminDashboardButtons({super.key});
@@ -23,25 +21,28 @@ class _AdminDashboardButtons extends State<AdminDashboardButtons> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: GridView(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisSpacing: 15,
-              crossAxisSpacing: 15,
-              mainAxisExtent: 110),
-          children: [
-            viewContainer("Animal", "lib/assets/cowEntry.png",animalRegistrationPage(),screenHeight/2),
-            viewContainer("Wanda", "lib/assets/wanda.png",feedEntryPage(),screenHeight/3),
-            viewContainer("Worker", "lib/assets/farmWorker.png",workerRegistrationPage(),screenHeight/2),
-          ],
-        ),
-      );
+      child: GridView(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            mainAxisSpacing: 15,
+            crossAxisSpacing: 15,
+            mainAxisExtent: 110),
+        children: [
+          viewContainer("Animal", "lib/assets/cowEntry.png",
+              animalRegistrationPage(), screenHeight / 2),
+          viewContainer("Wanda", "lib/assets/wanda.png", feedEntryPage(),
+              screenHeight / 3),
+          viewContainer("Worker", "lib/assets/farmWorker.png",
+              workerRegistrationPage(), screenHeight / 2),
+        ],
+      ),
+    );
   }
 
-  Widget viewContainer(String text, iconPath,Widget widget,double height){
+  Widget viewContainer(String text, iconPath, Widget widget, double height) {
     return InkWell(
-      onTap: (){
-        customPopUp(context, widget,height);
+      onTap: () {
+        customPopUp(context, widget, height);
       },
       child: Stack(
         children: [
@@ -49,38 +50,34 @@ class _AdminDashboardButtons extends State<AdminDashboardButtons> {
             children: [
               Container(
                 padding: EdgeInsets.all(paragraph),
-                width: screenWidth/5,
-                height: screenWidth/5,
+                width: screenWidth / 5,
+                height: screenWidth / 5,
                 decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(screenWidth/5),
+                    borderRadius: BorderRadius.circular(screenWidth / 5),
                     boxShadow: [
                       BoxShadow(
                           color: greyGreenColor,
                           offset: Offset(2, 2),
-                          blurRadius: 6
-                      ),
-                    ]
-                ),
+                          blurRadius: 6),
+                    ]),
                 child: Center(
-                    child: Image(image: AssetImage(iconPath),width: screenWidth/4,)
-                ),
+                    child: Image(
+                  image: AssetImage(iconPath),
+                  width: screenWidth / 4,
+                )),
               ),
-          
-              Text1(
-                  fontColor: lightBlackColor,
-                  fontSize: paragraph, text: text)
+              Text1(fontColor: lightBlackColor, fontSize: paragraph, text: text)
             ],
           ),
           Positioned(
-            top: header1*1.8,
-            left: header1*2,
+              top: header1 * 1.8,
+              left: header1 * 2,
               child: Icon(
-                  CupertinoIcons.plus_circle_fill,
-                  size: header1*1.2,
+                CupertinoIcons.plus_circle_fill,
+                size: header1 * 1.2,
                 color: darkGreenColor,
-              )
-          )
+              ))
         ],
       ),
     );

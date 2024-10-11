@@ -67,8 +67,8 @@ class _WorkersRecordState extends State<WorkersRecord> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text1(
-                                  fontColor: lightBlackColor,
-                                  fontSize: screenWidth * .05,
+                                  fontColor: blackColor,
+                                  fontSize: screenWidth * .055,
                                   text: "Worker Name"),
                               Text1(
                                   fontColor: lightBlackColor,
