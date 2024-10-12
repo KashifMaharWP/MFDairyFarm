@@ -3,11 +3,12 @@ import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/DailyRecord/daily_record_screen.dart';
 import 'package:flutter/cupertino.dart';
 
+// ignore: must_be_immutable
 class ReuseRow extends StatelessWidget {
   String text1, text2, text3, text4, text5, text6;
   String? img1, img2, img3;
   ReuseRow(
-      {Key? key,
+      {super.key,
       this.img1,
       this.img2,
       this.img3,
@@ -16,8 +17,7 @@ class ReuseRow extends StatelessWidget {
       required this.text3,
       required this.text4,
       required this.text5,
-      required this.text6})
-      : super(key: key);
+      required this.text6});
 
   @override
   Widget build(BuildContext context) {

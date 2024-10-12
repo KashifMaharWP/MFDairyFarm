@@ -2,9 +2,7 @@ import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 class AnimalDetail extends StatefulWidget {
@@ -70,10 +68,10 @@ class _AnimalDetailState extends State<AnimalDetail> {
               children: [
                 Row(
                   children: [
-                    Container(
+                    const SizedBox(
                       height: 30,
                       width: 30,
-                      child: const Image(
+                      child: Image(
                         image: AssetImage("lib/assets/medical.png"),
                       ),
                     ),
@@ -158,10 +156,10 @@ class _AnimalDetailState extends State<AnimalDetail> {
                               children: [
                                 Row(
                                   children: [
-                                    Container(
+                                    const SizedBox(
                                       height: 20,
                                       width: 20,
-                                      child: const Image(
+                                      child: Image(
                                           image:
                                               AssetImage("lib/assets/sun.png")),
                                     ),
@@ -176,10 +174,10 @@ class _AnimalDetailState extends State<AnimalDetail> {
                                 ),
                                 Row(
                                   children: [
-                                    Container(
+                                    const SizedBox(
                                       height: 20,
                                       width: 20,
-                                      child: const Image(
+                                      child: Image(
                                           image: AssetImage(
                                               "lib/assets/moon.png")),
                                     ),
@@ -224,14 +222,14 @@ class ReuseableWidget extends StatelessWidget {
         children: [
           Row(
             children: [
-              Container(
+              SizedBox(
                 height: 30,
                 width: 30,
                 child: Image(
                   image: AssetImage(imgUrl.toString()),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               Text1(

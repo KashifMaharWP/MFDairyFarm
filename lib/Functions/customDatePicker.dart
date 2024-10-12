@@ -1,10 +1,10 @@
 //Date Picker Function
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../Class/colorPallete.dart';
 
-Future<DateTime?> customDatePicker(BuildContext context, DateTime selectedDate) {
+Future<DateTime?> customDatePicker(
+    BuildContext context, DateTime selectedDate) {
   return showDatePicker(
       context: context,
       initialDate: selectedDate,
@@ -30,6 +30,5 @@ Future<DateTime?> customDatePicker(BuildContext context, DateTime selectedDate) 
           ),
           child: child!,
         );
-      }
-  );
+      });
 }

@@ -17,7 +17,7 @@ class myRoutes {
       login: (context) => const LoginPage(),
       homePage: (context) => home(),
       dashboard: (context) => Dashboard(),
-      animalRegistration: (context) => const animalRegistrationPage(),
+      animalRegistration: (context) => const AnimalRegistrationPage(),
       feedEntry: (context) => const feedEntryPage(),
     };
   }

@@ -29,7 +29,7 @@ class _AdminDashboardButtons extends State<AdminDashboardButtons> {
             mainAxisExtent: 110),
         children: [
           viewContainer("Animal", "lib/assets/cowEntry.png",
-              animalRegistrationPage(), screenHeight / 2),
+              AnimalRegistrationPage(), screenHeight / 2),
           viewContainer("Wanda", "lib/assets/wanda.png", feedEntryPage(),
               screenHeight / 3),
           viewContainer("Worker", "lib/assets/farmWorker.png",

@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class customFiltersWidget extends StatefulWidget {
+class  customFiltersWidget extends StatefulWidget {
   const customFiltersWidget({super.key});
 
   @override
@@ -26,7 +26,7 @@ class _customFiltersWidgetState extends State<customFiltersWidget> {
           darkGreenColor,
           selectedFilter == "Availabe",
         ),
-        SizedBox(width: 10),
+       const SizedBox(width: 10),
         customFilter(
           "Sold",
           whiteColor,
@@ -34,7 +34,7 @@ class _customFiltersWidgetState extends State<customFiltersWidget> {
           Colors.red,
           selectedFilter == "Sold",
         ),
-        SizedBox(width: 10),
+       const SizedBox(width: 10),
         customFilter(
           "All",
           whiteColor,

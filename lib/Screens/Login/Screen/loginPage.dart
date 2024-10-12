@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           image: DecorationImage(
               image: AssetImage("lib/assets/mfBackground.png"),
               fit: BoxFit.cover)),
@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Container(
           margin: EdgeInsets.only(top: screenHeight / 5),
           child: Image(
-            image: AssetImage("lib/assets/Logo.png"),
+            image: const AssetImage("lib/assets/Logo.png"),
             width: screenWidth / 3,
           )),
     );
@@ -100,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
           customRoundedButton(
               title: "Sign in",
               on_Tap: () {
-                print("Tapped");
+                // print("Tapped");
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => Dashboard()));
               })

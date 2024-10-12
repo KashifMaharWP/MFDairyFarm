@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.dairyfarmflow"
-    compileSdk = 33  // Replace with your compileSdkVersion, typically 33 for the latest version
+    compileSdk = 34  // Replace with your compileSdkVersion, typically 33 for the latest version
     ndkVersion = "21.4.7075529"  // Replace with the NDK version you are using
 
     compileOptions {

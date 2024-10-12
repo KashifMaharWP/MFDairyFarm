@@ -64,29 +64,40 @@ class _VacinationRecordState extends State<VacinationRecord> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Column(
+                            Row(
                               children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const MedicalDetail()));
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        //color: const Color.fromARGB(255, 210, 203, 203),
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    child: Image(
-                                      image: NetworkImage(
-                                          "https://static.vecteezy.com/system/resources/thumbnails/023/651/804/small/dairy-cow-on-transparent-background-created-with-generative-ai-png.png"),
-                                      fit: BoxFit.fill,
+                                Column(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const MedicalDetail()));
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            //color: const Color.fromARGB(255, 210, 203, 203),
+                                            borderRadius:
+                                                BorderRadius.circular(20)),
+                                        child: Image(
+                                          image: NetworkImage(
+                                              "https://static.vecteezy.com/system/resources/thumbnails/023/651/804/small/dairy-cow-on-transparent-background-created-with-generative-ai-png.png"),
+                                          fit: BoxFit.fill,
+                                        ),
+                                        height: screenHeight * .18,
+                                        width: screenWidth * .8,
+                                        //color: Colors.red,
+                                      ),
                                     ),
-                                    height: screenHeight * .18,
-                                    width: screenWidth * .8,
-                                    //color: Colors.red,
+                                  ],
+                                ),
+                                InkWell(
+                                  onTap: () {},
+                                  child: Icon(
+                                    Icons.more_vert,
+                                    size: screenWidth * .065,
                                   ),
                                 ),
                               ],

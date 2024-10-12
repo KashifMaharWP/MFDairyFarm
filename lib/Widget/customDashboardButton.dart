@@ -1,6 +1,5 @@
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CustomDashboardButton extends StatefulWidget {
@@ -8,13 +7,13 @@ class CustomDashboardButton extends StatefulWidget {
   final btnName;
   final String customIcon;
   final VoidCallback ontap;
-  const CustomDashboardButton(
-      {super.key,
-        required this.colors,
-        required this.btnName,
-        required this.customIcon,
-        required this.ontap,
-      });
+  const CustomDashboardButton({
+    super.key,
+    required this.colors,
+    required this.btnName,
+    required this.customIcon,
+    required this.ontap,
+  });
 
   @override
   State<CustomDashboardButton> createState() => _CustomDashboardButtonState();
@@ -32,21 +31,21 @@ class _CustomDashboardButtonState extends State<CustomDashboardButton> {
                 colors: widget.colors == Colors.orange
                     ? [Colors.orange, Colors.redAccent]
                     : widget.colors == Colors.green
-                    ? [
-                  const Color.fromARGB(255, 13, 124, 102),
-                  Colors.green
-                ]
-                    : widget.colors == Colors.pink
-                    ? [
-                  const Color.fromARGB(255, 146, 26, 64),
-                  const Color.fromARGB(255, 199, 91, 122)
-                ]
-                    : widget.colors == Colors.cyan
-                    ? [
-                  const Color.fromARGB(255, 8, 125, 221),
-                  const Color.fromARGB(255, 102, 155, 247)
-                ]
-                    : []),
+                        ? [
+                            const Color.fromARGB(255, 13, 124, 102),
+                            Colors.green
+                          ]
+                        : widget.colors == Colors.pink
+                            ? [
+                                const Color.fromARGB(255, 146, 26, 64),
+                                const Color.fromARGB(255, 199, 91, 122)
+                              ]
+                            : widget.colors == Colors.cyan
+                                ? [
+                                    const Color.fromARGB(255, 8, 125, 221),
+                                    const Color.fromARGB(255, 102, 155, 247)
+                                  ]
+                                : []),
             borderRadius: BorderRadius.circular(15),
             boxShadow: [
               BoxShadow(
@@ -56,13 +55,16 @@ class _CustomDashboardButtonState extends State<CustomDashboardButton> {
                   blurRadius: 5)
             ]),
         child: Padding(
-          padding: EdgeInsets.only(top: paragraph,),
+          padding: EdgeInsets.only(
+            top: paragraph,
+          ),
           child: Wrap(
             alignment: WrapAlignment.spaceEvenly,
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              Image(image: AssetImage(widget.customIcon),
-                width: screenWidth/10,
+              Image(
+                image: AssetImage(widget.customIcon),
+                width: screenWidth / 10,
               ),
               Text(
                 widget.btnName,

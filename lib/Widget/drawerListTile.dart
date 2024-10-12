@@ -1,5 +1,4 @@
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MyListTile extends StatefulWidget {
