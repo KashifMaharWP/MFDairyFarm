@@ -1,7 +1,10 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
+import 'package:dairyfarmflow/Providers/user_detail.dart';
+import 'package:dairyfarmflow/Screens/Login/Screen/loginPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MyDrawer extends StatefulWidget {
   const MyDrawer({super.key});
@@ -88,6 +91,12 @@ class _MyDrawerState extends State<MyDrawer> {
               ),
             ),
             ListTile(
+              onTap: () async {
+                Provider.of<UserDetail>(context, listen: false)
+                    .clearUserPreferences();
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => LoginPage()));
+              },
               leading: Icon(
                 CupertinoIcons.square_arrow_left,
                 size: screenHeight * .035,

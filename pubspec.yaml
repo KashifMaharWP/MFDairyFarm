@@ -43,6 +43,9 @@ dependencies:
   firebase_core: ^2.24.2
   intl: ^0.19.0
   curved_navigation_bar: ^1.0.6
+  http:
+  shared_preferences: ^2.3.1
+  provider:
 
 dev_dependencies:
   flutter_test:

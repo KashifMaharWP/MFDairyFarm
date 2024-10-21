@@ -1,7 +1,9 @@
 import 'package:dairyfarmflow/Class/myRoutes.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
+import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/Screens/Login/Screen/loginPage.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,10 +19,17 @@ class MyApp extends StatelessWidget {
     screenWidth = MediaQuery.of(context).size.width;
     screenHeight = MediaQuery.of(context).size.height;
 
-    return MaterialApp(
-      routes: myRoutes.getRoutes(),
-      debugShowCheckedModeBanner: false,
-      home: const LoginPage(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => UserDetail(),
+        ),
+      ],
+      child: MaterialApp(
+        routes: myRoutes.getRoutes(),
+        debugShowCheckedModeBanner: false,
+        home: const LoginPage(),
+      ),
     );
   }
 }

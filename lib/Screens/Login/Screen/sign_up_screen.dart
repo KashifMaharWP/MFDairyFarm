@@ -2,52 +2,33 @@ import 'dart:convert';
 
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
-import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/Dashboard.dart';
-import 'package:dairyfarmflow/Screens/Login/Screen/sign_up_screen.dart';
 import 'package:dairyfarmflow/Widget/customRoundButton.dart';
 import 'package:dairyfarmflow/Widget/textFieldWithIconWidget.dart';
+
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../Class/textSizing.dart';
 import '../../../Widget/Text1.dart';
-import 'package:http/http.dart' as http;
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpScreenState extends State<SignUpScreen> {
+  TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   bool isLoading = false;
 
-  checkUserData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final chk = prefs.getString('userId');
-    print("User Id = $chk");
-    //checking if the user detail is available then
-    if (chk != '' && chk != null) {
-      //get user data from the preference and store it in userdetail class
-      Provider.of<UserDetail>(context, listen: false)
-          .setUserDetailByPreferences();
-
-      //after initializing the user detail class move the user to homepage
-      Navigator.push(context, MaterialPageRoute(builder: (_) => Dashboard()));
-    } else {
-      print("User not found!");
-    }
-  }
-
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    checkUserData();
   }
 
   @override
@@ -89,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       padding: EdgeInsets.all(header1),
       width: double.infinity,
-      height: screenHeight / 1.8,
+      height: screenHeight / 1.5,
       decoration: BoxDecoration(
         color: transGreenColor,
         borderRadius: BorderRadius.only(
@@ -102,6 +83,12 @@ class _LoginPageState extends State<LoginPage> {
           SizedBox(
             height: screenHeight / 15,
           ),
+          customFormLabel("Name"),
+          textFieldWithIconWidget(
+              widgetcontroller: name,
+              fieldName: AutofillHints.name,
+              widgeticon: Icons.person,
+              isPasswordField: false),
           customFormLabel("Email"),
           textFieldWithIconWidget(
               widgetcontroller: email,
@@ -117,26 +104,14 @@ class _LoginPageState extends State<LoginPage> {
               fieldName: "password",
               widgeticon: Icons.lock,
               isPasswordField: true),
-          // SizedBox(
-          //   height: header1,
-          // ),
-          TextButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SignUpScreen()));
-              },
-              child: Text(
-                'Register!',
-                style: TextStyle(
-                    color: Colors.lightBlue, fontSize: screenWidth * .05),
-              )),
+          SizedBox(
+            height: header1,
+          ),
           customRoundedButton(
-              title: "Sign in",
-              on_Tap: () {
-                login(email.text, password.text);
-                // print("Tapped");
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => Dashboard()));
+              title: "Sign Up",
+              on_Tap: () async {
+                //print("Tapped");
+                await signUp(name.text, email.text, password.text);
               })
         ],
       ),
@@ -153,29 +128,53 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<bool> login(String email, String password) async {
-    bool authUser = false;
-    final bodyy = {"email": email, "password": password};
+  Future<String> signUp(String name, email, password) async {
+    String message = '';
+    final bodyy = {"name": name, "email": email, "password": password};
 
     final response = await http.post(
         Uri.parse(
-            "https://dairy-app-production-4bb8.up.railway.app/api/user/login"),
+            "https://dairy-app-production-4bb8.up.railway.app/api/user/signup"),
         body: bodyy);
     final userJson = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
-      // final userJson = jsonDecode(response.body);
-      //LoginModel loginModel = LoginModel.fromJson(jsonDecode(response.body));
-      Provider.of<UserDetail>(context, listen: false).setUserDetail(userJson);
-      debugPrint('Api Body: ${response.body}');
-      print("Token");
-      // print(loginModel.token);
-      authUser = true;
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Dashboard()));
+      message = userJson["message"];
+      myShowDialog(message);
     } else {
-      print(response.body.toString());
+      message = userJson["message"];
+      myShowDialog(message);
     }
-    return authUser;
+    return message;
+  }
+
+  Future<dynamic> myShowDialog(String message) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                message,
+                style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.blue,
+                    fontSize: 18),
+              ),
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "Ok",
+                    style: TextStyle(fontSize: 20),
+                  ))
+            ],
+          ),
+        );
+      },
+    );
   }
 }

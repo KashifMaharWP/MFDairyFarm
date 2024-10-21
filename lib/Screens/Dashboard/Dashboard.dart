@@ -2,6 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
+import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/ReuseableWidgets/dairy_form_detail.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/AnimalRecord/animalRecord.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/DailyRecord/daily_record_screen.dart';
@@ -18,6 +19,7 @@ import 'package:dairyfarmflow/Widget/my_drawer.dart';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class Dashboard extends StatefulWidget {
   Dashboard({super.key});
@@ -105,10 +107,14 @@ class _DashboardState extends State<Dashboard> {
                                               fontColor: whiteColor,
                                               fontSize: screenWidth * .05,
                                               text: "Welcome"),
-                                          Text1(
-                                              fontColor: whiteColor,
-                                              fontSize: screenWidth * .05,
-                                              text: "Admin"),
+                                          Consumer<UserDetail>(
+                                            builder: (context, value, child) =>
+                                                Text1(
+                                                    fontColor: whiteColor,
+                                                    fontSize: screenWidth * .05,
+                                                    text:
+                                                        value.name.toString()),
+                                          ),
                                         ],
                                       ),
                                     ),
