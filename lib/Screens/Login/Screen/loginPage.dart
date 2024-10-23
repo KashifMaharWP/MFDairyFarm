@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
+import 'package:dairyfarmflow/Providers/auth_provider.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/Dashboard.dart';
 import 'package:dairyfarmflow/Screens/Login/Screen/sign_up_screen.dart';
@@ -132,11 +133,9 @@ class _LoginPageState extends State<LoginPage> {
               )),
           customRoundedButton(
               title: "Sign in",
-              on_Tap: () {
-                login(email.text, password.text);
-                // print("Tapped");
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => Dashboard()));
+              on_Tap: () async {
+                await Provider.of<AuthProvider>(context, listen: false)
+                    .login(email.text, password.text, context);
               })
         ],
       ),
@@ -151,31 +150,5 @@ class _LoginPageState extends State<LoginPage> {
         Text1(fontColor: whiteColor, fontSize: header6, text: text),
       ],
     );
-  }
-
-  Future<bool> login(String email, String password) async {
-    bool authUser = false;
-    final bodyy = {"email": email, "password": password};
-
-    final response = await http.post(
-        Uri.parse(
-            "https://dairy-app-production-4bb8.up.railway.app/api/user/login"),
-        body: bodyy);
-    final userJson = jsonDecode(response.body);
-
-    if (response.statusCode == 200) {
-      // final userJson = jsonDecode(response.body);
-      //LoginModel loginModel = LoginModel.fromJson(jsonDecode(response.body));
-      Provider.of<UserDetail>(context, listen: false).setUserDetail(userJson);
-      debugPrint('Api Body: ${response.body}');
-      print("Token");
-      // print(loginModel.token);
-      authUser = true;
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Dashboard()));
-    } else {
-      print(response.body.toString());
-    }
-    return authUser;
   }
 }

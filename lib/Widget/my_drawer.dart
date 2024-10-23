@@ -1,6 +1,7 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
+import 'package:dairyfarmflow/Screens/Dashboard/adminDashboard/profile_view.dart';
 import 'package:dairyfarmflow/Screens/Login/Screen/loginPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,24 +27,26 @@ class _MyDrawerState extends State<MyDrawer> {
         child: ListView(
           children: [
             DrawerHeader(
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: screenHeight * .05,
-                    foregroundImage:
-                        const AssetImage("lib/assets/farmWorker.png"),
-                  ),
-                  SizedBox(
-                    height: screenHeight * .008,
-                  ),
-                  Text(
-                    'Admin Name',
-                    style: TextStyle(
-                        fontSize: screenHeight * .03,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white),
-                  )
-                ],
+              child: Consumer<UserDetail>(
+                builder: (context, value, child) => Column(
+                  children: [
+                    CircleAvatar(
+                      radius: screenHeight * .05,
+                      foregroundImage:
+                          const AssetImage("lib/assets/farmWorker.png"),
+                    ),
+                    SizedBox(
+                      height: screenHeight * .008,
+                    ),
+                    Text(
+                      value.name.toString(),
+                      style: TextStyle(
+                          fontSize: screenHeight * .03,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white),
+                    )
+                  ],
+                ),
               ),
             ),
             ListTile(
@@ -61,7 +64,12 @@ class _MyDrawerState extends State<MyDrawer> {
               ),
             ),
             ListTile(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ProfileView()));
+              },
               leading: Icon(
                 CupertinoIcons.person_alt,
                 size: screenHeight * .035,

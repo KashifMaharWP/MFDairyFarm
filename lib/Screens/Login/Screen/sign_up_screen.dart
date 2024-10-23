@@ -2,12 +2,14 @@ import 'dart:convert';
 
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
-import 'package:dairyfarmflow/Screens/Dashboard/Dashboard.dart';
+import 'package:dairyfarmflow/Providers/auth_provider.dart';
+
 import 'package:dairyfarmflow/Widget/customRoundButton.dart';
 import 'package:dairyfarmflow/Widget/textFieldWithIconWidget.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 import '../../../Class/textSizing.dart';
 import '../../../Widget/Text1.dart';
@@ -23,13 +25,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-  bool isLoading = false;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,8 +105,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
           customRoundedButton(
               title: "Sign Up",
               on_Tap: () async {
-                //print("Tapped");
-                await signUp(name.text, email.text, password.text);
+                await Provider.of<AuthProvider>(context, listen: false)
+                    .signUp(name.text, email.text, password.text, context);
+                name.clear();
+                email.clear();
+                password.clear();
               })
         ],
       ),
@@ -125,56 +123,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       children: [
         Text1(fontColor: whiteColor, fontSize: header6, text: text),
       ],
-    );
-  }
-
-  Future<String> signUp(String name, email, password) async {
-    String message = '';
-    final bodyy = {"name": name, "email": email, "password": password};
-
-    final response = await http.post(
-        Uri.parse(
-            "https://dairy-app-production-4bb8.up.railway.app/api/user/signup"),
-        body: bodyy);
-    final userJson = jsonDecode(response.body);
-
-    if (response.statusCode == 200) {
-      message = userJson["message"];
-      myShowDialog(message);
-    } else {
-      message = userJson["message"];
-      myShowDialog(message);
-    }
-    return message;
-  }
-
-  Future<dynamic> myShowDialog(String message) {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                message,
-                style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.blue,
-                    fontSize: 18),
-              ),
-              TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    "Ok",
-                    style: TextStyle(fontSize: 20),
-                  ))
-            ],
-          ),
-        );
-      },
     );
   }
 }
