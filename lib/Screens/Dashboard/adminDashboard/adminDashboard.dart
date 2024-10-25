@@ -28,10 +28,18 @@ class _AdminDashboardButtons extends State<AdminDashboardButtons> {
             crossAxisSpacing: 15,
             mainAxisExtent: 110),
         children: [
-          viewContainer("Animal", "lib/assets/cowEntry.png",
-              AnimalRegistrationPage(), screenHeight / 2),
-          viewContainer("Wanda", "lib/assets/wanda.png", feedEntryPage(),
-              screenHeight / 3),
+          viewContainer(
+            "Animal",
+            "lib/assets/cowEntry.png",
+            AnimalRegistrationPage(),
+            screenHeight / 2,
+          ),
+          viewContainer(
+            "Wanda",
+            "lib/assets/wanda.png",
+            feedEntryPage(),
+            screenHeight / 3,
+          ),
           viewContainer("Worker", "lib/assets/farmWorker.png",
               workerRegistrationPage(), screenHeight / 2),
         ],
@@ -42,7 +50,11 @@ class _AdminDashboardButtons extends State<AdminDashboardButtons> {
   Widget viewContainer(String text, iconPath, Widget widget, double height) {
     return InkWell(
       onTap: () {
-        customPopUp(context, widget, height);
+        customPopUp(
+          context,
+          widget,
+          height,
+        );
       },
       child: Stack(
         children: [

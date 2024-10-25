@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
@@ -5,6 +7,7 @@ import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:dairyfarmflow/Widget/textFieldWidget1.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AnimalRegistrationPage extends StatefulWidget {
   const AnimalRegistrationPage({super.key});
@@ -20,6 +23,9 @@ class _AnimalRegistrationPageState extends State<AnimalRegistrationPage> {
   List<String> tagIDList = ["1", "2", "3", "4"];
   String? dropDownItem;
   String animalIdDropDownValue = "1";
+
+  final ImagePicker _picker = ImagePicker();
+  File? _selectedImage;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,21 +49,28 @@ class _AnimalRegistrationPageState extends State<AnimalRegistrationPage> {
                     border: Border.all(color: darkGreenColor, width: 1),
                     borderRadius:
                         BorderRadius.all(Radius.circular(paragraph / 6))),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text1(
-                        fontColor: lightBlackColor,
-                        fontSize: paragraph / 1.2,
-                        text: "No Picture Selected"),
-                    Align(
-                        alignment: Alignment.centerRight,
-                        child: Icon(
-                          CupertinoIcons.camera_fill,
-                          color: darkGreenColor,
-                          size: header1 * 1.5,
-                        )),
-                  ],
+                child: InkWell(
+                  onTap: () {
+                    _showImageSourceSheet();
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text1(
+                          fontColor: lightBlackColor,
+                          fontSize: paragraph / 1.2,
+                          text: _selectedImage == null
+                              ? "No Picture Selected"
+                              : "Image Selected"),
+                      Align(
+                          alignment: Alignment.centerRight,
+                          child: Icon(
+                            CupertinoIcons.camera_fill,
+                            color: darkGreenColor,
+                            size: header1 * 1.5,
+                          )),
+                    ],
+                  ),
                 ),
               ),
               SizedBox(
@@ -113,7 +126,7 @@ class _AnimalRegistrationPageState extends State<AnimalRegistrationPage> {
             TextFieldWidget1(
                 widgetcontroller: purchasedPrice,
                 fieldName: "Purchase Price",
-                isPasswordField: false)
+                isPasswordField: false),
           ],
         ),
       )),
@@ -133,5 +146,56 @@ class _AnimalRegistrationPageState extends State<AnimalRegistrationPage> {
         Text1(fontColor: blackColor, fontSize: paragraph, text: text),
       ],
     );
+  }
+
+  Future<void> _showImageSourceSheet() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(CupertinoIcons.photo),
+                title: const Text('Gallery'),
+                onTap: () {
+                  _pickImage(ImageSource.gallery);
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(CupertinoIcons.camera),
+                title: const Text('Camera'),
+                onTap: () {
+                  _pickImage(ImageSource.camera);
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final image = await _picker.pickImage(source: source);
+      if (image != null) {
+        setState(() {
+          _selectedImage = File(image.path);
+        });
+        // Upload the image after picking it
+        // await _uploadProfileImage(File(image.path));
+      }
+    } catch (e) {
+      print("Error picking image: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to pick image. Please try again.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 }
