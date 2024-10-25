@@ -28,34 +28,29 @@ class _AdminDashboardButtons extends State<AdminDashboardButtons> {
             crossAxisSpacing: 15,
             mainAxisExtent: 110),
         children: [
-          viewContainer(
-            "Animal",
-            "lib/assets/cowEntry.png",
-            AnimalRegistrationPage(),
-            screenHeight / 2,
-          ),
-          viewContainer(
-            "Wanda",
-            "lib/assets/wanda.png",
-            feedEntryPage(),
-            screenHeight / 3,
-          ),
-          viewContainer("Worker", "lib/assets/farmWorker.png",
-              workerRegistrationPage(), screenHeight / 2),
+          viewContainer("Animal", "lib/assets/cowEntry.png", () async {
+            // Navigate to animalRegistrationPage and get the save function
+            final Function? saveFunction = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const animalRegistrationPage(),
+              ),
+            );
+            if (saveFunction != null) {
+              // Trigger customPopUp and pass the save function
+              customPopUp(context, screenHeight / 3,saveFunction);
+            }
+          }),
+          viewContainer("Wanda", "lib/assets/wanda.png",(){}),
+          viewContainer("Worker", "lib/assets/farmWorker.png",(){}),
         ],
       ),
     );
   }
 
-  Widget viewContainer(String text, iconPath, Widget widget, double height) {
+  Widget viewContainer(String text, String iconPath, VoidCallback onTap) {
     return InkWell(
-      onTap: () {
-        customPopUp(
-          context,
-          widget,
-          height,
-        );
-      },
+      onTap: onTap,
       child: Stack(
         children: [
           Column(
@@ -74,10 +69,7 @@ class _AdminDashboardButtons extends State<AdminDashboardButtons> {
                           blurRadius: 6),
                     ]),
                 child: Center(
-                    child: Image(
-                  image: AssetImage(iconPath),
-                  width: screenWidth / 4,
-                )),
+                    child: Image(image: AssetImage(iconPath), width: screenWidth / 4)),
               ),
               Text1(fontColor: lightBlackColor, fontSize: paragraph, text: text)
             ],
