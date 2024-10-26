@@ -33,16 +33,16 @@ class _AdminDashboardButtons extends State<AdminDashboardButtons> {
             final Function? saveFunction = await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const animalRegistrationPage(),
+                builder: (context) => const AnimalRegistrationPage(),
               ),
             );
             if (saveFunction != null) {
               // Trigger customPopUp and pass the save function
-              customPopUp(context, screenHeight / 3,saveFunction);
+              customPopUp(context, screenHeight / 3, saveFunction);
             }
           }),
-          viewContainer("Wanda", "lib/assets/wanda.png",(){}),
-          viewContainer("Worker", "lib/assets/farmWorker.png",(){}),
+          viewContainer("Wanda", "lib/assets/wanda.png", () {}),
+          viewContainer("Worker", "lib/assets/farmWorker.png", () {}),
         ],
       ),
     );
@@ -69,7 +69,8 @@ class _AdminDashboardButtons extends State<AdminDashboardButtons> {
                           blurRadius: 6),
                     ]),
                 child: Center(
-                    child: Image(image: AssetImage(iconPath), width: screenWidth / 4)),
+                    child: Image(
+                        image: AssetImage(iconPath), width: screenWidth / 4)),
               ),
               Text1(fontColor: lightBlackColor, fontSize: paragraph, text: text)
             ],

@@ -1,5 +1,6 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
+import 'package:dairyfarmflow/Providers/animal_registratin_provider.dart';
 import 'package:dairyfarmflow/Providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,7 +23,12 @@ class customRoundedButton extends StatefulWidget {
 class _customRoundedButtonState extends State<customRoundedButton> {
   @override
   Widget build(BuildContext context) {
+    bool isLoading = false;
+    final animalProvider = Provider.of<AnimalRegistratinProvider>(context);
     final authProvider = Provider.of<AuthProvider>(context);
+    isLoading = authProvider.isLoading;
+    isLoading = animalProvider.isLoading;
+    print(isLoading);
     return InkWell(
       onTap: widget.on_Tap,
       child: Material(
@@ -36,7 +42,7 @@ class _customRoundedButtonState extends State<customRoundedButton> {
               color: darkGreenColor,
               borderRadius: BorderRadius.circular(20),
             ),
-            child: authProvider.isLoading
+            child: isLoading
                 ? Center(
                     child: CircularProgressIndicator(
                       color: whiteColor,

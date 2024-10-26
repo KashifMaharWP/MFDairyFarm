@@ -1,5 +1,6 @@
 import 'package:dairyfarmflow/Class/myRoutes.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
+import 'package:dairyfarmflow/Providers/animal_registratin_provider.dart';
 import 'package:dairyfarmflow/Providers/auth_provider.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/Screens/Login/Screen/loginPage.dart';
@@ -26,6 +27,8 @@ class MyApp extends StatelessWidget {
           create: (context) => UserDetail(),
         ),
         ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(
+            create: (context) => AnimalRegistratinProvider()),
       ],
       child: MaterialApp(
         routes: myRoutes.getRoutes(),

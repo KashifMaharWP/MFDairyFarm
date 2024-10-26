@@ -1,149 +1,217 @@
+import 'dart:io';
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
+import 'package:dairyfarmflow/Providers/animal_registratin_provider.dart';
+import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:dairyfarmflow/Widget/customRoundButton.dart';
 import 'package:dairyfarmflow/Widget/textFieldWidget1.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
 
-class animalRegistrationPage extends StatefulWidget {
-  const animalRegistrationPage({super.key});
+class AnimalRegistrationPage extends StatefulWidget {
+  const AnimalRegistrationPage({super.key});
 
   @override
-  State<animalRegistrationPage> createState() => _animalRegistrationPageState();
+  State<AnimalRegistrationPage> createState() => _AnimalRegistrationPageState();
 }
 
+class _AnimalRegistrationPageState extends State<AnimalRegistrationPage> {
+  TextEditingController tagId = TextEditingController();
+  TextEditingController purchasedPrice = TextEditingController();
+  TextEditingController breedType = TextEditingController();
+  List<String> tagIDList = ["1", "2", "3", "4", "5", "6", "7"];
+  String animalIdDropDownValue = "1";
+  File? _image; // To store the selected image
 
+  final ImagePicker picker = ImagePicker();
 
-class _animalRegistrationPageState extends State<animalRegistrationPage> {
-  TextEditingController tagId=TextEditingController();
-  TextEditingController purchasedPrice=TextEditingController();
-  TextEditingController breadType=TextEditingController();
-  List<String> tagIDList=["1", "2", "3", "4"];
-  String? dropDownItem;
-  String animalIdDropDownValue="1";
-
-
-
-  // Define the save function here
-  void saveAnimal() {
-    print("Animal details saved:");
-    print("Tag ID: ${tagId.text}");
-    print("Purchased Price: ${purchasedPrice.text}");
-    print("Breed Type: ${breadType.text}");
-
-    // You can close the popup or navigate away after saving
-    Navigator.pop(context);
+  // Method to pick an image
+  Future<void> pickImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    } else {
+      print('No image selected.');
+    }
   }
+
+  // Method to upload data to the API
+  // Future<void> uploadAnimalData(BuildContext context) async {
+  //   if (_image == null ||
+  //       purchasedPrice.text.isEmpty ||
+  //       breedType.text.isEmpty) {
+  //     print("Please complete all fields and select an image.");
+  //     return;
+  //   }
+
+  //   var request = http.MultipartRequest(
+  //     'POST',
+  //     Uri.parse(
+  //         'https://dairy-app-production-4bb8.up.railway.app/api/cow/register'),
+  //   );
+
+  //   // Add headers and fields
+
+  //   request.files.add(
+  //     await http.MultipartFile.fromPath(
+  //       'image',
+  //       _image!.path,
+  //       filename: basename(_image!.path),
+  //     ),
+  //   );
+
+  //   request.headers['Authorization'] =
+  //       'Bearer ${Provider.of<UserDetail>(context, listen: false).token}';
+  //   request.fields['animalNumber'] = animalIdDropDownValue;
+  //   request.fields['breed'] = breedType.text;
+  //   request.fields['age'] = purchasedPrice.text;
+
+  //   // Send request and handle response
+  //   try {
+  //     var response = await request.send();
+  //     if (response.statusCode == 201 || response.statusCode == 200) {
+  //       print('Animal data uploaded successfully!');
+  //     } else {
+  //       print('Failed to upload data: ${response.statusCode}');
+  //     }
+  //   } catch (e) {
+  //     print('Error uploading data: $e');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
+    // final provider = Provider.of<AnimalRegistratinProvider>(context);
+    String token =
+        Provider.of<UserDetail>(context, listen: false).token.toString();
+    print("Token " + token);
     return Scaffold(
-        backgroundColor: Colors.white,
-        body:SingleChildScrollView(
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 20, right: 8, left: 8),
           child: Column(
             children: [
-              Text1(fontColor: darkGreenColor, fontSize: paragraph, text: "Register Animal"),
-              SizedBox(height: paragraph/6,),
-              Container(
-                margin: EdgeInsets.all(paragraph/6),
-                padding: EdgeInsets.only(right: 10,left: 10),
-                width: screenWidth,
-                height: screenHeight/16,
-                decoration: BoxDecoration(
+              Text1(
+                fontColor: darkGreenColor,
+                fontSize: paragraph,
+                text: "Register Animal",
+              ),
+              SizedBox(height: paragraph / 6),
+              GestureDetector(
+                onTap: pickImage,
+                child: Container(
+                  margin: EdgeInsets.all(paragraph / 6),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  width: screenWidth,
+                  height: screenHeight / 16,
+                  decoration: BoxDecoration(
                     border: Border.all(color: darkGreenColor, width: 1),
-                    borderRadius: BorderRadius.all(Radius.circular(paragraph/6))
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text1(fontColor: lightBlackColor, fontSize: paragraph/1.2, text: "No Picture Selected"),
-                    Align(
+                    borderRadius: BorderRadius.circular(paragraph / 6),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text1(
+                        fontColor: lightBlackColor,
+                        fontSize: paragraph / 1.2,
+                        text: _image == null
+                            ? "No Picture Selected"
+                            : "Image Selected",
+                      ),
+                      Align(
                         alignment: Alignment.centerRight,
-                        child: Icon(CupertinoIcons.camera_fill,color: darkGreenColor,size: header1*1.5,)),
-
-                  ],
+                        child: Icon(
+                          CupertinoIcons.camera_fill,
+                          color: darkGreenColor,
+                          size: header1 * 1.5,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              SizedBox(height: paragraph/2,),
+              SizedBox(height: paragraph / 2),
               customForm(),
               SizedBox(height: paragraph / 2),
               customRoundedButton(
                 title: "Save Animal",
-                on_Tap: () {
-                  // When save is clicked, pop and pass the save function
-                  Navigator.pop(context, saveAnimal);
+                on_Tap: () async {
+                  await Provider.of<AnimalRegistratinProvider>(context,
+                          listen: false)
+                      .uploadAnimalData(context, animalIdDropDownValue,
+                          breedType.text, purchasedPrice.text, _image!);
                 },
               ),
             ],
           ),
-        )
+        ),
+      ),
     );
   }
 
-  Widget customForm(){
-    return Padding(padding: EdgeInsets.all(paragraph/6),
+  Widget customForm() {
+    return Padding(
+      padding: EdgeInsets.all(paragraph / 6),
       child: Form(
-          child: Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                customTextFormField("Animal Id",CupertinoIcons.tag_fill ),
-                DropdownButtonFormField(
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: const BorderSide(
-                              width: 1,
-                              color: Colors.grey,
-                            ))),
-                    value: animalIdDropDownValue,
-                    items: tagIDList.map((String item){
-                      return DropdownMenuItem(
-                          value: item,
-                          child: Text(item)
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue){
-                      setState(() {
-                        dropDownItem=newValue;
-                      });
-                    }
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            customTextFormField("Animal ID", CupertinoIcons.tag_fill),
+            DropdownButtonFormField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(width: 1, color: Colors.grey),
                 ),
-                SizedBox(height: paragraph,),
-                customTextFormField("Breed Type",CupertinoIcons.arrow_3_trianglepath),
-                TextFieldWidget1(
-                    widgetcontroller: breadType,
-                    fieldName: "Breed Type",
-                    isPasswordField: false
-                ),
-                SizedBox(height: paragraph,),
-                customTextFormField("Purchase Price",CupertinoIcons.money_dollar_circle_fill),
-                TextFieldWidget1(
-                    widgetcontroller: purchasedPrice,
-                    fieldName: "Purchase Price",
-                    isPasswordField: false
-                )
-              ],
+              ),
+              value: animalIdDropDownValue,
+              items: tagIDList.map((String item) {
+                return DropdownMenuItem(value: item, child: Text(item));
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  animalIdDropDownValue = newValue!;
+                });
+              },
             ),
-          )),
+            SizedBox(height: paragraph),
+            customTextFormField(
+                "Breed Type", CupertinoIcons.arrow_3_trianglepath),
+            TextFieldWidget1(
+              widgetcontroller: breedType,
+              fieldName: "Breed Type",
+              isPasswordField: false,
+            ),
+            SizedBox(height: paragraph),
+            customTextFormField(
+                "Purchase Price", CupertinoIcons.money_dollar_circle_fill),
+            TextFieldWidget1(
+              widgetcontroller: purchasedPrice,
+              fieldName: "Purchase Price",
+              isPasswordField: false,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
-  Widget customTextFormField(String text,IconData customIcon){
-    return  Wrap(
+  Widget customTextFormField(String text, IconData customIcon) {
+    return Wrap(
       alignment: WrapAlignment.start,
       runAlignment: WrapAlignment.center,
       crossAxisAlignment: WrapCrossAlignment.start,
       children: [
-        Icon(customIcon,color: darkGreenColor,),
-        Text1(
-            fontColor: blackColor,
-            fontSize: paragraph,
-            text: text
-        ),
+        Icon(customIcon, color: darkGreenColor),
+        Text1(fontColor: blackColor, fontSize: paragraph, text: text),
       ],
     );
   }
