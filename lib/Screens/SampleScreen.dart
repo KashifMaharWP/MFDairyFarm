@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class sampleScreen extends StatelessWidget {
   final Color backgroundColor;
-  const sampleScreen({super.key,required this.backgroundColor});
+  const sampleScreen({super.key, required this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +15,8 @@ class sampleScreen extends StatelessWidget {
       ),
       backgroundColor: backgroundColor,
       body: Center(
-        child: Container(
-          child: Text1(
-              fontColor: whiteColor,
-              fontSize: header1,
-              text: "Comming Soon"),
-        ),
+        child: Text1(
+            fontColor: whiteColor, fontSize: header1, text: "Comming Soon"),
       ),
     );
   }

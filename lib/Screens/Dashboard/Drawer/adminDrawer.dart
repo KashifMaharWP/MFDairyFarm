@@ -1,4 +1,3 @@
-
 import 'package:dairyfarmflow/Screens/SampleScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,23 +19,43 @@ class _AdminOptionState extends State<AdminOption> {
         MyListTile(
             iconss: CupertinoIcons.bus,
             title: "Manage User",
-            route: Navigator.push(context, MaterialPageRoute(builder: (context)=>sampleScreen(backgroundColor: Colors.red)))),
+            route: Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const sampleScreen(backgroundColor: Colors.red)))),
         MyListTile(
             iconss: CupertinoIcons.doc_chart,
             title: "View Leave",
-            route: Navigator.push(context, MaterialPageRoute(builder: (context)=>sampleScreen(backgroundColor: Colors.red)))),
+            route: Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const sampleScreen(backgroundColor: Colors.red)))),
         MyListTile(
-          iconss: CupertinoIcons.doc_fill,
-          title: "Create Project",
-          route: Navigator.push(context, MaterialPageRoute(builder: (context)=>sampleScreen(backgroundColor: Colors.red)))),
+            iconss: CupertinoIcons.doc_fill,
+            title: "Create Project",
+            route: Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const sampleScreen(backgroundColor: Colors.red)))),
         MyListTile(
             iconss: CupertinoIcons.share,
             title: "Share App",
-            route: Navigator.push(context, MaterialPageRoute(builder: (context)=>sampleScreen(backgroundColor: Colors.red)))),
+            route: Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const sampleScreen(backgroundColor: Colors.red)))),
         MyListTile(
             iconss: CupertinoIcons.circle_fill,
             title: "Logout",
-            route: Navigator.push(context, MaterialPageRoute(builder: (context)=>sampleScreen(backgroundColor: Colors.red)))),
+            route: Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const sampleScreen(backgroundColor: Colors.red)))),
       ],
     );
   }

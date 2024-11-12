@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserDetail extends ChangeNotifier {
@@ -35,7 +35,9 @@ class UserDetail extends ChangeNotifier {
   }
 
   Future setUserPreferences() async {
-    print("Going to store the preferences in the Local Storage: $id");
+    if (kDebugMode) {
+      print("Going to store the preferences in the Local Storage: $id");
+    }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString("userId", id.toString());
     await prefs.setString("name", name.toString());

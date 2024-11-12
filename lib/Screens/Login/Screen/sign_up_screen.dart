@@ -1,6 +1,7 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Providers/auth_provider.dart';
+import 'package:dairyfarmflow/Providers/register_user_provider.dart';
 
 import 'package:dairyfarmflow/Widget/customRoundButton.dart';
 import 'package:dairyfarmflow/Widget/textFieldWithIconWidget.dart';
@@ -101,10 +102,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
             height: header1,
           ),
           customRoundedButton(
-              title: "Sign Up",
+              title: "Register User",
               on_Tap: () async {
-                await Provider.of<AuthProvider>(context, listen: false)
-                    .signUp(name.text, email.text, password.text, context);
+                await Provider.of<RegisterUserProvider>(context, listen: false)
+                    .registerUser(
+                        name: name.text,
+                        email: email.text,
+                        password: password.text,
+                        context: context);
+                // await Provider.of<AuthProvider>(context, listen: false)
+                //     .signUp(name.text, email.text, password.text, context);
                 name.clear();
                 email.clear();
                 password.clear();

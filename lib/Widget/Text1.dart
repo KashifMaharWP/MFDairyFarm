@@ -6,7 +6,10 @@ class Text1 extends StatefulWidget {
   final Color fontColor;
   final String text;
   const Text1(
-      {required this.fontColor, required this.fontSize, required this.text});
+      {super.key,
+      required this.fontColor,
+      required this.fontSize,
+      required this.text});
 
   @override
   State<Text1> createState() => _Text1State();

@@ -90,7 +90,7 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
                                             //color: const Color.fromARGB(255, 210, 203, 203),
                                             borderRadius:
                                                 BorderRadius.circular(20)),
-                                        child: Image(
+                                        child: const Image(
                                           image: NetworkImage(
                                               "https://static.vecteezy.com/system/resources/thumbnails/023/651/804/small/dairy-cow-on-transparent-background-created-with-generative-ai-png.png"),
                                           fit: BoxFit.fill,

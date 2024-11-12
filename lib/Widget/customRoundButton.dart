@@ -28,7 +28,7 @@ class _customRoundedButtonState extends State<customRoundedButton> {
     final authProvider = Provider.of<AuthProvider>(context);
     isLoading = authProvider.isLoading;
     isLoading = animalProvider.isLoading;
-    print(isLoading);
+
     return InkWell(
       onTap: widget.on_Tap,
       child: Material(

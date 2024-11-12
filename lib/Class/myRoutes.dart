@@ -1,11 +1,10 @@
 import 'package:dairyfarmflow/Screens/AdminScreen/AnimalRegistration/animalRegistrationPage.dart';
-import 'package:dairyfarmflow/Screens/AdminScreen/FeedEntry/feedEntryPage.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/Dashboard.dart';
 import 'package:dairyfarmflow/Screens/Home/Home.dart';
 import 'package:dairyfarmflow/Screens/Login/Screen/loginPage.dart';
 import 'package:flutter/cupertino.dart';
 
-class myRoutes {
+class MyRoutes {
   static const String login = "/login";
   static const String homePage = "/home";
   static const String dashboard = "/dashboard";
@@ -18,7 +17,7 @@ class myRoutes {
       homePage: (context) => home(),
       dashboard: (context) => Dashboard(),
       animalRegistration: (context) => const AnimalRegistrationPage(),
-      feedEntry: (context) => const feedEntryPage(),
+      // feedEntry: (context) => const feedEntryPage(),
     };
   }
 }

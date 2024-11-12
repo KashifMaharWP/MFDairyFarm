@@ -1,8 +1,7 @@
 import 'package:dairyfarmflow/Functions/customPopUp.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/AnimalRegistration/animalRegistrationPage.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/FeedEntry/feedEntryPage.dart';
-import 'package:dairyfarmflow/Screens/AdminScreen/WorkerRegistration/workerRegistrationPage.dart';
-import 'package:dairyfarmflow/Screens/SampleScreen.dart';
+import 'package:dairyfarmflow/Screens/Login/Screen/sign_up_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../Class/colorPallete.dart';
@@ -41,8 +40,14 @@ class _AdminDashboardButtons extends State<AdminDashboardButtons> {
               customPopUp(context, screenHeight / 3, saveFunction);
             }
           }),
-          viewContainer("Wanda", "lib/assets/wanda.png", () {}),
-          viewContainer("Worker", "lib/assets/farmWorker.png", () {}),
+          viewContainer("Wanda", "lib/assets/wanda.png", () async {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => feedEntryPage()));
+          }),
+          viewContainer("Worker", "lib/assets/farmWorker.png", () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const SignUpScreen()));
+          }),
         ],
       ),
     );

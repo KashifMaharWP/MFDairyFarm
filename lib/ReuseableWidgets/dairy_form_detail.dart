@@ -126,8 +126,8 @@ Widget wrapCircleContainer(String text, label) {
     padding: EdgeInsets.symmetric(horizontal: paragraph),
     child: Column(
       children: [
-        circleContainer("${text}"),
-        SizedBox(
+        circleContainer(text),
+        const SizedBox(
           height: 2,
         ),
         Text1(fontColor: lightBlackColor, fontSize: paragraph, text: label)
@@ -146,13 +146,12 @@ Widget circleContainer(String text) {
       boxShadow: [
         BoxShadow(
             color: greyGreenColor,
-            offset: Offset(2, 2),
+            offset: const Offset(2, 2),
             blurRadius: 2,
             spreadRadius: 2)
       ],
     ),
     child: Center(
-        child:
-            Text1(fontColor: blackColor, fontSize: paragraph, text: "${text}")),
+        child: Text1(fontColor: blackColor, fontSize: paragraph, text: text)),
   );
 }

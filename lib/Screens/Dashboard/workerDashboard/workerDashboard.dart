@@ -3,15 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../Widget/customDashboardButton.dart';
 
-
-class workerDashboardButtons extends StatefulWidget {
-  const workerDashboardButtons({super.key});
+class WorkerDashboardButtons extends StatefulWidget {
+  const WorkerDashboardButtons({super.key});
 
   @override
-  State<workerDashboardButtons> createState() => _workerDashboardButtons();
+  State<WorkerDashboardButtons> createState() => _workerDashboardButtons();
 }
 
-class _workerDashboardButtons extends State<workerDashboardButtons> {
+// ignore: camel_case_types
+class _workerDashboardButtons extends State<WorkerDashboardButtons> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -26,35 +26,34 @@ class _workerDashboardButtons extends State<workerDashboardButtons> {
               colors: Colors.cyan,
               btnName: "Morning Milk",
               customIcon: "lib/assets/sun.png",
-              ontap: () {
-
-              }),
+              ontap: () {}),
           CustomDashboardButton(
               colors: Colors.orange,
               btnName: "Evening Milk",
               customIcon: "lib/assets/moon.png",
-              ontap: () {
-
-              }),
-
+              ontap: () {}),
           CustomDashboardButton(
               colors: Colors.green,
               btnName: "Pregenency",
               customIcon: "lib/assets/cow.png",
               ontap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => sampleScreen(backgroundColor: Colors.deepOrange)));
-
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const sampleScreen(
+                            backgroundColor: Colors.deepOrange)));
               }),
           CustomDashboardButton(
               colors: Colors.pink,
               btnName: "Comments",
               customIcon: "lib/assets/document.png",
               ontap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => sampleScreen(backgroundColor: Colors.pink)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) =>
+                            const sampleScreen(backgroundColor: Colors.pink)));
               }),
-
         ],
       ),
     );

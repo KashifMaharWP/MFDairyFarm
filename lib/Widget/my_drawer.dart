@@ -103,7 +103,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 Provider.of<UserDetail>(context, listen: false)
                     .clearUserPreferences();
                 Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => LoginPage()));
+                    MaterialPageRoute(builder: (context) => const LoginPage()));
               },
               leading: Icon(
                 CupertinoIcons.square_arrow_left,

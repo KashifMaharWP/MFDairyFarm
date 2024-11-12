@@ -41,34 +41,32 @@ class _workerRegistrationPageState extends State<workerRegistrationPage> {
     return Padding(
       padding: EdgeInsets.all(paragraph / 6),
       child: Form(
-          child: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            customTextFormField("Full Name", Icons.person),
-            TextFieldWidget1(
-                widgetcontroller: fullName,
-                fieldName: "Full Name(Azhar Ali)",
-                isPasswordField: false),
-            SizedBox(
-              height: paragraph,
-            ),
-            customTextFormField("Email", Icons.email),
-            TextFieldWidget1(
-                widgetcontroller: email,
-                fieldName: "Email(azhar@gmail.com)",
-                isPasswordField: false),
-            SizedBox(
-              height: paragraph,
-            ),
-            customTextFormField("Password", Icons.lock),
-            TextFieldWidget1(
-                widgetcontroller: password,
-                fieldName: "Password",
-                isPasswordField: true),
-          ],
-        ),
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          customTextFormField("Full Name", Icons.person),
+          TextFieldWidget1(
+              widgetcontroller: fullName,
+              fieldName: "Full Name(Azhar Ali)",
+              isPasswordField: false),
+          SizedBox(
+            height: paragraph,
+          ),
+          customTextFormField("Email", Icons.email),
+          TextFieldWidget1(
+              widgetcontroller: email,
+              fieldName: "Email(azhar@gmail.com)",
+              isPasswordField: false),
+          SizedBox(
+            height: paragraph,
+          ),
+          customTextFormField("Password", Icons.lock),
+          TextFieldWidget1(
+              widgetcontroller: password,
+              fieldName: "Password",
+              isPasswordField: true),
+        ],
       )),
     );
   }

@@ -8,6 +8,7 @@ import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:dairyfarmflow/Widget/customRoundButton.dart';
 import 'package:dairyfarmflow/Widget/textFieldWidget1.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,22 +24,57 @@ class _AnimalRegistrationPageState extends State<AnimalRegistrationPage> {
   TextEditingController tagId = TextEditingController();
   TextEditingController purchasedPrice = TextEditingController();
   TextEditingController breedType = TextEditingController();
-  List<String> tagIDList = ["1", "2", "3", "4", "5", "6", "7"];
+  TextEditingController animalId = TextEditingController();
+  // List<String> tagIDList = ["1", "2", "3", "4", "5", "6", "7"];
   String animalIdDropDownValue = "1";
   File? _image; // To store the selected image
 
   final ImagePicker picker = ImagePicker();
 
   // Method to pick an image
-  Future<void> pickImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  Future<void> pickImage(ImageSource source) async {
+    final pickedFile = await picker.pickImage(source: source);
     if (pickedFile != null) {
       setState(() {
         _image = File(pickedFile.path);
       });
     } else {
-      print('No image selected.');
+      if (kDebugMode) {
+        print('No image selected.');
+      }
     }
+  }
+
+  void _showImageSourceDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Select Image Source'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: const Text('Camera'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  pickImage(ImageSource.camera);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo),
+                title: const Text('Gallery'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  pickImage(ImageSource.gallery);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   // Method to upload data to the API
@@ -90,12 +126,14 @@ class _AnimalRegistrationPageState extends State<AnimalRegistrationPage> {
     // final provider = Provider.of<AnimalRegistratinProvider>(context);
     String token =
         Provider.of<UserDetail>(context, listen: false).token.toString();
-    print("Token " + token);
+    if (kDebugMode) {
+      print("Token $token");
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 20, right: 8, left: 8),
+          padding: const EdgeInsets.only(top: 40, right: 8, left: 8),
           child: Column(
             children: [
               Text1(
@@ -105,10 +143,12 @@ class _AnimalRegistrationPageState extends State<AnimalRegistrationPage> {
               ),
               SizedBox(height: paragraph / 6),
               GestureDetector(
-                onTap: pickImage,
+                onTap: () {
+                  _showImageSourceDialog(context);
+                },
                 child: Container(
                   margin: EdgeInsets.all(paragraph / 6),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   width: screenWidth,
                   height: screenHeight / 16,
                   decoration: BoxDecoration(
@@ -145,8 +185,8 @@ class _AnimalRegistrationPageState extends State<AnimalRegistrationPage> {
                 on_Tap: () async {
                   await Provider.of<AnimalRegistratinProvider>(context,
                           listen: false)
-                      .uploadAnimalData(context, animalIdDropDownValue,
-                          breedType.text, purchasedPrice.text, _image!);
+                      .uploadAnimalData(context, animalId.text, breedType.text,
+                          purchasedPrice.text, _image!);
                 },
               ),
             ],
@@ -165,22 +205,10 @@ class _AnimalRegistrationPageState extends State<AnimalRegistrationPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             customTextFormField("Animal ID", CupertinoIcons.tag_fill),
-            DropdownButtonFormField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(width: 1, color: Colors.grey),
-                ),
-              ),
-              value: animalIdDropDownValue,
-              items: tagIDList.map((String item) {
-                return DropdownMenuItem(value: item, child: Text(item));
-              }).toList(),
-              onChanged: (String? newValue) {
-                setState(() {
-                  animalIdDropDownValue = newValue!;
-                });
-              },
+            TextFieldWidget1(
+              widgetcontroller: animalId,
+              fieldName: "Animal Id",
+              isPasswordField: false,
             ),
             SizedBox(height: paragraph),
             customTextFormField(

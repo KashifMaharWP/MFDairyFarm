@@ -1,20 +1,20 @@
-import 'dart:convert';
-
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Providers/auth_provider.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/Dashboard.dart';
+import 'package:dairyfarmflow/Screens/Dashboard/UserDashboard/user_dashboard.dart';
 import 'package:dairyfarmflow/Screens/Login/Screen/sign_up_screen.dart';
+import 'package:dairyfarmflow/Screens/Registration/registration_page1.dart';
 import 'package:dairyfarmflow/Widget/customRoundButton.dart';
 import 'package:dairyfarmflow/Widget/textFieldWithIconWidget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../Class/textSizing.dart';
 import '../../../Widget/Text1.dart';
-import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -27,21 +27,31 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   bool isLoading = false;
+  String role = '';
 
   checkUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final chk = prefs.getString('userId');
+    final role = prefs.getString('role');
+
     print("User Id = $chk");
     //checking if the user detail is available then
     if (chk != '' && chk != null) {
       //get user data from the preference and store it in userdetail class
       Provider.of<UserDetail>(context, listen: false)
           .setUserDetailByPreferences();
+      if (role == 'Admin') {
+        Navigator.push(context, MaterialPageRoute(builder: (_) => Dashboard()));
+      } else {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => UserDashboard()));
+      }
 
       //after initializing the user detail class move the user to homepage
-      Navigator.push(context, MaterialPageRoute(builder: (_) => Dashboard()));
     } else {
-      print("User not found!");
+      if (kDebugMode) {
+        print("User not found!");
+      }
     }
   }
 
@@ -123,8 +133,10 @@ class _LoginPageState extends State<LoginPage> {
           // ),
           TextButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SignUpScreen()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const RegistrationPage1()));
               },
               child: Text(
                 'Register!',

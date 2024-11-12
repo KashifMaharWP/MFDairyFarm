@@ -1,6 +1,7 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
+import 'package:dairyfarmflow/Providers/auth_provider.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:dairyfarmflow/Widget/customRoundButton.dart';
 import 'package:dairyfarmflow/Widget/textFieldWidget1.dart';
@@ -11,13 +12,15 @@ import 'package:intl/intl.dart';
 import '../../../Functions/customDatePicker.dart';
 
 class feedEntryPage extends StatefulWidget {
-  const feedEntryPage({super.key});
+  String? id;
+  feedEntryPage({super.key, this.id});
 
   @override
   State<feedEntryPage> createState() => _feedEntryPageState();
 }
 
 class _feedEntryPageState extends State<feedEntryPage> {
+  DateTime? pickedDate;
   TextEditingController wanda = TextEditingController();
   TextEditingController purchasedPrice = TextEditingController();
   TextEditingController breadType = TextEditingController();
@@ -28,19 +31,26 @@ class _feedEntryPageState extends State<feedEntryPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.id);
     return Material(
         color: Colors.white,
-        child: Column(
-          children: [
-            Text1(
-                fontColor: darkGreenColor,
-                fontSize: paragraph,
-                text: "Add Feed"),
-            SizedBox(
-              height: paragraph / 6,
-            ),
-            customForm(),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text1(
+                  fontColor: darkGreenColor,
+                  fontSize: paragraph * 2,
+                  text: "Add Feed"),
+              SizedBox(
+                height: paragraph / 6,
+              ),
+              customForm(),
+              customRoundedButton(title: "Add Feed", on_Tap: () async {})
+            ],
+          ),
         ));
   }
 
@@ -63,7 +73,10 @@ class _feedEntryPageState extends State<feedEntryPage> {
               height: paragraph,
             ),
             customTextFormField("Date", CupertinoIcons.calendar),
-            dateContainer()
+            dateContainer(),
+            SizedBox(
+              height: 30,
+            ),
           ],
         ),
       )),
@@ -74,8 +87,7 @@ class _feedEntryPageState extends State<feedEntryPage> {
   Widget dateContainer() {
     return InkWell(
       onTap: () async {
-        final DateTime? pickedDate =
-            await customDatePicker(context, selectedDate);
+        pickedDate = await customDatePicker(context, selectedDate);
         if (pickedDate != null) {
           setState(() {
             selectedDate = pickedDate as DateTime;

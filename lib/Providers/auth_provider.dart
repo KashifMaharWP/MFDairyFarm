@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'package:dairyfarmflow/API/global_api.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/Dashboard.dart';
+import 'package:dairyfarmflow/Screens/Dashboard/UserDashboard/user_dashboard.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -24,12 +27,12 @@ class AuthProvider with ChangeNotifier {
 
     try {
       final response = await http.post(
-        Uri.parse(
-            "https://dairy-app-production-4bb8.up.railway.app/api/user/signup"),
+        Uri.parse("${GlobalApi.baseApi}${GlobalApi.signUpAPI}"),
         body: body,
       );
 
       final userJson = jsonDecode(response.body);
+      print(userJson);
 
       if (response.statusCode == 200) {
         _message = userJson["message"];
@@ -77,29 +80,35 @@ class AuthProvider with ChangeNotifier {
   Future<bool> login(
       String email, String password, BuildContext context) async {
     bool authUser = false;
-    final body = {"email": email, "password": password};
-
     _isLoading = true;
     notifyListeners();
+    final body = {"email": email, "password": password};
 
     try {
       final response = await http.post(
-        Uri.parse(
-            "https://dairy-app-production-4bb8.up.railway.app/api/user/login"),
+        Uri.parse("${GlobalApi.baseApi}${GlobalApi.loginApi}"),
         body: body,
       );
 
       if (response.statusCode == 200) {
         final userJson = jsonDecode(response.body);
+        String role = userJson['user_']['role'];
 
         Provider.of<UserDetail>(context, listen: false).setUserDetail(userJson);
 
         debugPrint('API Body: ${response.body}');
         authUser = true;
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => Dashboard()),
-        );
+        if (role == 'Admin') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => Dashboard()),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => UserDashboard()),
+          );
+        }
       } else {
         final userJson = jsonDecode(response.body);
         _message = userJson['message'];

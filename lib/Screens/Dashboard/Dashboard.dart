@@ -22,7 +22,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class Dashboard extends StatefulWidget {
-  Dashboard({super.key});
+  const Dashboard({super.key});
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -53,7 +53,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MyDrawer(),
+      drawer: const MyDrawer(),
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.grey.shade100,
       body: iconIndex == 0
@@ -249,7 +249,7 @@ class _DashboardState extends State<Dashboard> {
   Widget gridButtons() {
     return role == "1"
         ? const AdminDashboardButtons()
-        : const workerDashboardButtons();
+        : const WorkerDashboardButtons();
   }
 
   Widget pageBodyContainer() {
@@ -288,7 +288,7 @@ class _DashboardState extends State<Dashboard> {
                     BoxShadow(
                         color: greyGreenColor,
                         blurRadius: 8,
-                        offset: Offset(2, 2))
+                        offset: const Offset(2, 2))
                   ]),
             ),
             SizedBox(
@@ -347,7 +347,7 @@ class _DashboardState extends State<Dashboard> {
       padding: EdgeInsets.symmetric(horizontal: paragraph),
       child: Column(
         children: [
-          circleContainer("${text}"),
+          circleContainer(text),
           const SizedBox(
             height: 2,
           ),
@@ -374,8 +374,7 @@ class _DashboardState extends State<Dashboard> {
         ],
       ),
       child: Center(
-          child: Text1(
-              fontColor: blackColor, fontSize: paragraph, text: "${text}")),
+          child: Text1(fontColor: blackColor, fontSize: paragraph, text: text)),
     );
   }
 
