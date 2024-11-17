@@ -12,6 +12,7 @@ import 'package:dairyfarmflow/Screens/Dashboard/adminDashboard/adminDashboard.da
 import 'package:dairyfarmflow/Screens/Dashboard/adminDashboard/profile_view.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/workerDashboard/workerDashboard.dart';
 import 'package:dairyfarmflow/Screens/Notifications/notification_screen.dart';
+import 'package:dairyfarmflow/Screens/SampleScreen.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:dairyfarmflow/Widget/my_drawer.dart';
 import 'package:flutter/cupertino.dart';
@@ -195,7 +196,8 @@ class _UserDashboardState extends State<UserDashboard> {
               },
             )
           : iconIndex == 1
-              ? const NotificationScreen()
+              ? const sampleScreen(
+                  backgroundColor: Colors.yellow) //NotificationScreen()
               : const ProfileView(),
       bottomNavigationBar: CurvedNavigationBar(
         items: _navigationItems,
@@ -314,13 +316,15 @@ class _UserDashboardState extends State<UserDashboard> {
                 // ),
                 Column(
                   children: [
+                    //Replace Sample Screen with following
+                    //VacinationRecord()
                     viewContainer("Medical Record", "lib/assets/medical.png",
-                        const VacinationRecord()),
+                        const sampleScreen(backgroundColor: Colors.orange)),
                     SizedBox(
                       height: paragraph,
                     ),
-                    viewContainer(
-                        "Morning Feed", "lib/assets/sun.png", AddMorningFeed()),
+                    viewContainer("Morning Feed", "lib/assets/sun.png",
+                        const AddMorningFeed()),
                   ],
                 ),
                 Column(

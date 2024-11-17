@@ -24,12 +24,11 @@ class MilkRecordProvider extends ChangeNotifier {
     print(date);
     _isLoading = true;
     _errorMessage = null;
-    notifyListeners();
+    //notifyListeners();
 
     final String token =
         Provider.of<UserDetail>(context, listen: false).token.toString();
-    final String apiUrl =
-        '${GlobalApi.baseApi}${GlobalApi.getMilkRecord}Sun Nov 17 2024';
+    final String apiUrl = '${GlobalApi.baseApi}${GlobalApi.getMilkRecord}$date';
     final headers = {
       'Authorization': 'Bearer $token',
     };

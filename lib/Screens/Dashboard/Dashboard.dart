@@ -13,6 +13,7 @@ import 'package:dairyfarmflow/Screens/AdminScreen/WorkerRegistration/worker_task
 import 'package:dairyfarmflow/Screens/AdminScreen/WorkerRegistration/workers_record.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/adminDashboard/adminDashboard.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/workerDashboard/workerDashboard.dart';
+import 'package:dairyfarmflow/Screens/SampleScreen.dart';
 
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:dairyfarmflow/Widget/my_drawer.dart';
@@ -305,14 +306,22 @@ class _DashboardState extends State<Dashboard> {
                     SizedBox(
                       height: paragraph,
                     ),
-                    viewContainer("Daily Record", "lib/assets/dairyfarm.png",
-                        const DailyRecordScreen()),
+                    viewContainer(
+                        "Daily Record",
+                        "lib/assets/dairyfarm.png",
+                        const sampleScreen(
+                            backgroundColor:
+                                Colors.yellow)) //DailyRecordScreen()),
                   ],
                 ),
                 Column(
                   children: [
-                    viewContainer("Medical Record", "lib/assets/medical.png",
-                        const VacinationRecord()),
+                    viewContainer(
+                        "Medical Record",
+                        "lib/assets/medical.png",
+                        const sampleScreen(
+                            backgroundColor:
+                                Colors.pink)), //VacinationRecord()),
                     SizedBox(
                       height: paragraph,
                     ),

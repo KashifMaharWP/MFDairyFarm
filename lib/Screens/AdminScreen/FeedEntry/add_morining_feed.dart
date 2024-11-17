@@ -64,11 +64,12 @@ class _AddMorningFeedState extends State<AddMorningFeed> {
                   datepiker.text =
                       DateFormat("EEE MMM dd yyyy").format(selectedDate);
                   print(pickedDate);
-                  Provider.of<FeedProvider>(context, listen: false)
+                  await Provider.of<FeedProvider>(context, listen: false)
                       .sendMorningFeedData(
                           context: context,
                           date: datepiker.text,
                           morning: morning.text);
+                  Navigator.pop(context);
                 },
               ),
             ],

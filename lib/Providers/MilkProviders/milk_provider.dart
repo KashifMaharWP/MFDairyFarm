@@ -146,6 +146,7 @@ class MilkProvider extends ChangeNotifier {
         final jsonResponse = jsonDecode(response.body);
         print('Success Message: ${jsonResponse['message']}');
         showSuccessSnackbar(jsonResponse['message'], context);
+        notifyListeners();
       } else {
         try {
           final message = jsonDecode(response.body);

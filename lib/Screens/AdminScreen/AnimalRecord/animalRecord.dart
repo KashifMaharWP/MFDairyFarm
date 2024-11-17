@@ -179,24 +179,24 @@ class _AnimalRecordState extends State<AnimalRecord> {
                                         ),
                                       ),
                                     ),
-                                    role == "Admin"
-                                        ? InkWell(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          feedEntryPage(
-                                                            id: cow.id,
-                                                          )));
-                                            },
-                                            child: Icon(
-                                              Icons.more_vert,
-                                              color: darkGreenColor,
-                                              size: screenWidth * .070,
-                                            ),
-                                          )
-                                        : const Center(),
+                                    // role == "Admin"
+                                    //     ? InkWell(
+                                    //         onTap: () {
+                                    //           Navigator.push(
+                                    //               context,
+                                    //               MaterialPageRoute(
+                                    //                   builder: (context) =>
+                                    //                       feedEntryPage(
+                                    //                         id: cow.id,
+                                    //                       )));
+                                    //         },
+                                    //         child: Icon(
+                                    //           Icons.more_vert,
+                                    //           color: darkGreenColor,
+                                    //           size: screenWidth * .070,
+                                    //         ),
+                                    //       )
+                                    //     : const Center(),
                                   ],
                                 ),
                                 SizedBox(
@@ -217,83 +217,27 @@ class _AnimalRecordState extends State<AnimalRecord> {
                                         ),
                                         Text1(
                                           fontColor: lightBlackColor,
-                                          fontSize: screenWidth * .05,
+                                          fontSize: screenWidth * .04,
                                           text: "Animal ${cow.animalNumber}",
                                         ),
                                       ],
                                     ),
-                                    InkWell(
-                                      onTap: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              content: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  ListTile(
-                                                    onTap: () {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  AddMorningMilk(
-                                                                    id: cow.id,
-                                                                  )));
-                                                    },
-                                                    leading: Image(
-                                                      image: const AssetImage(
-                                                          "lib/assets/sun.png"),
-                                                      width: screenWidth * .075,
-                                                      height:
-                                                          screenWidth * .075,
-                                                    ),
-                                                    title:
-                                                        const Text("Morning"),
-                                                  ),
-                                                  ListTile(
-                                                    onTap: () {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  AddEveningMilk(
-                                                                      id: cow
-                                                                          .id)));
-                                                    },
-                                                    leading: Image(
-                                                      image: const AssetImage(
-                                                          "lib/assets/moon.png"),
-                                                      width: screenWidth * .075,
-                                                      height:
-                                                          screenWidth * .075,
-                                                    ),
-                                                    title:
-                                                        const Text("Evening"),
-                                                  )
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      },
-                                      child: Row(
-                                        children: [
-                                          Image.asset(
-                                            "lib/assets/cowbreed.png",
-                                            width: screenWidth * .055,
-                                            height: screenWidth * .055,
-                                          ),
-                                          SizedBox(
-                                            width: screenWidth * .007,
-                                          ),
-                                          Text1(
-                                            fontColor: lightBlackColor,
-                                            fontSize: screenWidth * .05,
-                                            text: cow.breed,
-                                          ),
-                                        ],
-                                      ),
+                                    Row(
+                                      children: [
+                                        Image.asset(
+                                          "lib/assets/cowbreed.png",
+                                          width: screenWidth * .055,
+                                          height: screenWidth * .055,
+                                        ),
+                                        SizedBox(
+                                          width: screenWidth * .007,
+                                        ),
+                                        Text1(
+                                          fontColor: lightBlackColor,
+                                          fontSize: screenWidth * .04,
+                                          text: cow.breed,
+                                        ),
+                                      ],
                                     ),
                                     Row(
                                       children: [
@@ -307,7 +251,7 @@ class _AnimalRecordState extends State<AnimalRecord> {
                                         ),
                                         Text1(
                                           fontColor: lightBlackColor,
-                                          fontSize: screenWidth * .05,
+                                          fontSize: screenWidth * .04,
                                           text: cow.age
                                               .toString(), // Update as needed
                                         ),

@@ -67,12 +67,13 @@ class _AddEveningMilkState extends State<AddEveningMilk> {
                 on_Tap: () async {
                   datepiker.text =
                       DateFormat("EEE MMM dd yyyy").format(selectedDate);
-                  Provider.of<MilkProvider>(context, listen: false)
+                  await Provider.of<MilkProvider>(context, listen: false)
                       .sendEveningMilkData(
                           cowId: cowId.text,
                           date: datepiker.text,
                           evening: evening.text,
                           context: context);
+                  Navigator.pop(context);
                 },
               ),
             ],

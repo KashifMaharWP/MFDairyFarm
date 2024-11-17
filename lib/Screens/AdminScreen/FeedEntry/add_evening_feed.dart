@@ -64,11 +64,12 @@ class _AddEveningFeedState extends State<AddEveningFeed> {
                 on_Tap: () async {
                   datepiker.text =
                       DateFormat("EEE MMM dd yyyy").format(selectedDate);
-                  Provider.of<FeedProvider>(context, listen: false)
+                  await Provider.of<FeedProvider>(context, listen: false)
                       .sendEveningFeedData(
                           context: context,
                           date: datepiker.text,
                           evening: evening.text);
+                  Navigator.pop(context);
                 },
               ),
             ],
