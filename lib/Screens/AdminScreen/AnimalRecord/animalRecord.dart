@@ -27,7 +27,9 @@ class AnimalRecord extends StatefulWidget {
 
 class _AnimalRecordState extends State<AnimalRecord> {
   @override
+  String role = '';
   Widget build(BuildContext context) {
+    role = Provider.of<UserDetail>(context).role.toString();
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
@@ -36,20 +38,25 @@ class _AnimalRecordState extends State<AnimalRecord> {
         foregroundColor: Colors.white,
         centerTitle: true,
         shadowColor: Colors.black,
-        title: const Text("Animal Record"),
+        title: role == "Admin"
+            ? const Text("Animal Record")
+            : const Text("Add Milk"),
       ),
       body: Column(
         children: [
           SizedBox(
             height: screenHeight * .015,
           ),
-          Container(
-            width: screenWidth * 0.95,
-            height: screenHeight * .07,
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            child: const Center(child: customFiltersWidget()),
-          ),
+          role == "Admin"
+              ? Container(
+                  width: screenWidth * 0.95,
+                  height: screenHeight * .07,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: const Center(child: customFiltersWidget()),
+                )
+              : const Center(),
           SizedBox(
             height: screenHeight * .015,
           ),
@@ -78,14 +85,65 @@ class _AnimalRecordState extends State<AnimalRecord> {
                       return Padding(
                         padding: const EdgeInsets.all(5),
                         child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const AnimalDetail(),
-                              ),
-                            );
-                          },
+                          onTap: role == "Admin"
+                              ? () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const AnimalDetail(),
+                                    ),
+                                  );
+                                }
+                              : () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            ListTile(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            AddMorningMilk(
+                                                              id: cow.id,
+                                                            )));
+                                              },
+                                              leading: Image(
+                                                image: const AssetImage(
+                                                    "lib/assets/sun.png"),
+                                                width: screenWidth * .075,
+                                                height: screenWidth * .075,
+                                              ),
+                                              title: const Text("Morning"),
+                                            ),
+                                            ListTile(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            AddEveningMilk(
+                                                                id: cow.id)));
+                                              },
+                                              leading: Image(
+                                                image: const AssetImage(
+                                                    "lib/assets/moon.png"),
+                                                width: screenWidth * .075,
+                                                height: screenWidth * .075,
+                                              ),
+                                              title: const Text("Evening"),
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
                           child: Container(
                             width: screenWidth * 0.95,
                             height: screenHeight / 3.5,
@@ -121,22 +179,24 @@ class _AnimalRecordState extends State<AnimalRecord> {
                                         ),
                                       ),
                                     ),
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    feedEntryPage(
-                                                      id: cow.id,
-                                                    )));
-                                      },
-                                      child: Icon(
-                                        Icons.more_vert,
-                                        color: darkGreenColor,
-                                        size: screenWidth * .070,
-                                      ),
-                                    ),
+                                    role == "Admin"
+                                        ? InkWell(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          feedEntryPage(
+                                                            id: cow.id,
+                                                          )));
+                                            },
+                                            child: Icon(
+                                              Icons.more_vert,
+                                              color: darkGreenColor,
+                                              size: screenWidth * .070,
+                                            ),
+                                          )
+                                        : const Center(),
                                   ],
                                 ),
                                 SizedBox(

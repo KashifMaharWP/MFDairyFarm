@@ -16,8 +16,10 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class AddEveningFeed extends StatefulWidget {
-  String id = '';
-  AddEveningFeed({super.key, required this.id});
+  //String id = '';
+  const AddEveningFeed({
+    super.key,
+  });
 
   @override
   State<AddEveningFeed> createState() => _AddEveningFeedState();
@@ -32,35 +34,39 @@ class _AddEveningFeedState extends State<AddEveningFeed> {
 
   @override
   Widget build(BuildContext context) {
-    cowId.text = widget.id;
+    //cowId.text = widget.id;
     // final provider = Provider.of<AnimalRegistratinProvider>(context);
     String token =
         Provider.of<UserDetail>(context, listen: false).token.toString();
     print("Token " + token);
     return Scaffold(
+      appBar: AppBar(
+        title: Text1(
+          fontColor: whiteColor,
+          fontSize: header4,
+          text: "Add Evening Feed",
+        ),
+        centerTitle: true,
+        foregroundColor: whiteColor,
+        backgroundColor: darkGreenColor,
+      ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(top: 20, right: 8, left: 8),
           child: Column(
             children: [
-              Text1(
-                fontColor: darkGreenColor,
-                fontSize: paragraph,
-                text: "Add Evening Milk",
-              ),
               SizedBox(height: paragraph / 6),
               customForm(),
               SizedBox(height: paragraph / 2),
               customRoundedButton(
-                title: "Add Milk",
+                title: "Add Feed",
                 on_Tap: () async {
                   datepiker.text =
-                      DateFormat("dd / MM / yyyy").format(selectedDate);
+                      DateFormat("EEE MMM dd yyyy").format(selectedDate);
                   Provider.of<FeedProvider>(context, listen: false)
                       .sendEveningFeedData(
                           context: context,
-                          cowId: cowId.text,
                           date: datepiker.text,
                           evening: evening.text);
                 },
@@ -80,21 +86,21 @@ class _AddEveningFeedState extends State<AddEveningFeed> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            customTextFormField("Cow ID", CupertinoIcons.tag_fill),
-            TextFieldWidget1(
-              isReadOnly: true,
-              widgetcontroller: cowId,
-              fieldName: "Cow Id",
-              isPasswordField: false,
-            ),
+            // customTextFormField("Cow ID", CupertinoIcons.tag_fill),
+            // TextFieldWidget1(
+            //   isReadOnly: true,
+            //   widgetcontroller: cowId,
+            //   fieldName: "Cow Id",
+            //   isPasswordField: false,
+            // ),
             SizedBox(height: paragraph),
             customTextFormField("Date", CupertinoIcons.calendar),
             dateContainer(),
             SizedBox(height: paragraph),
-            customTextFormField("Evening Milk", CupertinoIcons.calendar),
+            customTextFormField("Evening Feed", CupertinoIcons.calendar),
             TextFieldWidget1(
               widgetcontroller: evening,
-              fieldName: "Add Milk(5kg)",
+              fieldName: "Add Feed(5kg)",
               isPasswordField: false,
             ),
           ],
@@ -145,7 +151,7 @@ class _AddEveningFeedState extends State<AddEveningFeed> {
             Text1(
                 fontColor: blackColor,
                 fontSize: paragraph - 3,
-                text: DateFormat("dd / MM / yyyy").format(selectedDate)),
+                text: DateFormat("EEE MMM dd yyyy").format(selectedDate)),
             Icon(
               CupertinoIcons.calendar,
               color: darkGreenColor,

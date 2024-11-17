@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../API/global_api.dart';
+import '../../../Model/feed_consume.dart';
 import '../../../Providers/user_detail.dart';
 
 class FeedRecord extends StatefulWidget {
@@ -24,8 +25,33 @@ class FeedRecord extends StatefulWidget {
 }
 
 class _FeedRecordState extends State<FeedRecord> {
+  bool isLoading = true;
+  List<FeedConsumption>? feedConsumptions;
+  String? errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    // fetchData();
+  }
+
   @override
   Widget build(BuildContext context) {
+    Future<void> fetchData() async {
+      final data = await fetchFeedConsumption(context);
+      if (data != null) {
+        setState(() {
+          feedConsumptions = data;
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          errorMessage = 'Failed to fetch feed consumption data';
+          isLoading = false;
+        });
+      }
+    }
+
     return Scaffold(
         backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
@@ -65,49 +91,72 @@ class _FeedRecordState extends State<FeedRecord> {
                 height: screenHeight * .010,
               ),
               Expanded(
-                child: ListView.builder(
-                    itemCount: 8,
-                    itemBuilder: (context, index) {
-                      return Card(
-                        color: Colors.white,
-                        elevation: 2.0,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              top: screenHeight * .025,
-                              bottom: screenHeight * .025,
-                              left: screenWidth * .025,
-                              right: screenWidth * .025),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    height: screenHeight * .035,
-                                    width: screenHeight * .035,
-                                    child: const Image(
-                                      image: AssetImage("lib/assets/wanda.png"),
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: screenWidth * .015,
-                                  ),
-                                  Text1(
-                                      fontColor: lightBlackColor,
-                                      fontSize: screenWidth * .05,
-                                      text: "Date"),
-                                ],
-                              ),
-                              Text1(
-                                  fontColor: lightBlackColor,
-                                  fontSize: screenWidth * .05,
-                                  text: "KG"),
-                            ],
-                          ),
-                        ),
+                child: FutureBuilder<List<FeedConsumption>?>(
+                  future: fetchFeedConsumption(context),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
                       );
-                    }),
+                    } else if (snapshot.hasError) {
+                      return const Center(
+                        child: Text("Error fetching cows data"),
+                      );
+                    } else if (!snapshot.hasData || snapshot.data == null) {
+                      return const Center(
+                        child: Text("No cows data found"),
+                      );
+                    } else {
+                      final feedRecords = snapshot.data!;
+                      return ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            final feed = feedRecords[index];
+                            return Card(
+                              color: Colors.white,
+                              elevation: 2.0,
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                    top: screenHeight * .025,
+                                    bottom: screenHeight * .025,
+                                    left: screenWidth * .025,
+                                    right: screenWidth * .025),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                          height: screenHeight * .035,
+                                          width: screenHeight * .035,
+                                          child: const Image(
+                                            image: AssetImage(
+                                                "lib/assets/wanda.png"),
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: screenWidth * .015,
+                                        ),
+                                        Text1(
+                                            fontColor: lightBlackColor,
+                                            fontSize: screenWidth * .05,
+                                            text: "${feed.date}"),
+                                      ],
+                                    ),
+                                    Text1(
+                                        fontColor: lightBlackColor,
+                                        fontSize: screenWidth * .05,
+                                        text: "${feed.total} Kg"),
+                                  ],
+                                ),
+                              ),
+                            );
+                          });
+                    }
+                  },
+                ),
               )
             ],
           ),
@@ -167,7 +216,7 @@ Widget pageHeaderContainer(BuildContext context) {
                           height: screenWidth / 3.8,
                           color: CupertinoColors.systemGrey6,
                         ),
-                        FutureBuilder<FeedInventory?>(
+                        FutureBuilder<dynamic>(
                           future: fetchFeed(context),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
@@ -178,7 +227,8 @@ Widget pageHeaderContainer(BuildContext context) {
                             } else if (snapshot.hasData &&
                                 snapshot.data != null) {
                               return wrapCircleContainer(
-                                  "${snapshot.data!.feedAmount}", "Total");
+                                  "${snapshot.data['feedInventory']['feedAmount']}",
+                                  "Total");
                             } else {
                               return Text('No data available');
                             }
@@ -238,7 +288,7 @@ Widget circleContainer(String text) {
   );
 }
 
-Future<FeedInventory?> fetchFeed(BuildContext context) async {
+Future<dynamic> fetchFeed(BuildContext context) async {
   var headers = {
     'Authorization':
         'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
@@ -254,13 +304,39 @@ Future<FeedInventory?> fetchFeed(BuildContext context) async {
     final jsonString = await response.stream.bytesToString();
     final jsonData = json.decode(jsonString);
     print(jsonData['feedInventory']['feedAmount']);
-    FeedInventory feedInventory = FeedInventory.fromJson(jsonData);
-    print("With Model" + feedInventory.toString());
-    return FeedInventory.fromJson(jsonData);
+
+    return jsonData;
   } else {
     if (kDebugMode) {
       print("Error: ${response.reasonPhrase}");
     }
+    return null;
+  }
+}
+
+Future<List<FeedConsumption>?> fetchFeedConsumption(
+    BuildContext context) async {
+  final headers = {
+    'Authorization':
+        'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
+  };
+  final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getFeedConsumption}');
+  final response = await http.get(url, headers: headers);
+
+  if (response.statusCode == 200) {
+    final jsonData = json.decode(response.body);
+    if (jsonData['success'] == true) {
+      final feedConsumptionList = (jsonData['feedConsumtion'] as List)
+          .map((item) => FeedConsumption.fromJson(item))
+          .toList();
+      return feedConsumptionList;
+    } else {
+      // Handle failure response
+      print('Error: ${jsonData['message']}');
+      return null;
+    }
+  } else {
+    print('Failed to fetch data. Error: ${response.reasonPhrase}');
     return null;
   }
 }

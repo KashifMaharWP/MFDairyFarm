@@ -8,8 +8,10 @@ import 'package:dairyfarmflow/Widget/textFieldWidget1.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../../Functions/customDatePicker.dart';
+import '../../../Providers/FeedProviders/feed_provider.dart';
 
 class feedEntryPage extends StatefulWidget {
   String? id;
@@ -43,12 +45,19 @@ class _feedEntryPageState extends State<feedEntryPage> {
               Text1(
                   fontColor: darkGreenColor,
                   fontSize: paragraph * 2,
-                  text: "Add Feed"),
+                  text: "Add Feed Inventory"),
               SizedBox(
-                height: paragraph / 6,
+                height: paragraph / 3,
               ),
               customForm(),
-              customRoundedButton(title: "Add Feed", on_Tap: () async {})
+              customRoundedButton(
+                  title: "Add Feed",
+                  on_Tap: () async {
+                    Provider.of<FeedProvider>(context, listen: false)
+                        .addFeedInventory(
+                            feedAmount: int.parse(wanda.text),
+                            context: context);
+                  })
             ],
           ),
         ));
@@ -72,11 +81,11 @@ class _feedEntryPageState extends State<feedEntryPage> {
             SizedBox(
               height: paragraph,
             ),
-            customTextFormField("Date", CupertinoIcons.calendar),
-            dateContainer(),
-            SizedBox(
-              height: 30,
-            ),
+            // customTextFormField("Date", CupertinoIcons.calendar),
+            // dateContainer(),
+            // const SizedBox(
+            //   height: 30,
+            // ),
           ],
         ),
       )),
@@ -102,7 +111,7 @@ class _feedEntryPageState extends State<feedEntryPage> {
             color: Colors.white.withOpacity(0.92),
             border: Border.all(color: CupertinoColors.systemGrey, width: 1),
             borderRadius: BorderRadius.circular(paragraph - 10),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                   color: CupertinoColors.systemGrey3,
                   offset: Offset(0, 2),

@@ -38,17 +38,27 @@ class _AddEveningMilkState extends State<AddEveningMilk> {
         Provider.of<UserDetail>(context, listen: false).token.toString();
     print("Token " + token);
     return Scaffold(
+      appBar: AppBar(
+        title: Text1(
+          fontColor: whiteColor,
+          fontSize: header4,
+          text: "Add Evening Milk",
+        ),
+        centerTitle: true,
+        foregroundColor: whiteColor,
+        backgroundColor: darkGreenColor,
+      ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(top: 20, right: 8, left: 8),
           child: Column(
             children: [
-              Text1(
-                fontColor: darkGreenColor,
-                fontSize: paragraph,
-                text: "Add Evening Milk",
-              ),
+              // Text1(
+              //   fontColor: darkGreenColor,
+              //   fontSize: paragraph,
+              //   text: "Add Evening Milk",
+              // ),
               SizedBox(height: paragraph / 6),
               customForm(),
               SizedBox(height: paragraph / 2),
@@ -56,7 +66,7 @@ class _AddEveningMilkState extends State<AddEveningMilk> {
                 title: "Add Milk",
                 on_Tap: () async {
                   datepiker.text =
-                      DateFormat("dd / MM / yyyy").format(selectedDate);
+                      DateFormat("EEE MMM dd yyyy").format(selectedDate);
                   Provider.of<MilkProvider>(context, listen: false)
                       .sendEveningMilkData(
                           cowId: cowId.text,
@@ -80,13 +90,13 @@ class _AddEveningMilkState extends State<AddEveningMilk> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            customTextFormField("Cow ID", CupertinoIcons.tag_fill),
-            TextFieldWidget1(
-              isReadOnly: true,
-              widgetcontroller: cowId,
-              fieldName: "Cow Id",
-              isPasswordField: false,
-            ),
+            // customTextFormField("Cow ID", CupertinoIcons.tag_fill),
+            // TextFieldWidget1(
+            //   isReadOnly: true,
+            //   widgetcontroller: cowId,
+            //   fieldName: "Cow Id",
+            //   isPasswordField: false,
+            // ),
             SizedBox(height: paragraph),
             customTextFormField("Date", CupertinoIcons.calendar),
             dateContainer(),
@@ -145,7 +155,7 @@ class _AddEveningMilkState extends State<AddEveningMilk> {
             Text1(
                 fontColor: blackColor,
                 fontSize: paragraph - 3,
-                text: DateFormat("dd / MM / yyyy").format(selectedDate)),
+                text: DateFormat("EEE MMM dd yyyy").format(selectedDate)),
             Icon(
               CupertinoIcons.calendar,
               color: darkGreenColor,

@@ -14,8 +14,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class AddMorningFeed extends StatefulWidget {
-  String id = '';
-  AddMorningFeed({super.key, required this.id});
+  //String id = '';
+  const AddMorningFeed({super.key});
 
   @override
   State<AddMorningFeed> createState() => _AddMorningFeedState();
@@ -30,7 +30,7 @@ class _AddMorningFeedState extends State<AddMorningFeed> {
 
   @override
   Widget build(BuildContext context) {
-    cowId.text = widget.id;
+    // cowId.text = widget.id;
 
     // final provider = Provider.of<AnimalRegistratinProvider>(context);
     String token =
@@ -39,30 +39,34 @@ class _AddMorningFeedState extends State<AddMorningFeed> {
       print("Token " + token);
     }
     return Scaffold(
+      appBar: AppBar(
+        title: Text1(
+          fontColor: whiteColor,
+          fontSize: header4,
+          text: "Add Morning Feed",
+        ),
+        centerTitle: true,
+        foregroundColor: whiteColor,
+        backgroundColor: darkGreenColor,
+      ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(top: 20, right: 8, left: 8),
           child: Column(
             children: [
-              Text1(
-                fontColor: darkGreenColor,
-                fontSize: paragraph,
-                text: "Add Milk",
-              ),
               SizedBox(height: paragraph / 6),
               customForm(),
               SizedBox(height: paragraph / 2),
               customRoundedButton(
-                title: "Add Milk",
+                title: "Add feed",
                 on_Tap: () async {
                   datepiker.text =
-                      DateFormat("dd / MM / yyyy").format(selectedDate);
+                      DateFormat("EEE MMM dd yyyy").format(selectedDate);
                   print(pickedDate);
                   Provider.of<FeedProvider>(context, listen: false)
                       .sendMorningFeedData(
                           context: context,
-                          cowId: cowId.text,
                           date: datepiker.text,
                           morning: morning.text);
                 },
@@ -82,21 +86,21 @@ class _AddMorningFeedState extends State<AddMorningFeed> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            customTextFormField("Cow ID", CupertinoIcons.tag_fill),
-            TextFieldWidget1(
-              isReadOnly: true,
-              widgetcontroller: cowId,
-              fieldName: "Cow Id",
-              isPasswordField: false,
-            ),
+            // customTextFormField("Cow ID", CupertinoIcons.tag_fill),
+            // TextFieldWidget1(
+            //   isReadOnly: true,
+            //   widgetcontroller: cowId,
+            //   fieldName: "Cow Id",
+            //   isPasswordField: false,
+            // ),
             SizedBox(height: paragraph),
             customTextFormField("Date", CupertinoIcons.calendar),
             dateContainer(),
             SizedBox(height: paragraph),
-            customTextFormField("Evening Milk", CupertinoIcons.calendar),
+            customTextFormField("Morning feed", CupertinoIcons.calendar),
             TextFieldWidget1(
               widgetcontroller: morning,
-              fieldName: "Add Milk(5kg)",
+              fieldName: "Add Feed(5kg)",
               isPasswordField: false,
             ),
           ],
@@ -147,7 +151,7 @@ class _AddMorningFeedState extends State<AddMorningFeed> {
             Text1(
                 fontColor: blackColor,
                 fontSize: paragraph - 3,
-                text: DateFormat("dd / MM / yyyy").format(selectedDate)),
+                text: DateFormat("EEE MMM dd yyyy").format(selectedDate)),
             Icon(
               CupertinoIcons.calendar,
               color: darkGreenColor,

@@ -3,22 +3,24 @@ import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
-import 'package:dairyfarmflow/ReuseableWidgets/dairy_form_detail.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/AnimalRecord/animalRecord.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/FeedEntry/add_evening_feed.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/FeedEntry/add_morining_feed.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/milk_record.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/VacinationScreen/vacination_record.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/adminDashboard/adminDashboard.dart';
+import 'package:dairyfarmflow/Screens/Dashboard/adminDashboard/profile_view.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/workerDashboard/workerDashboard.dart';
-import 'package:dairyfarmflow/Screens/SampleScreen.dart';
-
+import 'package:dairyfarmflow/Screens/Notifications/notification_screen.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:dairyfarmflow/Widget/my_drawer.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class UserDashboard extends StatefulWidget {
-  UserDashboard({super.key});
+  const UserDashboard({super.key});
 
   @override
   State<UserDashboard> createState() => _UserDashboardState();
@@ -35,7 +37,7 @@ class _UserDashboardState extends State<UserDashboard> {
       color: Colors.white,
     ),
     const Icon(
-      Icons.info,
+      Icons.notifications_on_rounded,
       size: 30,
       color: Colors.white,
     ),
@@ -179,12 +181,13 @@ class _UserDashboardState extends State<UserDashboard> {
                         SizedBox(
                           height: screenHeight * .01,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8, right: 8),
-                          child: wrapContainer(),
-                        )
 
-                        //pageHeaderContainer(),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(left: 8, right: 8),
+                        //   child: wrapContainer(),
+                        // ),
+
+                        //  pageHeaderContainer(),
                       ],
                     ),
                   ),
@@ -192,8 +195,8 @@ class _UserDashboardState extends State<UserDashboard> {
               },
             )
           : iconIndex == 1
-              ? const DairyFormDetail()
-              : const sampleScreen(backgroundColor: Colors.yellow),
+              ? const NotificationScreen()
+              : const ProfileView(),
       bottomNavigationBar: CurvedNavigationBar(
         items: _navigationItems,
         backgroundColor: Colors.grey.shade100,
@@ -211,6 +214,45 @@ class _UserDashboardState extends State<UserDashboard> {
     return role == "1"
         ? const AdminDashboardButtons()
         : const WorkerDashboardButtons();
+  }
+
+  Widget pageHeaderContainer() {
+    return Padding(
+      padding:
+          EdgeInsets.only(right: screenWidth * .015, left: screenWidth * .015),
+      child: Material(
+          elevation: 6,
+          borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(40),
+              bottomRight: Radius.circular(40),
+              topLeft: Radius.circular(40),
+              topRight: Radius.circular(40)),
+          child: Container(
+              height: screenHeight / 4,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                        color: greyGreenColor,
+                        blurRadius: 6,
+                        offset: const Offset(2, 2))
+                  ]),
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: screenHeight / 40,
+                    ),
+                    //here is the code for the custom gridview boxes
+                    gridButtons()
+                    // Text("data")
+                  ],
+                ),
+              ))),
+    );
   }
 
   Widget pageBodyContainer() {
@@ -249,7 +291,7 @@ class _UserDashboardState extends State<UserDashboard> {
                     BoxShadow(
                         color: greyGreenColor,
                         blurRadius: 8,
-                        offset: Offset(2, 2))
+                        offset: const Offset(2, 2))
                   ]),
             ),
             SizedBox(
@@ -277,23 +319,28 @@ class _UserDashboardState extends State<UserDashboard> {
                     SizedBox(
                       height: paragraph,
                     ),
-                    viewContainer("Morning Milk", "lib/assets/sun.png",
-                        const sampleScreen(backgroundColor: Colors.red)),
+                    viewContainer(
+                        "Morning Feed", "lib/assets/sun.png", AddMorningFeed()),
                   ],
                 ),
                 Column(
                   children: [
                     viewContainer("Milk(ltr)", "lib/assets/milk.png",
-                        const sampleScreen(backgroundColor: Colors.orange)),
+                        const MilkRecordScreen()),
                     SizedBox(
                       height: paragraph,
                     ),
-                    viewContainer("Evening Milk", "lib/assets/moon.png",
-                        const sampleScreen(backgroundColor: Colors.orange)),
+                    viewContainer("Evening Feed", "lib/assets/moon.png",
+                        const AddEveningFeed()),
                   ],
-                )
+                ),
               ],
-            )
+            ),
+            SizedBox(
+              height: screenHeight * .033,
+            ),
+            viewContainer(
+                "Add Milk", "lib/assets/addMilk.jpg", const AnimalRecord()),
           ],
         ),
       ),

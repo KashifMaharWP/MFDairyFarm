@@ -7,10 +7,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
+import '../../Model/feed_consume.dart';
+
 class FeedProvider extends ChangeNotifier {
   Future<void> sendMorningFeedData(
-      {required String cowId,
-      required String date,
+      {required String date,
       required String morning,
       required BuildContext context}) async {
     final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.addMorningFeed}');
@@ -22,7 +23,6 @@ class FeedProvider extends ChangeNotifier {
     };
 
     final body = jsonEncode({
-      'cowId': cowId,
       'date': date,
       'morning': int.parse(morning),
     });
@@ -36,9 +36,11 @@ class FeedProvider extends ChangeNotifier {
       );
 
       if (response.statusCode == 201) {
-        showSuccessSnackbar("Data successfully sent!", context);
+        final message = jsonDecode(response.body);
+        showSuccessSnackbar(message['message'], context);
       } else {
-        showErrorSnackbar("Failed to send data.", context);
+        final message = jsonDecode(response.body);
+        showErrorSnackbar(message['message'], context);
       }
     } catch (e) {
       showErrorSnackbar("An error occurred: $e", context);
@@ -46,8 +48,7 @@ class FeedProvider extends ChangeNotifier {
   }
 
   Future<void> sendEveningFeedData(
-      {required String cowId,
-      required String date,
+      {required String date,
       required String evening,
       required BuildContext context}) async {
     final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.addEveningFeed}');
@@ -59,7 +60,6 @@ class FeedProvider extends ChangeNotifier {
     };
 
     final body = jsonEncode({
-      'cowId': cowId,
       'date': date,
       'evening': int.parse(evening),
     });
@@ -81,6 +81,69 @@ class FeedProvider extends ChangeNotifier {
       }
     } catch (e) {
       showErrorSnackbar("An error occurred: $e", context);
+    }
+  }
+
+  Future<void> addFeedInventory(
+      {required int feedAmount, required BuildContext context}) async {
+    final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.addFeedAmount}');
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization':
+          "Bearer ${Provider.of<UserDetail>(context, listen: false).token}"
+    };
+
+    final body = jsonEncode({
+      'feedAmount': feedAmount,
+    });
+    // print(jsonDecode(body));
+
+    try {
+      final response = await http.put(
+        url,
+        headers: headers,
+        body: body,
+      );
+      print("object324");
+      if (response.statusCode == 200) {
+        print("object");
+        showSuccessSnackbar(
+            "Data successfully sent! ${response.statusCode}", context);
+      } else {
+        showErrorSnackbar(
+            "Failed to send data.${response.statusCode}", context);
+      }
+    } catch (e) {
+      showErrorSnackbar("An error occurred: $e", context);
+    }
+  }
+
+  Future<List<FeedConsumption>?> fetchFeedConsumption(
+      BuildContext context) async {
+    final headers = {
+      'Authorization':
+          'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
+    };
+    final url =
+        Uri.parse('${GlobalApi.baseApi}${GlobalApi.getFeedConsumption}');
+    final response = await http.get(url, headers: headers);
+
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      if (jsonData['success'] == true) {
+        final feedConsumptionList = (jsonData['feedConsumtion'] as List)
+            .map((item) => FeedConsumption.fromJson(item))
+            .toList();
+        return feedConsumptionList;
+      } else {
+        // Handle failure response
+        print('Error: ${jsonData['message']}');
+        return null;
+      }
+    } else {
+      print('Failed to fetch data. Error: ${response.reasonPhrase}');
+      return null;
     }
   }
 }
