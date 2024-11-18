@@ -6,6 +6,7 @@ import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:simple_toast_message/simple_toast.dart';
 
 import '../../Model/feed_consume.dart';
 
@@ -37,13 +38,18 @@ class FeedProvider extends ChangeNotifier {
 
       if (response.statusCode == 201) {
         final message = jsonDecode(response.body);
-        showSuccessSnackbar(message['message'], context);
+        SimpleToast.showSuccessToast(
+            context, "Feed Added", "${message['message']}");
+        // showSuccessSnackbar(message['message'], context);
       } else {
         final message = jsonDecode(response.body);
-        showErrorSnackbar(message['message'], context);
+        SimpleToast.showInfoToast(
+            context, "Feed Already Added", "${message['message']}");
+        //showErrorSnackbar(message['message'], context);
       }
     } catch (e) {
-      showErrorSnackbar("An error occurred: $e", context);
+      SimpleToast.showErrorToast(context, "Error occurred", "$e");
+      //showErrorSnackbar("An error occurred: $e", context);
     }
   }
 
@@ -73,14 +79,20 @@ class FeedProvider extends ChangeNotifier {
 
       if (response.statusCode == 201) {
         final message = jsonDecode(response.body);
-        showSuccessSnackbar(message["message"], context);
+        SimpleToast.showSuccessToast(
+            context, "Feed Added", "${message['message']}");
+        //showSuccessSnackbar(message["message"], context);
       } else {
-        showErrorSnackbar(
-            "Failed to send data. Status code: ${response.statusCode}",
-            context);
+        final message = jsonDecode(response.body);
+        SimpleToast.showInfoToast(
+            context, "Feed Already Added", "${message['message']}");
+        // showErrorSnackbar(
+        //     "Failed to send data. Status code: ${response.statusCode}",
+        //     context);
       }
     } catch (e) {
-      showErrorSnackbar("An error occurred: $e", context);
+      SimpleToast.showErrorToast(context, "An Error occurred", "$e");
+      //showErrorSnackbar("An error occurred: $e", context);
     }
   }
 
@@ -107,15 +119,22 @@ class FeedProvider extends ChangeNotifier {
       );
       print("object324");
       if (response.statusCode == 200) {
-        print("object");
-        showSuccessSnackbar(
-            "Data successfully sent! ${response.statusCode}", context);
+        final message = jsonDecode(response.body);
+        SimpleToast.showSuccessToast(
+            context, "Feed Added", "${message['message']}");
+        // print("object");
+        // showSuccessSnackbar(
+        //     "Data successfully sent! ${response.statusCode}", context);
       } else {
-        showErrorSnackbar(
-            "Failed to send data.${response.statusCode}", context);
+        final message = jsonDecode(response.body);
+        SimpleToast.showErrorToast(
+            context, "Feed Not Added", "${message['message']}");
+        // showErrorSnackbar(
+        //     "Failed to send data.${response.statusCode}", context);
       }
     } catch (e) {
-      showErrorSnackbar("An error occurred: $e", context);
+      SimpleToast.showErrorToast(context, "Error occurred:", "$e");
+      //showErrorSnackbar("An error occurred: $e", context);
     }
   }
 

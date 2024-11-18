@@ -6,6 +6,7 @@ import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:simple_toast_message/simple_toast.dart';
 
 class MilkProvider extends ChangeNotifier {
   Future<void> sendMorningMilkData(
@@ -36,13 +37,18 @@ class MilkProvider extends ChangeNotifier {
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         final message = jsonDecode(response.body);
-        showSuccessSnackbar(message['message'], context);
+        SimpleToast.showSuccessToast(
+            context, "Milk Added", "${message['message']}");
+        //showSuccessSnackbar(message['message'], context);
       } else {
         final message = jsonDecode(response.body);
-        showErrorSnackbar(message['message'], context);
+        SimpleToast.showInfoToast(
+            context, "Milk Already Added", "${message['message']}");
+        // showErrorSnackbar(message['message'], context);
       }
     } catch (e) {
-      showErrorSnackbar("An error occurred: $e", context);
+      SimpleToast.showErrorToast(context, "Error Message", "$e");
+      //showErrorSnackbar("An error occurred: $e", context);
     }
   }
 
@@ -75,13 +81,18 @@ class MilkProvider extends ChangeNotifier {
       if (response.statusCode == 201 || response.statusCode == 200) {
         final userJson = jsonDecode(response.body);
         print(userJson['message']);
-        showSuccessSnackbar(userJson['message'], context);
+        SimpleToast.showSuccessToast(
+            context, "Milk Added", "${userJson['message']}");
+        //showSuccessSnackbar(userJson['message'], context);
       } else {
         final message = jsonDecode(response.body);
-        showErrorSnackbar(message['message'], context);
+        SimpleToast.showInfoToast(
+            context, "Milk Alrady Added", "${message['message']}");
+        //showErrorSnackbar(message['message'], context);
       }
     } catch (e) {
-      showErrorSnackbar("An Error occured: $e", context);
+      SimpleToast.showErrorToast(context, "Error occured", "$e");
+      //showErrorSnackbar("An Error occured: $e", context);
     }
   }
 
@@ -113,13 +124,18 @@ class MilkProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         final userJson = jsonDecode(response.body);
         print(userJson['message']);
-        showSuccessSnackbar(userJson['message'], context);
+        SimpleToast.showSuccessToast(
+            context, "Milk Updated", "${userJson['message']}");
+        //showSuccessSnackbar(userJson['message'], context);
       } else {
         final message = jsonDecode(response.body);
-        showErrorSnackbar(message['message'], context);
+        SimpleToast.showErrorToast(
+            context, "Updating Error", "${message['message']}");
+        //showErrorSnackbar(message['message'], context);
       }
     } catch (e) {
-      showErrorSnackbar("An Error occured: $e", context);
+      SimpleToast.showErrorToast(context, "Error occured", "$e");
+      // showErrorSnackbar("An Error occured: $e", context);
     }
   }
 
@@ -145,19 +161,24 @@ class MilkProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         print('Success Message: ${jsonResponse['message']}');
-        showSuccessSnackbar(jsonResponse['message'], context);
+        SimpleToast.showSuccessToast(
+            context, "Milk Deleted", "${jsonResponse['message']}");
+        //showSuccessSnackbar(jsonResponse['message'], context);
         notifyListeners();
       } else {
         try {
           final message = jsonDecode(response.body);
-          showErrorSnackbar(message['message'], context);
+          SimpleToast.showErrorToast(
+              context, "Milk Added", "${message['message']}");
+          //showErrorSnackbar(message['message'], context);
         } catch (_) {
           showErrorSnackbar(
               'Failed to delete milk record: ${response.body}', context);
         }
       }
     } catch (e) {
-      showErrorSnackbar("An error occurred: $e", context);
+      SimpleToast.showErrorToast(context, "Error occured", "$e");
+      // showErrorSnackbar("An error occurred: $e", context);
       print('Error: $e');
     }
   }

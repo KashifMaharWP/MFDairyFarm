@@ -130,7 +130,8 @@ Widget wrapCircleContainer(String text, label) {
         const SizedBox(
           height: 2,
         ),
-        Text1(fontColor: lightBlackColor, fontSize: paragraph, text: label)
+        Text1(
+            fontColor: lightBlackColor, fontSize: paragraph / 1.07, text: label)
       ],
     ),
   );
@@ -138,8 +139,8 @@ Widget wrapCircleContainer(String text, label) {
 
 Widget circleContainer(String text) {
   return Container(
-    width: screenWidth / 6,
-    height: screenWidth / 6,
+    width: screenWidth / 7,
+    height: screenWidth / 7,
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(screenWidth / 4),
@@ -152,6 +153,7 @@ Widget circleContainer(String text) {
       ],
     ),
     child: Center(
-        child: Text1(fontColor: blackColor, fontSize: paragraph, text: text)),
+        child: Text1(
+            fontColor: blackColor, fontSize: paragraph / 1.1, text: text)),
   );
 }

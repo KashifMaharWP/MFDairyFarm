@@ -53,10 +53,11 @@ class _feedEntryPageState extends State<feedEntryPage> {
               customRoundedButton(
                   title: "Add Feed",
                   on_Tap: () async {
-                    Provider.of<FeedProvider>(context, listen: false)
+                    await Provider.of<FeedProvider>(context, listen: false)
                         .addFeedInventory(
                             feedAmount: int.parse(wanda.text),
                             context: context);
+                    Navigator.pop(context);
                   })
             ],
           ),
