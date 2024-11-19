@@ -4,7 +4,6 @@ import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/Dashboard.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/UserDashboard/user_dashboard.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -20,6 +19,7 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> signUp(
       String name, String email, String password, BuildContext context) async {
+    
     final body = {"name": name, "email": email, "password": password};
 
     _isLoading = true;
@@ -32,7 +32,7 @@ class AuthProvider with ChangeNotifier {
       );
 
       final userJson = jsonDecode(response.body);
-      print(userJson);
+     // print(userJson);
 
       if (response.statusCode == 200) {
         _message = userJson["message"];
@@ -101,12 +101,12 @@ class AuthProvider with ChangeNotifier {
         if (role == 'Admin') {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => Dashboard()),
+            MaterialPageRoute(builder: (context) => const Dashboard()),
           );
         } else {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => UserDashboard()),
+            MaterialPageRoute(builder: (context) => const UserDashboard()),
           );
         }
       } else {

@@ -32,6 +32,7 @@ class _AddMorningMilkState extends State<AddMorningMilk> {
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = Provider.of<MilkProvider>(context).isLoading;
     cowId.text = widget.id;
     // final provider = Provider.of<AnimalRegistratinProvider>(context);
     String token =
@@ -63,6 +64,7 @@ class _AddMorningMilkState extends State<AddMorningMilk> {
               customForm(),
               SizedBox(height: paragraph / 2),
               customRoundedButton(
+                loading: isLoading,
                 title: "Add Milk",
                 on_Tap: () async {
                   datepiker.text =
@@ -104,6 +106,7 @@ class _AddMorningMilkState extends State<AddMorningMilk> {
             SizedBox(height: paragraph),
             customTextFormField("Morning Milk", CupertinoIcons.calendar),
             TextFieldWidget1(
+              keyboardtype: TextInputType.number,
               widgetcontroller: morning,
               fieldName: "Add Milk(5kg)",
               isPasswordField: false,

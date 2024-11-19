@@ -70,7 +70,8 @@ class _ProfileViewState extends State<ProfileView> {
               SizedBox(
                 height: screenHeight * .035,
               ),
-              customRoundedButton(title: "Edit Profile", on_Tap: () {})
+              customRoundedButton(
+                  loading: false, title: "Edit Profile", on_Tap: () {})
               // Add other widgets for the profile view here
             ],
           ),

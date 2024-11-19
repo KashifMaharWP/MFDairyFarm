@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_toast_message/simple_toast.dart';
 
 class AnimalRegistratinProvider extends ChangeNotifier {
   bool _isLoading = false;
@@ -19,9 +20,7 @@ class AnimalRegistratinProvider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     if (image == null || animalNumber.isEmpty || breed.isEmpty) {
-      if (kDebugMode) {
-        print("Please complete all fields and select an image.");
-      }
+      SimpleToast.showInfoToast(context, 'Alert', "Add Required Fields!");
       return;
     }
 
@@ -53,20 +52,18 @@ class AnimalRegistratinProvider extends ChangeNotifier {
         _isLoading = false;
         notifyListeners();
         message = "Animal data uploaded successfully!";
-
-        showSuccessSnackbar(message, context);
+        SimpleToast.showSuccessToast(context, "Success Message", message);
       } else {
         _isLoading = false;
         notifyListeners();
         message = "Failed to upload data ${response.statusCode}";
-
-        showErrorSnackbar(message, context);
+        SimpleToast.showErrorToast(context, "Error Message", message);
       }
     } catch (e) {
       _isLoading = false;
       notifyListeners();
       message = "Error uploading data: $e";
-      showErrorSnackbar(message, context);
+      SimpleToast.showErrorToast(context, "Error Message", message);
     }
   }
 }

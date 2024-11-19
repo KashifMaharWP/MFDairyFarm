@@ -1,21 +1,19 @@
 import 'dart:convert';
 
-import 'package:dairyfarmflow/Class/colorPallete.dart';
-import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
-import 'package:dairyfarmflow/Model/feed_inventory.dart';
-import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:path/path.dart';
-import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 import '../../../API/global_api.dart';
-import '../../../Model/feed_consume.dart';
+import '../../../Providers/FeedProviders/feed_provider.dart';
+import '../../../Class/colorPallete.dart';
+import '../../../Class/screenMediaQuery.dart';
 import '../../../Providers/user_detail.dart';
+import '../../../Widget/Text1.dart';
 
 class FeedRecord extends StatefulWidget {
   const FeedRecord({super.key});
@@ -25,146 +23,193 @@ class FeedRecord extends StatefulWidget {
 }
 
 class _FeedRecordState extends State<FeedRecord> {
-  bool isLoading = true;
-  List<FeedConsumption>? feedConsumptions;
-  String? errorMessage;
-
   @override
   void initState() {
     super.initState();
-    // fetchData();
+    final feedProvider = Provider.of<FeedProvider>(context, listen: false);
+
+    feedProvider.fetchFeedConsumption(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    Future<void> fetchData() async {
-      final data = await fetchFeedConsumption(context);
-      if (data != null) {
-        setState(() {
-          feedConsumptions = data;
-          isLoading = false;
-        });
-      } else {
-        setState(() {
-          errorMessage = 'Failed to fetch feed consumption data';
-          isLoading = false;
-        });
-      }
-    }
+    final feedProvider = Provider.of<FeedProvider>(context);
 
     return Scaffold(
-        backgroundColor: Colors.grey.shade100,
-        appBar: AppBar(
-          elevation: 1,
-          backgroundColor: darkGreenColor,
-          foregroundColor: Colors.white,
-          centerTitle: true,
-          shadowColor: Colors.black,
-          title: const Text("Feed Record"),
-        ),
-        body: Padding(
-          padding: EdgeInsets.only(
-              left: screenWidth * .015, right: screenWidth * .015),
-          child: Column(
-            children: [
-              pageHeaderContainer(context),
-              SizedBox(
-                height: screenHeight * .025,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.calendar_month_sharp,
-                    color: darkGreenColor,
-                  ),
-                  SizedBox(
-                    width: screenWidth * .010,
-                  ),
-                  Text1(
-                      fontColor: lightBlackColor,
-                      fontSize: paragraph,
-                      text: DateFormat("MMMM yyyy").format(DateTime.now())),
-                ],
-              ),
-              SizedBox(
-                height: screenHeight * .010,
-              ),
-              Expanded(
-                child: FutureBuilder<List<FeedConsumption>?>(
-                  future: fetchFeedConsumption(context),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (snapshot.hasError) {
-                      return const Center(
-                        child: Text("Error fetching cows data"),
-                      );
-                    } else if (!snapshot.hasData || snapshot.data == null) {
-                      return const Center(
-                        child: Text("No cows data found"),
-                      );
-                    } else {
-                      final feedRecords = snapshot.data!;
-                      return ListView.builder(
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            final feed = feedRecords[index];
-                            return Card(
-                              color: Colors.white,
-                              elevation: 2.0,
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                    top: screenHeight * .025,
-                                    bottom: screenHeight * .025,
-                                    left: screenWidth * .025,
-                                    right: screenWidth * .025),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
+      backgroundColor: Colors.grey.shade100,
+      appBar: AppBar(
+        elevation: 1,
+        backgroundColor: darkGreenColor,
+        foregroundColor: Colors.white,
+        centerTitle: true,
+        shadowColor: Colors.black,
+        title: const Text("Feed Record"),
+      ),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: screenWidth * .015),
+        child: Column(
+          children: [
+            feedProvider.isLoading
+                ? Shimmer(
+                    color: Colors.white,
+                    child: Container(
+                        height: screenHeight / 5,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(40),
+                                bottomRight: Radius.circular(40)),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                  color: greyGreenColor,
+                                  blurRadius: 6,
+                                  offset: const Offset(2, 2))
+                            ]),
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: screenHeight * .02,
+                              ),
+
+                              //here is the code for the custom gridview boxes
+
+                              Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const CircleAvatar(
+                                        backgroundColor: Colors.grey,
+                                        radius: 30,
+                                      ),
+                                      SizedBox(
+                                        height: paragraph / 4,
+                                      ),
+                                      Container(
+                                        width: 1,
+                                        height: screenWidth / 3.5,
+                                        color: CupertinoColors.systemGrey6,
+                                      ),
+                                      const CircleAvatar(
+                                        backgroundColor: Colors.grey,
+                                        radius: 30,
+                                      ),
+                                      SizedBox(
+                                        height: paragraph / 4,
+                                      ),
+                                      Container(
+                                        width: 01,
+                                        height: screenWidth / 3.8,
+                                        color: CupertinoColors.systemGrey6,
+                                      ),
+                                      const CircleAvatar(
+                                        backgroundColor: Colors.grey,
+                                        radius: 30,
+                                      ),
+                                      SizedBox(
+                                        height: paragraph / 4,
+                                      ),
+                                      Container(
+                                        width: 0,
+                                        height: screenWidth / 3.8,
+                                        color: CupertinoColors.systemGrey6,
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        )))
+                : pageHeaderContainer(
+                    context, feedProvider.totalFeedFromItem, 0),
+            SizedBox(height: screenHeight * .025),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(Icons.calendar_month_sharp, color: darkGreenColor),
+                SizedBox(width: screenWidth * .010),
+                Text1(
+                  fontColor: lightBlackColor,
+                  fontSize: screenWidth * .05,
+                  text: DateFormat("MMMM yyyy").format(DateTime.now()),
+                ),
+              ],
+            ),
+            SizedBox(height: screenHeight * .010),
+            Expanded(
+              child: feedProvider.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : feedProvider.errorMessage != null
+                      ? Center(
+                          child: Text(feedProvider.errorMessage!),
+                        )
+                      : feedProvider.feedConsumptions == null
+                          ? const Center(
+                              child: Text("No feed data found"),
+                            )
+                          : ListView.builder(
+                              itemCount: feedProvider.feedConsumptions!.length,
+                              itemBuilder: (context, index) {
+                                final feed =
+                                    feedProvider.feedConsumptions![index];
+                                return Card(
+                                  color: Colors.white,
+                                  elevation: 2.0,
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: screenHeight * .025,
+                                      horizontal: screenWidth * .025,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        SizedBox(
-                                          height: screenHeight * .035,
-                                          width: screenHeight * .035,
-                                          child: const Image(
-                                            image: AssetImage(
-                                                "lib/assets/wanda.png"),
-                                            fit: BoxFit.fill,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: screenWidth * .015,
+                                        Row(
+                                          children: [
+                                            SizedBox(
+                                              height: screenHeight * .035,
+                                              width: screenHeight * .035,
+                                              child: const Image(
+                                                image: AssetImage(
+                                                    "lib/assets/wanda.png"),
+                                                fit: BoxFit.fill,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: screenWidth * .015,
+                                            ),
+                                            Text1(
+                                              fontColor: lightBlackColor,
+                                              fontSize: screenWidth * .05,
+                                              text: "${feed.date}",
+                                            ),
+                                          ],
                                         ),
                                         Text1(
-                                            fontColor: lightBlackColor,
-                                            fontSize: screenWidth * .05,
-                                            text: "${feed.date}"),
+                                          fontColor: lightBlackColor,
+                                          fontSize: screenWidth * .05,
+                                          text: "${feed.total} Kg",
+                                        ),
                                       ],
                                     ),
-                                    Text1(
-                                        fontColor: lightBlackColor,
-                                        fontSize: screenWidth * .05,
-                                        text: "${feed.total} Kg"),
-                                  ],
-                                ),
-                              ),
-                            );
-                          });
-                    }
-                  },
-                ),
-              )
-            ],
-          ),
-        ));
+                                  ),
+                                );
+                              },
+                            ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
-Widget pageHeaderContainer(BuildContext context) {
+Widget pageHeaderContainer(BuildContext context, int consumedFeed, feeds) {
   return Material(
       elevation: 6,
       borderRadius: const BorderRadius.only(
@@ -198,7 +243,31 @@ Widget pageHeaderContainer(BuildContext context) {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        wrapCircleContainer("225", "Available"),
+                        FutureBuilder<dynamic>(
+                          future: fetchFeed(context),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return wrapCircleContainer("0", "Total");
+                            } else if (snapshot.hasError) {
+                              return wrapCircleContainer("0", "Total");
+                            } else if (snapshot.hasData &&
+                                snapshot.data != null) {
+                              final feedAvailable = int.tryParse(snapshot
+                                      .data['feedInventory']['feedAmount']
+                                      .toString()) ??
+                                  0;
+                              final totalFeedStored =
+                                  feedAvailable + consumedFeed;
+
+                              // Display total feed stored
+                              return wrapCircleContainer(
+                                  "$totalFeedStored", "Total");
+                            } else {
+                              return wrapCircleContainer("0", "Total");
+                            }
+                          },
+                        ),
                         SizedBox(
                           height: paragraph / 4,
                         ),
@@ -207,7 +276,7 @@ Widget pageHeaderContainer(BuildContext context) {
                           height: screenWidth / 3.8,
                           color: CupertinoColors.systemGrey6,
                         ),
-                        wrapCircleContainer("25", "Used"),
+                        wrapCircleContainer(consumedFeed.toString(), "Used"),
                         SizedBox(
                           height: paragraph / 4,
                         ),
@@ -221,14 +290,14 @@ Widget pageHeaderContainer(BuildContext context) {
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return wrapCircleContainer("25", "Used");
+                              return wrapCircleContainer("0", "Available");
                             } else if (snapshot.hasError) {
-                              return wrapCircleContainer("error", "Used");
+                              return wrapCircleContainer("0", "Available");
                             } else if (snapshot.hasData &&
                                 snapshot.data != null) {
                               return wrapCircleContainer(
                                   "${snapshot.data['feedInventory']['feedAmount']}",
-                                  "Total");
+                                  "Available");
                             } else {
                               return Text('No data available');
                             }
@@ -314,31 +383,31 @@ Future<dynamic> fetchFeed(BuildContext context) async {
   }
 }
 
-Future<List<FeedConsumption>?> fetchFeedConsumption(
-    BuildContext context) async {
-  final headers = {
-    'Authorization':
-        'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
-  };
-  final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getFeedConsumption}');
-  final response = await http.get(url, headers: headers);
+// Future<List<FeedConsumption>?> fetchFeedConsumption(
+//     BuildContext context) async {
+//   final headers = {
+//     'Authorization':
+//         'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
+//   };
+//   final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getFeedConsumption}');
+//   final response = await http.get(url, headers: headers);
 
-  if (response.statusCode == 200) {
-    final jsonData = json.decode(response.body);
-    if (jsonData['success'] == true) {
-      final feedConsumptionList = (jsonData['feedConsumtion'] as List)
-          .map((item) => FeedConsumption.fromJson(item))
-          .toList();
-      return feedConsumptionList;
-    } else {
-      // Handle failure response
-      print('Error: ${jsonData['message']}');
-      return null;
-    }
-  } else {
-    print('Failed to fetch data. Error: ${response.reasonPhrase}');
-    return null;
-  }
-}
+//   if (response.statusCode == 200) {
+//     final jsonData = json.decode(response.body);
+//     if (jsonData['success'] == true) {
+//       final feedConsumptionList = (jsonData['feedConsumtion'] as List)
+//           .map((item) => FeedConsumption.fromJson(item))
+//           .toList();
+//       return feedConsumptionList;
+//     } else {
+//       // Handle failure response
+//       print('Error: ${jsonData['message']}');
+//       return null;
+//     }
+//   } else {
+//     print('Failed to fetch data. Error: ${response.reasonPhrase}');
+//     return null;
+//   }
+
 
 //https://www.behance.net/gallery/187496733/Dairy-Farm-Management-Mobile-App-UI-Design?tracking_source=search_projects|Dairy+Management&l=0

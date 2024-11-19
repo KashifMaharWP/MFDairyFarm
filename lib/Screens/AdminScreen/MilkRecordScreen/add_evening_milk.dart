@@ -1,11 +1,8 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
-
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Functions/customDatePicker.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/milk_provider.dart';
-import 'package:dairyfarmflow/Providers/auth_provider.dart';
-
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:dairyfarmflow/Widget/customRoundButton.dart';
@@ -36,6 +33,8 @@ class _AddEveningMilkState extends State<AddEveningMilk> {
     // final provider = Provider.of<AnimalRegistratinProvider>(context);
     String token =
         Provider.of<UserDetail>(context, listen: false).token.toString();
+    final isLoading =
+        Provider.of<MilkProvider>(context, listen: false).isLoading;
     print("Token " + token);
     return Scaffold(
       appBar: AppBar(
@@ -63,6 +62,7 @@ class _AddEveningMilkState extends State<AddEveningMilk> {
               customForm(),
               SizedBox(height: paragraph / 2),
               customRoundedButton(
+                loading: isLoading,
                 title: "Add Milk",
                 on_Tap: () async {
                   datepiker.text =
@@ -104,6 +104,7 @@ class _AddEveningMilkState extends State<AddEveningMilk> {
             SizedBox(height: paragraph),
             customTextFormField("Evening Milk", CupertinoIcons.calendar),
             TextFieldWidget1(
+              keyboardtype: TextInputType.number,
               widgetcontroller: evening,
               fieldName: "Add Milk(5kg)",
               isPasswordField: false,

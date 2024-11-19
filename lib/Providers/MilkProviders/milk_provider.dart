@@ -9,11 +9,15 @@ import 'package:provider/provider.dart';
 import 'package:simple_toast_message/simple_toast.dart';
 
 class MilkProvider extends ChangeNotifier {
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
   Future<void> sendMorningMilkData(
       {required String cowId,
       required String date,
       required String morning,
       required BuildContext context}) async {
+    _isLoading = true;
+    notifyListeners();
     final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.addMorningMilk}');
 
     final headers = {
@@ -39,14 +43,20 @@ class MilkProvider extends ChangeNotifier {
         final message = jsonDecode(response.body);
         SimpleToast.showSuccessToast(
             context, "Milk Added", "${message['message']}");
+        _isLoading = false;
+        notifyListeners();
         //showSuccessSnackbar(message['message'], context);
       } else {
+        _isLoading = false;
+        notifyListeners();
         final message = jsonDecode(response.body);
         SimpleToast.showInfoToast(
             context, "Milk Already Added", "${message['message']}");
         // showErrorSnackbar(message['message'], context);
       }
     } catch (e) {
+      _isLoading = false;
+      notifyListeners();
       SimpleToast.showErrorToast(context, "Error Message", "$e");
       //showErrorSnackbar("An error occurred: $e", context);
     }
@@ -57,6 +67,8 @@ class MilkProvider extends ChangeNotifier {
       required String date,
       required String evening,
       required BuildContext context}) async {
+    _isLoading = true;
+    notifyListeners();
     final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.addEveningMilk}');
 
     final headers = {
@@ -83,15 +95,21 @@ class MilkProvider extends ChangeNotifier {
         print(userJson['message']);
         SimpleToast.showSuccessToast(
             context, "Milk Added", "${userJson['message']}");
+        _isLoading = false;
+        notifyListeners();
         //showSuccessSnackbar(userJson['message'], context);
       } else {
         final message = jsonDecode(response.body);
         SimpleToast.showInfoToast(
             context, "Milk Alrady Added", "${message['message']}");
+        _isLoading = false;
+        notifyListeners();
         //showErrorSnackbar(message['message'], context);
       }
     } catch (e) {
       SimpleToast.showErrorToast(context, "Error occured", "$e");
+      _isLoading = false;
+      notifyListeners();
       //showErrorSnackbar("An Error occured: $e", context);
     }
   }
@@ -102,6 +120,8 @@ class MilkProvider extends ChangeNotifier {
       required int evening,
       required int total,
       required BuildContext context}) async {
+    _isLoading = true;
+    notifyListeners();
     final url =
         Uri.parse('${GlobalApi.baseApi}${GlobalApi.updateMilkRecord}/$id');
 
@@ -126,15 +146,21 @@ class MilkProvider extends ChangeNotifier {
         print(userJson['message']);
         SimpleToast.showSuccessToast(
             context, "Milk Updated", "${userJson['message']}");
+        _isLoading = false;
+        notifyListeners();
         //showSuccessSnackbar(userJson['message'], context);
       } else {
         final message = jsonDecode(response.body);
         SimpleToast.showErrorToast(
             context, "Updating Error", "${message['message']}");
+        _isLoading = false;
+        notifyListeners();
         //showErrorSnackbar(message['message'], context);
       }
     } catch (e) {
       SimpleToast.showErrorToast(context, "Error occured", "$e");
+      _isLoading = false;
+      notifyListeners();
       // showErrorSnackbar("An Error occured: $e", context);
     }
   }
@@ -143,6 +169,8 @@ class MilkProvider extends ChangeNotifier {
     required String id,
     required BuildContext context,
   }) async {
+    _isLoading = true;
+    notifyListeners();
     final url =
         Uri.parse('${GlobalApi.baseApi}${GlobalApi.deleteMilkRecord}/$id');
 
@@ -163,20 +191,27 @@ class MilkProvider extends ChangeNotifier {
         print('Success Message: ${jsonResponse['message']}');
         SimpleToast.showSuccessToast(
             context, "Milk Deleted", "${jsonResponse['message']}");
-        //showSuccessSnackbar(jsonResponse['message'], context);
+        _isLoading = false;
         notifyListeners();
+        //showSuccessSnackbar(jsonResponse['message'], context);
       } else {
         try {
           final message = jsonDecode(response.body);
           SimpleToast.showErrorToast(
               context, "Milk Added", "${message['message']}");
+          _isLoading = false;
+          notifyListeners();
           //showErrorSnackbar(message['message'], context);
         } catch (_) {
+          _isLoading = false;
+          notifyListeners();
           showErrorSnackbar(
               'Failed to delete milk record: ${response.body}', context);
         }
       }
     } catch (e) {
+      _isLoading = false;
+      notifyListeners();
       SimpleToast.showErrorToast(context, "Error occured", "$e");
       // showErrorSnackbar("An error occurred: $e", context);
       print('Error: $e');

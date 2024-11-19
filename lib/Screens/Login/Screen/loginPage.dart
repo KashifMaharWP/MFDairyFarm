@@ -63,6 +63,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    isLoading = Provider.of<AuthProvider>(context).isLoading;
     return Scaffold(
         body: Container(
       decoration: const BoxDecoration(
@@ -144,8 +145,10 @@ class _LoginPageState extends State<LoginPage> {
                     color: Colors.lightBlue, fontSize: screenWidth * .05),
               )),
           customRoundedButton(
+              loading: isLoading,
               title: "Sign in",
               on_Tap: () async {
+                FocusScope.of(context).unfocus();
                 await Provider.of<AuthProvider>(context, listen: false)
                     .login(email.text, password.text, context);
               })

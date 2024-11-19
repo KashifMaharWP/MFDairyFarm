@@ -28,25 +28,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("lib/assets/mfBackground.png"),
-              fit: BoxFit.cover)),
-      child: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              pageHeaderContainer(),
-              SizedBox(
-                height: screenHeight / 15,
-              ),
-              pageBodyContainer(),
-            ],
+        appBar: AppBar(
+          backgroundColor: darkGreenColor,
+          foregroundColor: whiteColor,
+          centerTitle: true,
+          title: Text1(
+            fontSize: header4,
+            fontColor: whiteColor,
+            text: "Register Worker",
           ),
         ),
-      ),
-    ));
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // pageHeaderContainer(),
+                SizedBox(
+                  height: screenHeight / 15,
+                ),
+                pageBodyContainer(),
+              ],
+            ),
+          ),
+        ));
   }
 
   Widget pageHeaderContainer() {
@@ -61,16 +65,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget pageBodyContainer() {
-    return Container(
-      padding: EdgeInsets.all(header1),
-      width: double.infinity,
-      height: screenHeight / 1.5,
-      decoration: BoxDecoration(
-        color: transGreenColor,
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(screenWidth / 8),
-            topRight: Radius.circular(screenWidth / 8)),
-      ),
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          vertical: screenHeight * .025, horizontal: screenWidth * .05),
       child: Column(
         children: [
           Text1(fontColor: whiteColor, fontSize: header1, text: "Sign in"),
@@ -101,21 +98,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
           SizedBox(
             height: header1,
           ),
-          customRoundedButton(
-              title: "Register User",
-              on_Tap: () async {
-                await Provider.of<RegisterUserProvider>(context, listen: false)
-                    .registerUser(
-                        name: name.text,
-                        email: email.text,
-                        password: password.text,
-                        context: context);
-                // await Provider.of<AuthProvider>(context, listen: false)
-                //     .signUp(name.text, email.text, password.text, context);
-                name.clear();
-                email.clear();
-                password.clear();
-              })
+          Consumer<RegisterUserProvider>(
+            builder: (context, value, child) => customRoundedButton(
+                loading: value.isLoading,
+                title: "Register User",
+                on_Tap: () async {
+                  FocusScope.of(context).unfocus();
+                  await Provider.of<RegisterUserProvider>(context,
+                          listen: false)
+                      .registerUser(
+                          name: name.text,
+                          email: email.text,
+                          password: password.text,
+                          context: context);
+                  // await Provider.of<AuthProvider>(context, listen: false)
+                  //     .signUp(name.text, email.text, password.text, context);
+                  name.clear();
+                  email.clear();
+                  password.clear();
+                }),
+          )
         ],
       ),
     );

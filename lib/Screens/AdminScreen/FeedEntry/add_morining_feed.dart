@@ -3,6 +3,7 @@ import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Functions/customDatePicker.dart';
 import 'package:dairyfarmflow/Providers/FeedProviders/feed_provider.dart';
+import 'package:dairyfarmflow/Providers/MilkProviders/milk_provider.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:dairyfarmflow/Widget/customRoundButton.dart';
@@ -30,6 +31,7 @@ class _AddMorningFeedState extends State<AddMorningFeed> {
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = Provider.of<FeedProvider>(context).isLoading;
     // cowId.text = widget.id;
 
     // final provider = Provider.of<AnimalRegistratinProvider>(context);
@@ -59,8 +61,10 @@ class _AddMorningFeedState extends State<AddMorningFeed> {
               customForm(),
               SizedBox(height: paragraph / 2),
               customRoundedButton(
+                loading: isLoading,
                 title: "Add feed",
                 on_Tap: () async {
+                  FocusScope.of(context).unfocus();
                   datepiker.text =
                       DateFormat("EEE MMM dd yyyy").format(selectedDate);
                   print(pickedDate);
@@ -100,6 +104,7 @@ class _AddMorningFeedState extends State<AddMorningFeed> {
             SizedBox(height: paragraph),
             customTextFormField("Morning feed", CupertinoIcons.calendar),
             TextFieldWidget1(
+              keyboardtype: TextInputType.number,
               widgetcontroller: morning,
               fieldName: "Add Feed(5kg)",
               isPasswordField: false,

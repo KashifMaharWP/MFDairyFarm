@@ -111,6 +111,7 @@ class _RegistrationPage2State extends State<RegistrationPage2> {
               height: 50,
             ),
             customRoundedButton(
+                loading: false,
                 title: "Register",
                 on_Tap: () {
                   setAdminDetails();

@@ -1,18 +1,31 @@
 import 'dart:convert';
-
 import 'package:dairyfarmflow/API/global_api.dart';
-import 'package:dairyfarmflow/Functions/showPopsScreen.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:simple_toast_message/simple_toast.dart';
 
 class RegisterUserProvider extends ChangeNotifier {
+  int _feedConsumed = 0;
+  get feedConsumed => _feedConsumed;
+
+  Future<void> feedConsumedFunction(int feeddata) async {
+    _feedConsumed = await feeddata;
+    print("feed in provider " + feedConsumed.toString());
+    // return _feedConsumed;
+    //notifyListeners();
+  }
+
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
   Future<void> registerUser(
       {required String name,
       required String email,
       required String password,
       required BuildContext context}) async {
+    _isLoading = true;
+    notifyListeners();
     final url = Uri.parse('${GlobalApi.baseApi}user/createUser');
 
     final headers = {
@@ -26,7 +39,6 @@ class RegisterUserProvider extends ChangeNotifier {
       'email': email,
       'password': password,
     });
-    print(jsonDecode(body));
 
     try {
       final response = await http.post(
@@ -36,12 +48,24 @@ class RegisterUserProvider extends ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        showSuccessSnackbar("User Created successfully!", context);
+        final userJson = jsonDecode(response.body);
+
+        SimpleToast.showSuccessToast(
+            context, "User Register!", "${userJson['message']}");
+        _isLoading = false;
+        notifyListeners();
       } else {
-        showErrorSnackbar("Failed to Create User", context);
+        final userJson = jsonDecode(response.body);
+
+        _isLoading = false;
+        notifyListeners();
+        SimpleToast.showErrorToast(
+            context, "Error Message", "${userJson['message']}");
       }
     } catch (e) {
-      showErrorSnackbar("An error occurred: $e", context);
+      _isLoading = false;
+      notifyListeners();
+      SimpleToast.showErrorToast(context, "An Error Occurred", "$e");
     }
   }
 }

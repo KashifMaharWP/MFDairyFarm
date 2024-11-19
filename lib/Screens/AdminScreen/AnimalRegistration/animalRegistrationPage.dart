@@ -25,13 +25,9 @@ class _AnimalRegistrationPageState extends State<AnimalRegistrationPage> {
   TextEditingController purchasedPrice = TextEditingController();
   TextEditingController breedType = TextEditingController();
   TextEditingController animalId = TextEditingController();
-  // List<String> tagIDList = ["1", "2", "3", "4", "5", "6", "7"];
   String animalIdDropDownValue = "1";
-  File? _image; // To store the selected image
-
+  File? _image;
   final ImagePicker picker = ImagePicker();
-
-  // Method to pick an image
   Future<void> pickImage(ImageSource source) async {
     final pickedFile = await picker.pickImage(source: source);
     if (pickedFile != null) {
@@ -77,70 +73,30 @@ class _AnimalRegistrationPageState extends State<AnimalRegistrationPage> {
     );
   }
 
-  // Method to upload data to the API
-  // Future<void> uploadAnimalData(BuildContext context) async {
-  //   if (_image == null ||
-  //       purchasedPrice.text.isEmpty ||
-  //       breedType.text.isEmpty) {
-  //     print("Please complete all fields and select an image.");
-  //     return;
-  //   }
-
-  //   var request = http.MultipartRequest(
-  //     'POST',
-  //     Uri.parse(
-  //         'https://dairy-app-production-4bb8.up.railway.app/api/cow/register'),
-  //   );
-
-  //   // Add headers and fields
-
-  //   request.files.add(
-  //     await http.MultipartFile.fromPath(
-  //       'image',
-  //       _image!.path,
-  //       filename: basename(_image!.path),
-  //     ),
-  //   );
-
-  //   request.headers['Authorization'] =
-  //       'Bearer ${Provider.of<UserDetail>(context, listen: false).token}';
-  //   request.fields['animalNumber'] = animalIdDropDownValue;
-  //   request.fields['breed'] = breedType.text;
-  //   request.fields['age'] = purchasedPrice.text;
-
-  //   // Send request and handle response
-  //   try {
-  //     var response = await request.send();
-  //     if (response.statusCode == 201 || response.statusCode == 200) {
-  //       print('Animal data uploaded successfully!');
-  //     } else {
-  //       print('Failed to upload data: ${response.statusCode}');
-  //     }
-  //   } catch (e) {
-  //     print('Error uploading data: $e');
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // final provider = Provider.of<AnimalRegistratinProvider>(context);
     String token =
         Provider.of<UserDetail>(context, listen: false).token.toString();
     if (kDebugMode) {
       print("Token $token");
     }
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: darkGreenColor,
+        foregroundColor: whiteColor,
+        title: Text1(
+          fontColor: whiteColor,
+          fontSize: header4,
+          text: "Register Animal",
+        ),
+      ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 40, right: 8, left: 8),
+          padding: const EdgeInsets.only(top: 40, right: 10, left: 10),
           child: Column(
             children: [
-              Text1(
-                fontColor: darkGreenColor,
-                fontSize: paragraph,
-                text: "Register Animal",
-              ),
               SizedBox(height: paragraph / 6),
               GestureDetector(
                 onTap: () {
@@ -181,8 +137,10 @@ class _AnimalRegistrationPageState extends State<AnimalRegistrationPage> {
               customForm(),
               SizedBox(height: paragraph / 2),
               customRoundedButton(
+                loading: false,
                 title: "Save Animal",
                 on_Tap: () async {
+                  FocusScope.of(context).unfocus();
                   await Provider.of<AnimalRegistratinProvider>(context,
                           listen: false)
                       .uploadAnimalData(context, animalId.text, breedType.text,

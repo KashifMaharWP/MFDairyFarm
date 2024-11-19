@@ -1,7 +1,6 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
-import 'package:dairyfarmflow/Providers/auth_provider.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:dairyfarmflow/Widget/customRoundButton.dart';
 import 'package:dairyfarmflow/Widget/textFieldWidget1.dart';
@@ -9,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_toast_message/simple_toast.dart';
 
 import '../../../Functions/customDatePicker.dart';
 import '../../../Providers/FeedProviders/feed_provider.dart';
@@ -26,42 +26,58 @@ class _feedEntryPageState extends State<feedEntryPage> {
   TextEditingController wanda = TextEditingController();
   TextEditingController purchasedPrice = TextEditingController();
   TextEditingController breadType = TextEditingController();
-  List<String> tagIDList = ["1", "2", "3", "4"];
+  // List<String> tagIDList = ["1", "2", "3", "4"];
   String? dropDownItem;
   String animalIdDropDownValue = "1";
   DateTime selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
-    print(widget.id);
-    return Material(
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text1(
-                  fontColor: darkGreenColor,
-                  fontSize: paragraph * 2,
-                  text: "Add Feed Inventory"),
-              SizedBox(
-                height: paragraph / 3,
-              ),
-              customForm(),
-              customRoundedButton(
-                  title: "Add Feed",
-                  on_Tap: () async {
-                    await Provider.of<FeedProvider>(context, listen: false)
-                        .addFeedInventory(
-                            feedAmount: int.parse(wanda.text),
-                            context: context);
-                    Navigator.pop(context);
-                  })
-            ],
-          ),
-        ));
+    final isLoading = Provider.of<FeedProvider>(context).isLoading;
+    // print(widget.id);
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: darkGreenColor,
+        foregroundColor: whiteColor,
+        centerTitle: true,
+        title: Text1(
+          fontColor: whiteColor,
+          fontSize: header4,
+          text: "Add Feed Inventory",
+        ),
+      ),
+      body: Material(
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: paragraph / 3,
+                ),
+                customForm(),
+                customRoundedButton(
+                    loading: isLoading,
+                    title: "Add Feed",
+                    on_Tap: () async {
+                      FocusScope.of(context).unfocus();
+                      if (wanda.text == '') {
+                        SimpleToast.showErrorToast(
+                            context, "Alert", "Please Enter Feed Amount");
+                      } else {
+                        await Provider.of<FeedProvider>(context, listen: false)
+                            .addFeedInventory(
+                                feedAmount: int.parse(wanda.text),
+                                context: context);
+                        Navigator.pop(context);
+                      }
+                    })
+              ],
+            ),
+          )),
+    );
   }
 
   // Form for Data Entry
@@ -69,26 +85,25 @@ class _feedEntryPageState extends State<feedEntryPage> {
     return Padding(
       padding: EdgeInsets.all(paragraph / 6),
       child: Form(
-          child: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            customTextFormField("Wanda", Icons.grass),
-            TextFieldWidget1(
-                widgetcontroller: wanda,
-                fieldName: "Wanda-(kg)",
-                isPasswordField: false),
-            SizedBox(
-              height: paragraph,
-            ),
-            // customTextFormField("Date", CupertinoIcons.calendar),
-            // dateContainer(),
-            // const SizedBox(
-            //   height: 30,
-            // ),
-          ],
-        ),
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          customTextFormField("Wanda", Icons.grass),
+          TextFieldWidget1(
+              keyboardtype: TextInputType.number,
+              widgetcontroller: wanda,
+              fieldName: "Wanda-(kg)",
+              isPasswordField: false),
+          SizedBox(
+            height: paragraph,
+          ),
+          // customTextFormField("Date", CupertinoIcons.calendar),
+          // dateContainer(),
+          // const SizedBox(
+          //   height: 30,
+          // ),
+        ],
       )),
     );
   }

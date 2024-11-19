@@ -102,8 +102,8 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
   void deleteRecord(String id) async {
     await Provider.of<MilkProvider>(context, listen: false)
         .deleteMilkData(id: id, context: context);
+    fetchMilkData();
     //Navigator.pop(context);
-    setState(() {});
   }
 
   @override
@@ -204,8 +204,10 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
                           ],
                         ),
                       )))
-              : pageHeaderContainer(totalMilk.toString(),
-                  morningMilk.toString(), eveningMilk.toString()),
+              : pageHeaderContainer(
+                  totalMilk == null ? "0" : totalMilk.toString(),
+                  morningMilk == null ? "0" : morningMilk.toString(),
+                  eveningMilk == null ? "0" : eveningMilk.toString()),
           SizedBox(
             height: screenHeight * .015,
           ),
@@ -233,250 +235,260 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
           ),
           Consumer<MilkRecordProvider>(
             builder: (context, value, child) => Expanded(
-                child: ListView.builder(
-                    itemCount: value.milkRecords.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final cow = value.milkRecords[index];
-                      // print(cow);
-                      return Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Slidable(
-                          key: ValueKey(cow.id),
-                          startActionPane: ActionPane(
-                              motion: const DrawerMotion(),
-                              children: [
-                                SlidableAction(
-                                  onPressed: (context) {
-                                    String id = cow.id;
-                                    //print(id);
-                                    String morning = cow.morning.toString();
-                                    String evening = cow.evening.toString();
-                                    String total =
-                                        _morningMilkContriller.text = morning;
+                child: value.milkRecords.isEmpty
+                    ? Center(
+                        child: value.isLoading
+                            ? const CircularProgressIndicator()
+                            : Text1(
+                                fontColor: lightBlackColor,
+                                fontSize: paragraph,
+                                text: "No Milk Record",
+                              ),
+                      )
+                    : ListView.builder(
+                        itemCount: value.milkRecords.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final cow = value.milkRecords[index];
+                          // print(cow);
+                          return Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Slidable(
+                              key: ValueKey(cow.id),
+                              startActionPane: ActionPane(
+                                  motion: const DrawerMotion(),
+                                  children: [
+                                    SlidableAction(
+                                      onPressed: (context) {
+                                        String id = cow.id;
+                                        //print(id);
+                                        String morning = cow.morning.toString();
+                                        String evening = cow.evening.toString();
+                                        String total = _morningMilkContriller
+                                            .text = morning;
 
-                                    _eveningMilkContriller.text = evening;
+                                        _eveningMilkContriller.text = evening;
 
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return SingleChildScrollView(
-                                          child: AlertDialog(
-                                            title: Center(
-                                              child: Text1(
-                                                  fontColor: blackColor,
-                                                  fontSize: header5,
-                                                  text: "Update"),
-                                            ),
-                                            content: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                customTextFormField(
-                                                  "Morning Milk",
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return SingleChildScrollView(
+                                              child: AlertDialog(
+                                                title: Center(
+                                                  child: Text1(
+                                                      fontColor: blackColor,
+                                                      fontSize: header5,
+                                                      text: "Update"),
                                                 ),
-                                                TextFieldWidget1(
-                                                    widgetcontroller:
-                                                        _morningMilkContriller,
-                                                    fieldName: "Morning Milk",
-                                                    isPasswordField: false),
-                                                SizedBox(
-                                                  height: screenHeight * .025,
-                                                ),
-                                                customTextFormField(
-                                                  "Evening Milk",
-                                                ),
-                                                TextFieldWidget1(
-                                                    widgetcontroller:
-                                                        _eveningMilkContriller,
-                                                    fieldName: "Evening Milk",
-                                                    isPasswordField: false),
-                                                SizedBox(
-                                                  height: screenHeight * .025,
-                                                ),
-                                                customTextFormField(
-                                                  "Total Milk",
-                                                ),
-                                                TextFieldWidget1(
-                                                    widgetcontroller:
-                                                        _totalMilkContriller,
-                                                    fieldName: "Total Milk",
-                                                    isPasswordField: false),
-                                                SizedBox(
-                                                  height: screenHeight * .025,
-                                                ),
-                                                Center(
-                                                  child: customRoundedButton(
-                                                      title: "Update",
-                                                      on_Tap: () async {
-                                                        await Provider.of<
-                                                                    MilkProvider>(
-                                                                context,
-                                                                listen: false)
-                                                            .upadetMilkData(
-                                                                id: id,
-                                                                morning: int.parse(
-                                                                    _morningMilkContriller
-                                                                        .text),
-                                                                evening: int.parse(
-                                                                    _eveningMilkContriller
-                                                                        .text),
-                                                                total: int.parse(
-                                                                    _totalMilkContriller
-                                                                        .text),
-                                                                context:
+                                                content: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    customTextFormField(
+                                                      "Morning Milk",
+                                                    ),
+                                                    TextFieldWidget1(
+                                                        keyboardtype:
+                                                            TextInputType
+                                                                .number,
+                                                        widgetcontroller:
+                                                            _morningMilkContriller,
+                                                        fieldName:
+                                                            "Morning Milk",
+                                                        isPasswordField: false),
+                                                    SizedBox(
+                                                      height:
+                                                          screenHeight * .025,
+                                                    ),
+                                                    customTextFormField(
+                                                      "Evening Milk",
+                                                    ),
+                                                    TextFieldWidget1(
+                                                        keyboardtype:
+                                                            TextInputType
+                                                                .number,
+                                                        widgetcontroller:
+                                                            _eveningMilkContriller,
+                                                        fieldName:
+                                                            "Evening Milk",
+                                                        isPasswordField: false),
+                                                    SizedBox(
+                                                      height:
+                                                          screenHeight * .025,
+                                                    ),
+                                                    customTextFormField(
+                                                      "Total Milk",
+                                                    ),
+                                                    TextFieldWidget1(
+                                                        isReadOnly: true,
+                                                        widgetcontroller:
+                                                            _totalMilkContriller,
+                                                        fieldName: "Total Milk",
+                                                        isPasswordField: false),
+                                                    SizedBox(
+                                                      height:
+                                                          screenHeight * .025,
+                                                    ),
+                                                    Center(
+                                                      child:
+                                                          customRoundedButton(
+                                                              loading:
+                                                                  isLoading,
+                                                              title: "Update",
+                                                              on_Tap: () async {
+                                                                await Provider.of<MilkProvider>(context, listen: false).upadetMilkData(
+                                                                    id: id,
+                                                                    morning: int.parse(
+                                                                        _morningMilkContriller
+                                                                            .text),
+                                                                    evening: int.parse(
+                                                                        _eveningMilkContriller
+                                                                            .text),
+                                                                    total: int.parse(
+                                                                        _totalMilkContriller
+                                                                            .text),
+                                                                    context:
+                                                                        context);
+                                                                Navigator.pop(
                                                                     context);
-                                                        Navigator.pop(context);
-                                                        setState(() {
-                                                          fetchMilkData();
-                                                        });
-                                                      }),
-                                                )
-                                              ],
-                                            ),
-                                          ),
+                                                                setState(() {
+                                                                  fetchMilkData();
+                                                                });
+                                                              }),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
                                         );
                                       },
-                                    );
-                                  },
-                                  backgroundColor: Colors.blue,
-                                  icon: Icons.edit,
-                                  label: 'Edit',
-                                ),
-                              ]),
-                          endActionPane: ActionPane(
-                            motion: const DrawerMotion(),
-                            children: [
-                              SlidableAction(
-                                onPressed: (context) {
-                                  deleteRecord(cow.id);
-                                  setState(() {
-                                    fetchMilkData();
-                                  });
-                                },
-                                backgroundColor: Colors.red,
-                                icon: Icons.delete,
-                                label: 'Delete',
-                              )
-                            ],
-                          ),
-                          child: Container(
-                            width: screenWidth * 0.95,
-                            height: screenHeight / 3.66,
-                            padding: EdgeInsets.all(screenHeight * .009),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(paragraph),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: greyGreenColor,
-                                      blurRadius: 6,
-                                      spreadRadius: 3,
-                                      offset: const Offset(2, 0)),
-                                ]),
-                            child: Column(
-                              // crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
+                                      backgroundColor: Colors.blue,
+                                      icon: Icons.edit,
+                                      label: 'Edit',
+                                    ),
+                                  ]),
+                              endActionPane: ActionPane(
+                                motion: const DrawerMotion(),
+                                children: [
+                                  SlidableAction(
+                                    onPressed: (context) {
+                                      deleteRecord(cow.id);
+                                      setState(() {});
+                                    },
+                                    backgroundColor: Colors.red,
+                                    icon: Icons.delete,
+                                    label: 'Delete',
+                                  )
+                                ],
+                              ),
+                              child: Container(
+                                width: screenWidth * 0.95,
+                                height: screenHeight / 3.66,
+                                padding: EdgeInsets.all(screenHeight * .009),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius:
+                                        BorderRadius.circular(paragraph),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: greyGreenColor,
+                                          blurRadius: 6,
+                                          spreadRadius: 3,
+                                          offset: const Offset(2, 0)),
+                                    ]),
+                                child: Column(
+                                  // crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Column(
+                                    Row(
                                       children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              color: const Color.fromARGB(
-                                                  255, 210, 203, 203),
-                                              borderRadius:
-                                                  BorderRadius.circular(20)),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            child: Image(
-                                              image:
-                                                  NetworkImage(cow.cow.image),
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                          height: screenHeight * .23,
-                                          width: screenWidth * .4,
-                                          //color: Colors.red,
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: screenWidth * .05,
-                                    ),
-                                    Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
+                                        Column(
                                           children: [
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  CupertinoIcons.tag_fill,
-                                                  color: darkGreenColor,
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                  color: const Color.fromARGB(
+                                                      255, 210, 203, 203),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20)),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                child: Image(
+                                                  image: NetworkImage(
+                                                      cow.cow.image),
+                                                  fit: BoxFit.cover,
                                                 ),
-                                                SizedBox(
-                                                  width: screenWidth * .007,
-                                                ),
-                                                Text1(
-                                                    fontColor: lightBlackColor,
-                                                    fontSize:
-                                                        screenWidth * .044,
-                                                    text: cow.cow.animalNumber
-                                                        .toString()),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              width: screenWidth * .055,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  CupertinoIcons.add,
-                                                  color: darkGreenColor,
-                                                ),
-                                                SizedBox(
-                                                  width: screenWidth * .007,
-                                                ),
-                                                Text1(
-                                                    fontColor: lightBlackColor,
-                                                    fontSize:
-                                                        screenWidth * .044,
-                                                    text: "${cow.total} Kg"),
-                                              ],
+                                              ),
+                                              height: screenHeight * .23,
+                                              width: screenWidth * .4,
+                                              //color: Colors.red,
                                             ),
                                           ],
                                         ),
                                         SizedBox(
-                                          height: screenHeight * .025,
+                                          width: screenWidth * .05,
                                         ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                        Column(
                                           children: [
-                                            Image(
-                                              image: const AssetImage(
-                                                  "lib/assets/sun.png"),
-                                              width: screenWidth * .055,
-                                              height: screenWidth * .055,
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Icon(
+                                                      CupertinoIcons.tag_fill,
+                                                      color: darkGreenColor,
+                                                    ),
+                                                    SizedBox(
+                                                      width: screenWidth * .007,
+                                                    ),
+                                                    Text1(
+                                                        fontColor:
+                                                            lightBlackColor,
+                                                        fontSize:
+                                                            screenWidth * .044,
+                                                        text: cow
+                                                            .cow.animalNumber
+                                                            .toString()),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  width: screenWidth * .055,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Icon(
+                                                      CupertinoIcons.add,
+                                                      color: darkGreenColor,
+                                                    ),
+                                                    SizedBox(
+                                                      width: screenWidth * .007,
+                                                    ),
+                                                    Text1(
+                                                        fontColor:
+                                                            lightBlackColor,
+                                                        fontSize:
+                                                            screenWidth * .044,
+                                                        text:
+                                                            "${cow.total} Kg"),
+                                                  ],
+                                                ),
+                                              ],
                                             ),
                                             SizedBox(
-                                              width: screenWidth * .007,
-                                            ),
-                                            Text1(
-                                                fontColor: lightBlackColor,
-                                                fontSize: screenWidth * .044,
-                                                text: "${cow.morning} Kg"),
-                                            SizedBox(
-                                              width: screenWidth * .055,
+                                              height: screenHeight * .025,
                                             ),
                                             Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Image(
                                                   image: const AssetImage(
-                                                      "lib/assets/moon.png"),
+                                                      "lib/assets/sun.png"),
                                                   width: screenWidth * .055,
                                                   height: screenWidth * .055,
                                                 ),
@@ -487,241 +499,263 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
                                                     fontColor: lightBlackColor,
                                                     fontSize:
                                                         screenWidth * .044,
-                                                    text: "${cow.evening} Kg"),
+                                                    text: "${cow.morning} Kg"),
+                                                SizedBox(
+                                                  width: screenWidth * .055,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Image(
+                                                      image: const AssetImage(
+                                                          "lib/assets/moon.png"),
+                                                      width: screenWidth * .055,
+                                                      height:
+                                                          screenWidth * .055,
+                                                    ),
+                                                    SizedBox(
+                                                      width: screenWidth * .007,
+                                                    ),
+                                                    Text1(
+                                                        fontColor:
+                                                            lightBlackColor,
+                                                        fontSize:
+                                                            screenWidth * .044,
+                                                        text:
+                                                            "${cow.evening} Kg"),
+                                                  ],
+                                                ),
                                               ],
-                                            ),
+                                            )
                                           ],
-                                        )
+                                        ),
+                                        // InkWell(
+                                        // onTap: () {
+                                        //   String id = cow.id;
+                                        //   //print(id);
+                                        //   String morning = cow.morning.toString();
+                                        //   String evening = cow.evening.toString();
+                                        //   String total = _morningMilkContriller
+                                        //       .text = morning;
+
+                                        //   _eveningMilkContriller.text = evening;
+
+                                        //   showDialog(
+                                        //     context: context,
+                                        //     builder: (context) {
+                                        //       return AlertDialog(
+                                        //         content: Column(
+                                        //           mainAxisSize: MainAxisSize.min,
+                                        //           children: [
+                                        //             ListTile(
+                                        //               onTap: () {
+                                        //                 showDialog(
+                                        //                   context: context,
+                                        //                   builder: (context) {
+                                        //                     return SingleChildScrollView(
+                                        //                       child: AlertDialog(
+                                        //                         title: Center(
+                                        //                           child: Text1(
+                                        //                               fontColor:
+                                        //                                   blackColor,
+                                        //                               fontSize:
+                                        //                                   header5,
+                                        //                               text:
+                                        //                                   "Update"),
+                                        //                         ),
+                                        //                         content: Column(
+                                        //                           crossAxisAlignment:
+                                        //                               CrossAxisAlignment
+                                        //                                   .start,
+                                        //                           mainAxisSize:
+                                        //                               MainAxisSize
+                                        //                                   .min,
+                                        //                           children: [
+                                        //                             customTextFormField(
+                                        //                               "Morning Milk",
+                                        //                             ),
+                                        //                             TextFieldWidget1(
+                                        //                                 widgetcontroller:
+                                        //                                     _morningMilkContriller,
+                                        //                                 fieldName:
+                                        //                                     "Morning Milk",
+                                        //                                 isPasswordField:
+                                        //                                     false),
+                                        //                             SizedBox(
+                                        //                               height:
+                                        //                                   screenHeight *
+                                        //                                       .025,
+                                        //                             ),
+                                        //                             customTextFormField(
+                                        //                               "Evening Milk",
+                                        //                             ),
+                                        //                             TextFieldWidget1(
+                                        //                                 widgetcontroller:
+                                        //                                     _eveningMilkContriller,
+                                        //                                 fieldName:
+                                        //                                     "Evening Milk",
+                                        //                                 isPasswordField:
+                                        //                                     false),
+                                        //                             SizedBox(
+                                        //                               height:
+                                        //                                   screenHeight *
+                                        //                                       .025,
+                                        //                             ),
+                                        //                             customTextFormField(
+                                        //                               "Total Milk",
+                                        //                             ),
+                                        //                             TextFieldWidget1(
+                                        //                                 widgetcontroller:
+                                        //                                     _totalMilkContriller,
+                                        //                                 fieldName:
+                                        //                                     "Total Milk",
+                                        //                                 isPasswordField:
+                                        //                                     false),
+                                        //                             SizedBox(
+                                        //                               height:
+                                        //                                   screenHeight *
+                                        //                                       .025,
+                                        //                             ),
+                                        //                             Center(
+                                        //                               child: customRoundedButton(
+                                        //                                   title: "Update",
+                                        //                                   on_Tap: () async {
+                                        //                                     await Provider.of<MilkProvider>(context, listen: false).upadetMilkData(
+                                        //                                         id: id,
+                                        //                                         morning: int.parse(_morningMilkContriller.text),
+                                        //                                         evening: int.parse(_eveningMilkContriller.text),
+                                        //                                         total: int.parse(_totalMilkContriller.text),
+                                        //                                         context: context);
+                                        //                                     Navigator.pop(
+                                        //                                         context);
+                                        //                                     setState(
+                                        //                                         () {
+                                        //                                       fetchMilkData();
+                                        //                                     });
+                                        //                                   }),
+                                        //                             )
+                                        //                           ],
+                                        //                         ),
+                                        //                       ),
+                                        //                     );
+                                        //                   },
+                                        //                 );
+                                        //               },
+                                        //               leading:
+                                        //                   const Icon(Icons.edit),
+                                        //               title: const Text("Edit"),
+                                        //             ),
+                                        //             ListTile(
+                                        //               onTap: () =>
+                                        //                   DeleteRecord(id),
+                                        //               leading: const Icon(
+                                        //                   Icons.delete),
+                                        //               title: const Text("Delete"),
+                                        //             )
+                                        //           ],
+                                        //         ),
+                                        //       );
+                                        //     },
+                                        //   );
+                                        // },
+                                        //     child: Icon(
+                                        //       Icons.more_vert,
+                                        //       size: screenWidth * .065,
+                                        //     )),
                                       ],
                                     ),
-                                    // InkWell(
-                                    // onTap: () {
-                                    //   String id = cow.id;
-                                    //   //print(id);
-                                    //   String morning = cow.morning.toString();
-                                    //   String evening = cow.evening.toString();
-                                    //   String total = _morningMilkContriller
-                                    //       .text = morning;
-
-                                    //   _eveningMilkContriller.text = evening;
-
-                                    //   showDialog(
-                                    //     context: context,
-                                    //     builder: (context) {
-                                    //       return AlertDialog(
-                                    //         content: Column(
-                                    //           mainAxisSize: MainAxisSize.min,
-                                    //           children: [
-                                    //             ListTile(
-                                    //               onTap: () {
-                                    //                 showDialog(
-                                    //                   context: context,
-                                    //                   builder: (context) {
-                                    //                     return SingleChildScrollView(
-                                    //                       child: AlertDialog(
-                                    //                         title: Center(
-                                    //                           child: Text1(
-                                    //                               fontColor:
-                                    //                                   blackColor,
-                                    //                               fontSize:
-                                    //                                   header5,
-                                    //                               text:
-                                    //                                   "Update"),
-                                    //                         ),
-                                    //                         content: Column(
-                                    //                           crossAxisAlignment:
-                                    //                               CrossAxisAlignment
-                                    //                                   .start,
-                                    //                           mainAxisSize:
-                                    //                               MainAxisSize
-                                    //                                   .min,
-                                    //                           children: [
-                                    //                             customTextFormField(
-                                    //                               "Morning Milk",
-                                    //                             ),
-                                    //                             TextFieldWidget1(
-                                    //                                 widgetcontroller:
-                                    //                                     _morningMilkContriller,
-                                    //                                 fieldName:
-                                    //                                     "Morning Milk",
-                                    //                                 isPasswordField:
-                                    //                                     false),
-                                    //                             SizedBox(
-                                    //                               height:
-                                    //                                   screenHeight *
-                                    //                                       .025,
-                                    //                             ),
-                                    //                             customTextFormField(
-                                    //                               "Evening Milk",
-                                    //                             ),
-                                    //                             TextFieldWidget1(
-                                    //                                 widgetcontroller:
-                                    //                                     _eveningMilkContriller,
-                                    //                                 fieldName:
-                                    //                                     "Evening Milk",
-                                    //                                 isPasswordField:
-                                    //                                     false),
-                                    //                             SizedBox(
-                                    //                               height:
-                                    //                                   screenHeight *
-                                    //                                       .025,
-                                    //                             ),
-                                    //                             customTextFormField(
-                                    //                               "Total Milk",
-                                    //                             ),
-                                    //                             TextFieldWidget1(
-                                    //                                 widgetcontroller:
-                                    //                                     _totalMilkContriller,
-                                    //                                 fieldName:
-                                    //                                     "Total Milk",
-                                    //                                 isPasswordField:
-                                    //                                     false),
-                                    //                             SizedBox(
-                                    //                               height:
-                                    //                                   screenHeight *
-                                    //                                       .025,
-                                    //                             ),
-                                    //                             Center(
-                                    //                               child: customRoundedButton(
-                                    //                                   title: "Update",
-                                    //                                   on_Tap: () async {
-                                    //                                     await Provider.of<MilkProvider>(context, listen: false).upadetMilkData(
-                                    //                                         id: id,
-                                    //                                         morning: int.parse(_morningMilkContriller.text),
-                                    //                                         evening: int.parse(_eveningMilkContriller.text),
-                                    //                                         total: int.parse(_totalMilkContriller.text),
-                                    //                                         context: context);
-                                    //                                     Navigator.pop(
-                                    //                                         context);
-                                    //                                     setState(
-                                    //                                         () {
-                                    //                                       fetchMilkData();
-                                    //                                     });
-                                    //                                   }),
-                                    //                             )
-                                    //                           ],
-                                    //                         ),
-                                    //                       ),
-                                    //                     );
-                                    //                   },
-                                    //                 );
-                                    //               },
-                                    //               leading:
-                                    //                   const Icon(Icons.edit),
-                                    //               title: const Text("Edit"),
-                                    //             ),
-                                    //             ListTile(
-                                    //               onTap: () =>
-                                    //                   DeleteRecord(id),
-                                    //               leading: const Icon(
-                                    //                   Icons.delete),
-                                    //               title: const Text("Delete"),
-                                    //             )
-                                    //           ],
+                                    SizedBox(
+                                      height: screenHeight * .025,
+                                    ),
+                                    // Column(
+                                    //   children: [
+                                    // Row(
+                                    //   mainAxisAlignment:
+                                    //       MainAxisAlignment.spaceBetween,
+                                    //   children: [
+                                    //     Row(
+                                    //       children: [
+                                    //         Icon(
+                                    //           CupertinoIcons.tag_fill,
+                                    //           color: darkGreenColor,
                                     //         ),
-                                    //       );
-                                    //     },
-                                    //   );
-                                    // },
-                                    //     child: Icon(
-                                    //       Icons.more_vert,
-                                    //       size: screenWidth * .065,
-                                    //     )),
+                                    //         SizedBox(
+                                    //           width: screenWidth * .007,
+                                    //         ),
+                                    //         Text1(
+                                    //             fontColor: lightBlackColor,
+                                    //             fontSize: screenWidth * .044,
+                                    //             text: cow.cow.animalNumber
+                                    //                 .toString()),
+                                    //       ],
+                                    //     ),
+                                    //     Row(
+                                    //       children: [
+                                    //         Icon(
+                                    //           CupertinoIcons.add,
+                                    //           color: darkGreenColor,
+                                    //         ),
+                                    //         SizedBox(
+                                    //           width: screenWidth * .007,
+                                    //         ),
+                                    //         Text1(
+                                    //             fontColor: lightBlackColor,
+                                    //             fontSize: screenWidth * .044,
+                                    //             text: "${cow.total} Kg"),
+                                    //       ],
+                                    //     ),
+                                    //   ],
+                                    // ),
+                                    // SizedBox(
+                                    //   height: screenHeight * .015,
+                                    // ),
+                                    // Row(
+                                    //   mainAxisAlignment:
+                                    //       MainAxisAlignment.spaceBetween,
+                                    //   children: [
+                                    //     Row(
+                                    //       children: [
+                                    //         Image(
+                                    //           image: const AssetImage(
+                                    //               "lib/assets/sun.png"),
+                                    //           width: screenWidth * .055,
+                                    //           height: screenWidth * .055,
+                                    //         ),
+                                    //         SizedBox(
+                                    //           width: screenWidth * .007,
+                                    //         ),
+                                    //         Text1(
+                                    //             fontColor: lightBlackColor,
+                                    //             fontSize: screenWidth * .044,
+                                    //             text: "${cow.morning} Kg"),
+                                    //       ],
+                                    //     ),
+                                    //     Row(
+                                    //       children: [
+                                    //         Image(
+                                    //           image: const AssetImage(
+                                    //               "lib/assets/moon.png"),
+                                    //           width: screenWidth * .055,
+                                    //           height: screenWidth * .055,
+                                    //         ),
+                                    //         SizedBox(
+                                    //           width: screenWidth * .007,
+                                    //         ),
+                                    //         Text1(
+                                    //             fontColor: lightBlackColor,
+                                    //             fontSize: screenWidth * .044,
+                                    //             text: "${cow.evening} Kg"),
+                                    //       ],
+                                    //     ),
+                                    //   ],
+                                    // )
+                                    //   ],
+                                    // )
                                   ],
                                 ),
-                                SizedBox(
-                                  height: screenHeight * .025,
-                                ),
-                                // Column(
-                                //   children: [
-                                // Row(
-                                //   mainAxisAlignment:
-                                //       MainAxisAlignment.spaceBetween,
-                                //   children: [
-                                //     Row(
-                                //       children: [
-                                //         Icon(
-                                //           CupertinoIcons.tag_fill,
-                                //           color: darkGreenColor,
-                                //         ),
-                                //         SizedBox(
-                                //           width: screenWidth * .007,
-                                //         ),
-                                //         Text1(
-                                //             fontColor: lightBlackColor,
-                                //             fontSize: screenWidth * .044,
-                                //             text: cow.cow.animalNumber
-                                //                 .toString()),
-                                //       ],
-                                //     ),
-                                //     Row(
-                                //       children: [
-                                //         Icon(
-                                //           CupertinoIcons.add,
-                                //           color: darkGreenColor,
-                                //         ),
-                                //         SizedBox(
-                                //           width: screenWidth * .007,
-                                //         ),
-                                //         Text1(
-                                //             fontColor: lightBlackColor,
-                                //             fontSize: screenWidth * .044,
-                                //             text: "${cow.total} Kg"),
-                                //       ],
-                                //     ),
-                                //   ],
-                                // ),
-                                // SizedBox(
-                                //   height: screenHeight * .015,
-                                // ),
-                                // Row(
-                                //   mainAxisAlignment:
-                                //       MainAxisAlignment.spaceBetween,
-                                //   children: [
-                                //     Row(
-                                //       children: [
-                                //         Image(
-                                //           image: const AssetImage(
-                                //               "lib/assets/sun.png"),
-                                //           width: screenWidth * .055,
-                                //           height: screenWidth * .055,
-                                //         ),
-                                //         SizedBox(
-                                //           width: screenWidth * .007,
-                                //         ),
-                                //         Text1(
-                                //             fontColor: lightBlackColor,
-                                //             fontSize: screenWidth * .044,
-                                //             text: "${cow.morning} Kg"),
-                                //       ],
-                                //     ),
-                                //     Row(
-                                //       children: [
-                                //         Image(
-                                //           image: const AssetImage(
-                                //               "lib/assets/moon.png"),
-                                //           width: screenWidth * .055,
-                                //           height: screenWidth * .055,
-                                //         ),
-                                //         SizedBox(
-                                //           width: screenWidth * .007,
-                                //         ),
-                                //         Text1(
-                                //             fontColor: lightBlackColor,
-                                //             fontSize: screenWidth * .044,
-                                //             text: "${cow.evening} Kg"),
-                                //       ],
-                                //     ),
-                                //   ],
-                                // )
-                                //   ],
-                                // )
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                      );
-                    })
+                          );
+                        })
                 // Example widget
 
                 ),

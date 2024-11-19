@@ -102,7 +102,8 @@ class _RegistrationPage1State extends State<RegistrationPage1> {
                     const SizedBox(
                       height: 30,
                     ),
-                    customRoundedButton(title: "Next", on_Tap: ontap)
+                    customRoundedButton(
+                        loading: false, title: "Next", on_Tap: ontap)
                     //rounded custom button widtet
                     // RoundedButton(title: "Next", loading: false, on_Tap: ontap)
                   ],
