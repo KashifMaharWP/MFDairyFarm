@@ -17,4 +17,6 @@ class GlobalApi {
   static String addEveningMilk = "milk/eveningMilkProduction";
   static String addFeedAmount = "feedInventory/addFeed";
   static String deleteMilkRecord = 'milk/deleteMilkRecordById';
+  static String addMedical = 'medicalRecord/add';
+  static String getMedicalRecord = 'medicalRecord/getMonthlyMedicalRecord/Nov';
 }

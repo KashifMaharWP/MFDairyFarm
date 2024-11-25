@@ -316,12 +316,8 @@ class _DashboardState extends State<Dashboard> {
                 ),
                 Column(
                   children: [
-                    viewContainer(
-                        "Medical Record",
-                        "lib/assets/medical.png",
-                        const sampleScreen(
-                            backgroundColor:
-                                Colors.pink)), //VacinationRecord()),
+                    viewContainer("Medical Record", "lib/assets/medical.png",
+                        const VacinationRecord()),
                     SizedBox(
                       height: paragraph,
                     ),

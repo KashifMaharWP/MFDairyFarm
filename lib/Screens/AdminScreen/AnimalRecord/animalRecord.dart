@@ -7,9 +7,9 @@ import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Model/get_cow_model.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/AnimalRecord/animal_detail.dart';
-import 'package:dairyfarmflow/Screens/AdminScreen/FeedEntry/feedEntryPage.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/add_evening_milk.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/add_morning_milk.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/VacinationScreen/add_madicine.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:dairyfarmflow/Widget/custom_filter_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,6 +28,7 @@ class AnimalRecord extends StatefulWidget {
 class _AnimalRecordState extends State<AnimalRecord> {
   @override
   String role = '';
+
   Widget build(BuildContext context) {
     role = Provider.of<UserDetail>(context).role.toString();
     return Scaffold(
@@ -91,7 +92,7 @@ class _AnimalRecordState extends State<AnimalRecord> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          const AnimalDetail(),
+                                          AddMedicine(id: cow.id),
                                     ),
                                   );
                                 }

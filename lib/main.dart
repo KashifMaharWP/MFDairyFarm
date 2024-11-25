@@ -12,6 +12,8 @@ import 'package:dairyfarmflow/Screens/Login/Screen/loginPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'Providers/Medical/add_medical.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
@@ -40,6 +42,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => RegisterUserProvider()),
         ChangeNotifierProvider(
           create: (context) => MilkRecordProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AddMedical(),
         )
       ],
       child: MaterialApp(
