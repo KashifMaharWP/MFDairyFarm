@@ -5,7 +5,6 @@ import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/ReuseableWidgets/dairy_form_detail.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/AnimalRecord/animalRecord.dart';
-import 'package:dairyfarmflow/Screens/AdminScreen/DailyRecord/daily_record_screen.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/FeedEntry/feed_record.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/milk_record.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/VacinationScreen/vacination_record.dart';

@@ -15,7 +15,7 @@ class MyRoutes {
     return {
       login: (context) => const LoginPage(),
       homePage: (context) => home(),
-      dashboard: (context) => Dashboard(),
+      dashboard: (context) => const Dashboard(),
       animalRegistration: (context) => const AnimalRegistrationPage(),
       // feedEntry: (context) => const feedEntryPage(),
     };

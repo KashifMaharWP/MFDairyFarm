@@ -46,7 +46,7 @@ class RegistrationProvider extends ChangeNotifier {
     if (response.statusCode == 200) {
       print(response.body);
       isRegestered = true;
-      dairyFarmId = await companyJson["dairyFarm"]["_id"].toString();
+      dairyFarmId = companyJson["dairyFarm"]["_id"].toString();
       print("Print from getting: $dairyFarmId");
     }
     // comId != null? return true: return false;

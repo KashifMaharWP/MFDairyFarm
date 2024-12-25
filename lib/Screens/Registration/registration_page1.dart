@@ -4,9 +4,7 @@ import 'package:dairyfarmflow/Providers/registration_provider.dart';
 import 'package:dairyfarmflow/Screens/Registration/registration_page2.dart';
 import 'package:dairyfarmflow/Widget/customRoundButton.dart';
 import 'package:dairyfarmflow/Widget/textFieldWithIconWidget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class RegistrationPage1 extends StatefulWidget {

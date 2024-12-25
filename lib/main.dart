@@ -11,7 +11,6 @@ import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/Screens/Login/Screen/loginPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'Providers/Medical/add_medical.dart';
 
 void main() {

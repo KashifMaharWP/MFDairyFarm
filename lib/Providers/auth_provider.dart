@@ -84,11 +84,15 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
     final body = {"email": email, "password": password};
 
+
     try {
       final response = await http.post(
         Uri.parse("${GlobalApi.baseApi}${GlobalApi.loginApi}"),
         body: body,
       );
+
+      final jsonresponse = jsonDecode(response.body);
+      print(jsonresponse);
 
       if (response.statusCode == 200) {
         final userJson = jsonDecode(response.body);

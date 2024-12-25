@@ -1,9 +1,7 @@
 import 'dart:io';
 import 'package:dairyfarmflow/API/global_api.dart';
-import 'package:dairyfarmflow/Functions/showPopsScreen.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +17,7 @@ class AnimalRegistratinProvider extends ChangeNotifier {
       String breed, age, File image) async {
     _isLoading = true;
     notifyListeners();
-    if (image == null || animalNumber.isEmpty || breed.isEmpty) {
+    if (animalNumber.isEmpty || breed.isEmpty) {
       SimpleToast.showInfoToast(context, 'Alert', "Add Required Fields!");
       return;
     }
@@ -34,8 +32,8 @@ class AnimalRegistratinProvider extends ChangeNotifier {
     request.files.add(
       await http.MultipartFile.fromPath(
         'image',
-        image!.path,
-        filename: basename(image!.path),
+        image.path,
+        filename: basename(image.path),
       ),
     );
 

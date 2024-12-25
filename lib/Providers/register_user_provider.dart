@@ -11,8 +11,8 @@ class RegisterUserProvider extends ChangeNotifier {
   get feedConsumed => _feedConsumed;
 
   Future<void> feedConsumedFunction(int feeddata) async {
-    _feedConsumed = await feeddata;
-    print("feed in provider " + feedConsumed.toString());
+    _feedConsumed = feeddata;
+    print("feed in provider $feedConsumed");
     // return _feedConsumed;
     //notifyListeners();
   }

@@ -1,6 +1,5 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
-import 'package:dairyfarmflow/Providers/auth_provider.dart';
 import 'package:dairyfarmflow/Providers/register_user_provider.dart';
 
 import 'package:dairyfarmflow/Widget/customRoundButton.dart';

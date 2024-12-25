@@ -7,11 +7,9 @@ import 'package:dairyfarmflow/Screens/AdminScreen/AnimalRecord/animalRecord.dart
 import 'package:dairyfarmflow/Screens/AdminScreen/FeedEntry/add_evening_feed.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/FeedEntry/add_morining_feed.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/milk_record.dart';
-import 'package:dairyfarmflow/Screens/AdminScreen/VacinationScreen/vacination_record.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/adminDashboard/adminDashboard.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/adminDashboard/profile_view.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/workerDashboard/workerDashboard.dart';
-import 'package:dairyfarmflow/Screens/Notifications/notification_screen.dart';
 import 'package:dairyfarmflow/Screens/SampleScreen.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:dairyfarmflow/Widget/my_drawer.dart';
@@ -359,7 +357,7 @@ class _UserDashboardState extends State<UserDashboard> {
       padding: EdgeInsets.symmetric(horizontal: paragraph),
       child: Column(
         children: [
-          circleContainer("${text}"),
+          circleContainer(text),
           const SizedBox(
             height: 2,
           ),
@@ -386,8 +384,7 @@ class _UserDashboardState extends State<UserDashboard> {
         ],
       ),
       child: Center(
-          child: Text1(
-              fontColor: blackColor, fontSize: paragraph, text: "${text}")),
+          child: Text1(fontColor: blackColor, fontSize: paragraph, text: text)),
     );
   }
 
@@ -524,8 +521,8 @@ Widget wrapCircleContainer(String text, label) {
     padding: EdgeInsets.symmetric(horizontal: paragraph),
     child: Column(
       children: [
-        circleContainer("${text}"),
-        SizedBox(
+        circleContainer(text),
+        const SizedBox(
           height: 2,
         ),
         Text1(fontColor: lightBlackColor, fontSize: paragraph, text: label)
@@ -544,13 +541,12 @@ Widget circleContainer(String text) {
       boxShadow: [
         BoxShadow(
             color: greyGreenColor,
-            offset: Offset(2, 2),
+            offset: const Offset(2, 2),
             blurRadius: 2,
             spreadRadius: 2)
       ],
     ),
     child: Center(
-        child:
-            Text1(fontColor: blackColor, fontSize: paragraph, text: "${text}")),
+        child: Text1(fontColor: blackColor, fontSize: paragraph, text: text)),
   );
 }

@@ -4,7 +4,6 @@ import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Functions/customDatePicker.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/milk_provider.dart';
-import 'package:dairyfarmflow/Providers/auth_provider.dart';
 
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
@@ -37,7 +36,7 @@ class _AddMorningMilkState extends State<AddMorningMilk> {
     // final provider = Provider.of<AnimalRegistratinProvider>(context);
     String token =
         Provider.of<UserDetail>(context, listen: false).token.toString();
-    print("Token " + token);
+    print("Token $token");
     return Scaffold(
       appBar: AppBar(
         title: Text1(
@@ -147,7 +146,7 @@ class _AddMorningMilkState extends State<AddMorningMilk> {
             color: Colors.white.withOpacity(0.92),
             border: Border.all(color: CupertinoColors.systemGrey, width: 1),
             borderRadius: BorderRadius.circular(paragraph - 10),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                   color: CupertinoColors.systemGrey3,
                   offset: Offset(0, 2),

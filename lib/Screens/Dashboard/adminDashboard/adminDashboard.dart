@@ -62,15 +62,15 @@ class _AdminDashboardButtons extends State<AdminDashboardButtons> {
             children: [
               Container(
                 padding: EdgeInsets.all(paragraph),
-                width: screenWidth / 5,
-                height: screenWidth / 5,
+                width: screenWidth / 6,
+                height: screenWidth / 6,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(screenWidth / 5),
                     boxShadow: [
                       BoxShadow(
                           color: greyGreenColor,
-                          offset: Offset(2, 2),
+                          offset: const Offset(2, 2),
                           blurRadius: 6),
                     ]),
                 child: Center(

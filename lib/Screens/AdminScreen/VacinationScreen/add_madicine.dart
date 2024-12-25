@@ -38,7 +38,7 @@ class _AddMedicineState extends State<AddMedicine> {
     // final provider = Provider.of<AnimalRegistratinProvider>(context);
     String token =
         Provider.of<UserDetail>(context, listen: false).token.toString();
-    print("Token " + token);
+    print("Token $token");
     return Scaffold(
       appBar: AppBar(
         title: Text1(

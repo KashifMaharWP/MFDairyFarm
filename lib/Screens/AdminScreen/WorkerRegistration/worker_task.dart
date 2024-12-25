@@ -2,7 +2,6 @@ import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/ReuseableWidgets/row_withtext_andimage.dart';
-import 'package:dairyfarmflow/Screens/AdminScreen/DailyRecord/daily_record_screen.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -84,7 +83,7 @@ class _WorkerTaskState extends State<WorkerTask> {
                                     children: [
                                       const Column(
                                         children: [
-                                          const CircleAvatar(
+                                          CircleAvatar(
                                               radius: 55,
                                               backgroundImage: AssetImage(
                                                   "lib/assets/farmWorker.png")),
@@ -165,7 +164,9 @@ Widget pageHeaderContainer() {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                    color: greyGreenColor, blurRadius: 6, offset: Offset(2, 2))
+                    color: greyGreenColor,
+                    blurRadius: 6,
+                    offset: const Offset(2, 2))
               ]),
           child: Padding(
             padding: const EdgeInsets.all(15.0),
@@ -245,13 +246,12 @@ Widget circleContainer(String text) {
       boxShadow: [
         BoxShadow(
             color: greyGreenColor,
-            offset: Offset(2, 2),
+            offset: const Offset(2, 2),
             blurRadius: 2,
             spreadRadius: 2)
       ],
     ),
     child: Center(
-        child:
-            Text1(fontColor: blackColor, fontSize: paragraph, text: "${text}")),
+        child: Text1(fontColor: blackColor, fontSize: paragraph, text: text)),
   );
 }

@@ -6,7 +6,6 @@ import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Model/get_cow_model.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
-import 'package:dairyfarmflow/Screens/AdminScreen/AnimalRecord/animal_detail.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/add_evening_milk.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/add_morning_milk.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/VacinationScreen/add_madicine.dart';
@@ -29,6 +28,7 @@ class _AnimalRecordState extends State<AnimalRecord> {
   @override
   String role = '';
 
+  @override
   Widget build(BuildContext context) {
     role = Provider.of<UserDetail>(context).role.toString();
     return Scaffold(

@@ -1,12 +1,11 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../Dashboard/Dashboard.dart';
 
 // ignore: camel_case_types
 class home extends StatefulWidget {
-  home({super.key});
+  const home({super.key});
 
   @override
   State<home> createState() => _homeState();
@@ -14,7 +13,7 @@ class home extends StatefulWidget {
 
 class _homeState extends State<home> {
   List<Widget> screens = [
-    Dashboard(),
+    const Dashboard(),
   ];
 
   @override

@@ -35,7 +35,7 @@ class _AddEveningMilkState extends State<AddEveningMilk> {
         Provider.of<UserDetail>(context, listen: false).token.toString();
     final isLoading =
         Provider.of<MilkProvider>(context, listen: false).isLoading;
-    print("Token " + token);
+    print("Token $token");
     return Scaffold(
       appBar: AppBar(
         title: Text1(
@@ -145,7 +145,7 @@ class _AddEveningMilkState extends State<AddEveningMilk> {
             color: Colors.white.withOpacity(0.92),
             border: Border.all(color: CupertinoColors.systemGrey, width: 1),
             borderRadius: BorderRadius.circular(paragraph - 10),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                   color: CupertinoColors.systemGrey3,
                   offset: Offset(0, 2),

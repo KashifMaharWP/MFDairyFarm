@@ -156,7 +156,7 @@ class _MedicalDetailState extends State<MedicalDetail> {
                               children: [
                                 Row(
                                   children: [
-                                    Container(
+                                    SizedBox(
                                       height: 20,
                                       width: 20,
                                       child: const Image(
@@ -174,7 +174,7 @@ class _MedicalDetailState extends State<MedicalDetail> {
                                 ),
                                 Row(
                                   children: [
-                                    Container(
+                                    SizedBox(
                                       height: 20,
                                       width: 20,
                                       child: const Image(
@@ -222,14 +222,14 @@ class ReuseableWidget extends StatelessWidget {
         children: [
           Row(
             children: [
-              Container(
+              SizedBox(
                 height: 30,
                 width: 30,
                 child: Image(
                   image: AssetImage(imgUrl.toString()),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               Text1(

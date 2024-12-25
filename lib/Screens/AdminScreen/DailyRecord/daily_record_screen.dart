@@ -231,7 +231,7 @@ class WrapCircleContainer extends StatelessWidget {
           Row(
             children: [
               optional == null
-                  ? Center()
+                  ? const Center()
                   : Image(
                       image: AssetImage(optional.toString()),
                       width: screenHeight * .025,
@@ -257,13 +257,12 @@ Widget circleContainer(String text) {
       boxShadow: [
         BoxShadow(
             color: greyGreenColor,
-            offset: Offset(2, 2),
+            offset: const Offset(2, 2),
             blurRadius: 2,
             spreadRadius: 2)
       ],
     ),
     child: Center(
-        child:
-            Text1(fontColor: blackColor, fontSize: paragraph, text: "${text}")),
+        child: Text1(fontColor: blackColor, fontSize: paragraph, text: text)),
   );
 }

@@ -4,7 +4,6 @@ import 'package:dairyfarmflow/Providers/auth_provider.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/Dashboard.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/UserDashboard/user_dashboard.dart';
-import 'package:dairyfarmflow/Screens/Login/Screen/sign_up_screen.dart';
 import 'package:dairyfarmflow/Screens/Registration/registration_page1.dart';
 import 'package:dairyfarmflow/Widget/customRoundButton.dart';
 import 'package:dairyfarmflow/Widget/textFieldWithIconWidget.dart';
@@ -41,10 +40,11 @@ class _LoginPageState extends State<LoginPage> {
       Provider.of<UserDetail>(context, listen: false)
           .setUserDetailByPreferences();
       if (role == 'Admin') {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => Dashboard()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => const Dashboard()));
       } else {
         Navigator.push(
-            context, MaterialPageRoute(builder: (_) => UserDashboard()));
+            context, MaterialPageRoute(builder: (_) => const UserDashboard()));
       }
 
       //after initializing the user detail class move the user to homepage
@@ -71,16 +71,14 @@ class _LoginPageState extends State<LoginPage> {
               image: AssetImage("lib/assets/mfBackground.png"),
               fit: BoxFit.cover)),
       child: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              pageHeaderContainer(),
-              SizedBox(
-                height: screenHeight / 15,
-              ),
-              pageBodyContainer(),
-            ],
-          ),
+        child: Stack(
+          children: [
+            pageHeaderContainer(),
+            SizedBox(
+              height: screenHeight / 15,
+            ),
+            pageBodyContainer(),
+          ],
         ),
       ),
     ));
@@ -101,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       padding: EdgeInsets.all(header1),
       width: double.infinity,
-      height: screenHeight / 1.8,
+     // height: screenHeight / 1.8,
       decoration: BoxDecoration(
         color: transGreenColor,
         borderRadius: BorderRadius.only(

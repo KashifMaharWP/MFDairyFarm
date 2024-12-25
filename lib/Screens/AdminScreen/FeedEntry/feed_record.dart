@@ -299,7 +299,7 @@ Widget pageHeaderContainer(BuildContext context, int consumedFeed, feeds) {
                                   "${snapshot.data['feedInventory']['feedAmount']}",
                                   "Available");
                             } else {
-                              return Text('No data available');
+                              return const Text('No data available');
                             }
                           },
                         ),

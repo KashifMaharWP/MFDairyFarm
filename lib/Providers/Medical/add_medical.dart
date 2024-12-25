@@ -14,7 +14,7 @@ class AddMedical extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  List<MedicalRecordResponse> _milkRecords = [];
+  final List<MedicalRecordResponse> _milkRecords = [];
   //Map<String, dynamic>? _milkCountData;
   // bool _isLoading = true;
   String? _errorMessage;

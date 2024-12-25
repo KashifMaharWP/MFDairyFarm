@@ -386,7 +386,7 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
                               child: Container(
                                 width: screenWidth * 0.95,
                                 height: screenHeight / 3.9,
-                                padding: EdgeInsets.all(5),
+                                padding: const EdgeInsets.all(5),
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius:
@@ -448,8 +448,7 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
                                                     Text1(
                                                         fontColor:
                                                             lightBlackColor,
-                                                        fontSize:
-                                                            paragraph,
+                                                        fontSize: paragraph,
                                                         text: cow
                                                             .cow.animalNumber
                                                             .toString()),
@@ -470,8 +469,7 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
                                                     Text1(
                                                         fontColor:
                                                             lightBlackColor,
-                                                        fontSize:
-                                                        paragraph,
+                                                        fontSize: paragraph,
                                                         text:
                                                             "${cow.total} Kg"),
                                                   ],
@@ -497,8 +495,7 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
                                                 ),
                                                 Text1(
                                                     fontColor: lightBlackColor,
-                                                    fontSize:
-                                                    paragraph,
+                                                    fontSize: paragraph,
                                                     text: "${cow.morning} Kg"),
                                                 SizedBox(
                                                   width: screenWidth * .055,
@@ -518,8 +515,7 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
                                                     Text1(
                                                         fontColor:
                                                             lightBlackColor,
-                                                        fontSize:
-                                                        paragraph,
+                                                        fontSize: paragraph,
                                                         text:
                                                             "${cow.evening} Kg"),
                                                   ],
@@ -663,7 +659,7 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
                                         //     )),
                                       ],
                                     ),
-                                   /* SizedBox(
+                                    /* SizedBox(
                                       height: screenHeight * .025,
                                     ),*/
                                     // Column(
@@ -1063,7 +1059,9 @@ Widget pageHeaderContainer(String Total, morning, evening) {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                    color: greyGreenColor, blurRadius: 6, offset: Offset(2, 2))
+                    color: greyGreenColor,
+                    blurRadius: 6,
+                    offset: const Offset(2, 2))
               ]),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -1155,14 +1153,13 @@ Widget circleContainer(String text) {
       boxShadow: [
         BoxShadow(
             color: greyGreenColor,
-            offset: Offset(2, 2),
+            offset: const Offset(2, 2),
             blurRadius: 2,
             spreadRadius: 2)
       ],
     ),
     child: Center(
-        child:
-            Text1(fontColor: blackColor, fontSize: paragraph, text: "${text}")),
+        child: Text1(fontColor: blackColor, fontSize: paragraph, text: text)),
   );
 }
 
