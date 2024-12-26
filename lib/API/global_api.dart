@@ -13,11 +13,11 @@ class GlobalApi {
   static String getMilkRecord = 'milk/getMilkRecordByDate/';
   static String addEveningFeed = "feed/eveningFeed";
   static String updateMilkRecord = 'milk/updateMilkRecordById';
-  static String getFeedConsumption = 'feed/getFeedConsumtionRecordByMonth/Nov';
+  static String getFeedConsumption = 'feed/getFeedConsumtionRecordByMonth/';
   static String addMorningMilk = "milk/morningMilkProduction";
   static String addEveningMilk = "milk/eveningMilkProduction";
   static String addFeedAmount = "feedInventory/addFeed";
   static String deleteMilkRecord = 'milk/deleteMilkRecordById';
   static String addMedical = 'medicalRecord/add';
-  static String getMedicalRecord = 'medicalRecord/getMonthlyMedicalRecord/Nov';
+  static String getMedicalRecord = 'medicalRecord/getMonthlyMedicalRecord/Dec';
 }

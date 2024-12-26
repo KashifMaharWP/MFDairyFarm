@@ -3,6 +3,7 @@ import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Functions/customDatePicker.dart';
+import 'package:dairyfarmflow/Providers/FeedProviders/feed_provider.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/milk_provider.dart';
 
 import 'package:dairyfarmflow/Providers/user_detail.dart';
@@ -27,6 +28,7 @@ class _AddMorningMilkState extends State<AddMorningMilk> {
   TextEditingController cowId = TextEditingController();
   TextEditingController datepiker = TextEditingController();
   TextEditingController morning = TextEditingController();
+  TextEditingController morningfeed = TextEditingController();
   DateTime selectedDate = DateTime.now();
 
   @override
@@ -42,7 +44,7 @@ class _AddMorningMilkState extends State<AddMorningMilk> {
         title: Text1(
           fontColor: whiteColor,
           fontSize: header4,
-          text: "Add Morning Milk",
+          text: "Add Morning Record",
         ),
         centerTitle: true,
         foregroundColor: whiteColor,
@@ -64,7 +66,7 @@ class _AddMorningMilkState extends State<AddMorningMilk> {
               SizedBox(height: paragraph / 2),
               customRoundedButton(
                 loading: isLoading,
-                title: "Add Milk",
+                title: "Add Record",
                 on_Tap: () async {
                   datepiker.text =
                       DateFormat("EEE MMM dd yyyy").format(selectedDate);
@@ -74,6 +76,7 @@ class _AddMorningMilkState extends State<AddMorningMilk> {
                           date: datepiker.text,
                           morning: morning.text,
                           context: context);
+                      await  Provider.of<FeedProvider>(context, listen: false).sendMorningFeedData(cowId: cowId.text,date: datepiker.text, morning: morningfeed.text, context: context);
                   Navigator.pop(context);
                 },
               ),
@@ -108,6 +111,14 @@ class _AddMorningMilkState extends State<AddMorningMilk> {
               keyboardtype: TextInputType.number,
               widgetcontroller: morning,
               fieldName: "Add Milk(5kg)",
+              isPasswordField: false,
+            ),
+             SizedBox(height: paragraph),
+            customTextFormField("Morning Feed", CupertinoIcons.calendar),
+            TextFieldWidget1(
+              keyboardtype: TextInputType.number,
+              widgetcontroller: morningfeed,
+              fieldName: "Add Feed(5kg)",
               isPasswordField: false,
             ),
           ],

@@ -68,6 +68,7 @@ class _AddEveningFeedState extends State<AddEveningFeed> {
                       DateFormat("EEE MMM dd yyyy").format(selectedDate);
                   await Provider.of<FeedProvider>(context, listen: false)
                       .sendEveningFeedData(
+                        cowId: "",
                           context: context,
                           date: datepiker.text,
                           evening: evening.text);

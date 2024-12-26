@@ -69,6 +69,7 @@ class _AddMorningFeedState extends State<AddMorningFeed> {
                   print(pickedDate);
                   await Provider.of<FeedProvider>(context, listen: false)
                       .sendMorningFeedData(
+                        cowId: "",
                           context: context,
                           date: datepiker.text,
                           morning: morning.text);

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,12 +24,13 @@ class FeedRecord extends StatefulWidget {
 }
 
 class _FeedRecordState extends State<FeedRecord> {
+  String Date='Dec';
   @override
   void initState() {
     super.initState();
     final feedProvider = Provider.of<FeedProvider>(context, listen: false);
-
-    feedProvider.fetchFeedConsumption(context);
+    //debugger();
+    feedProvider.fetchFeedConsumption(context,Date);
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:dairyfarmflow/API/global_api.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,7 +19,7 @@ class FeedProvider extends ChangeNotifier {
 
   List<FeedConsumption>? feedConsumptions;
 
-  Future<void> fetchFeedConsumption(BuildContext context) async {
+  Future<void> fetchFeedConsumption(BuildContext context,String Date) async {
     _isloading = true;
     //notifyListeners();
 
@@ -27,9 +28,9 @@ class FeedProvider extends ChangeNotifier {
           'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
     };
     final url =
-        Uri.parse('${GlobalApi.baseApi}${GlobalApi.getFeedConsumption}');
+        Uri.parse('${GlobalApi.baseApi}${GlobalApi.getFeedConsumption}$Date');
     final response = await http.get(url, headers: headers);
-
+//debugger();
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
       if (jsonData['success'] == true) {
@@ -72,7 +73,9 @@ class FeedProvider extends ChangeNotifier {
   }
 
   Future<void> sendMorningFeedData(
-      {required String date,
+      {
+        required String cowId,
+        required String date,
       required String morning,
       required BuildContext context}) async {
     _isloading = true;
@@ -86,6 +89,7 @@ class FeedProvider extends ChangeNotifier {
     };
 
     final body = jsonEncode({
+      'cowId': cowId,
       'date': date,
       'morning': int.parse(morning),
     });
@@ -100,6 +104,7 @@ class FeedProvider extends ChangeNotifier {
 
       if (response.statusCode == 201) {
         final message = jsonDecode(response.body);
+         print(message['message']);
         SimpleToast.showSuccessToast(
             context, "Feed Added", "${message['message']}");
         _isloading = false;
@@ -107,6 +112,7 @@ class FeedProvider extends ChangeNotifier {
         // showSuccessSnackbar(message['message'], context);
       } else {
         final message = jsonDecode(response.body);
+         print(message['message']);
         SimpleToast.showInfoToast(
             context, "Feed Already Added", "${message['message']}");
         _isloading = false;
@@ -122,7 +128,9 @@ class FeedProvider extends ChangeNotifier {
   }
 
   Future<void> sendEveningFeedData(
-      {required String date,
+      {
+        required String cowId,
+        required String date,
       required String evening,
       required BuildContext context}) async {
     _isloading = true;
@@ -136,6 +144,7 @@ class FeedProvider extends ChangeNotifier {
     };
 
     final body = jsonEncode({
+      'cowId':cowId,
       'date': date,
       'evening': int.parse(evening),
     });
@@ -149,6 +158,7 @@ class FeedProvider extends ChangeNotifier {
 
       if (response.statusCode == 201) {
         final message = jsonDecode(response.body);
+         print(message['message']);
         SimpleToast.showSuccessToast(
             context, "Feed Added", "${message['message']}");
         _isloading = false;
@@ -156,6 +166,7 @@ class FeedProvider extends ChangeNotifier {
         //showSuccessSnackbar(message["message"], context);
       } else {
         final message = jsonDecode(response.body);
+        print(message['message']);
         SimpleToast.showInfoToast(
             context, "Feed Already Added", "${message['message']}");
         _isloading = false;
@@ -222,37 +233,39 @@ class FeedProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<FeedConsumption>?> fetchFeedConsumption1(
-      BuildContext context) async {
-    final headers = {
-      'Authorization':
-          'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
-    };
-    final url =
-        Uri.parse('${GlobalApi.baseApi}${GlobalApi.getFeedConsumption}');
-    final response = await http.get(url, headers: headers);
+  // Future<List<FeedConsumption>?> fetchFeedConsumption1(
+  //     BuildContext context,) async {
+  //   final headers = {
+  //     'Authorization':
+  //         'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
+  //   };
+  //   final url =
+  //       Uri.parse('${GlobalApi.baseApi}${GlobalApi.getFeedConsumption}/$Date');
+  //   final response = await http.get(url, headers: headers);
+    
+  //   if (response.statusCode == 200) {
+  //     final jsonData = json.decode(response.body);
+  //     if (jsonData['success'] == true) {
+  //       _isloading = false;
+  //       notifyListeners();
+  //       final feedConsumptionList = (jsonData['feedConsumtion'] as List)
+  //           .map((item) => FeedConsumption.fromJson(item))
+  //           .toList();
+  //       return feedConsumptionList;
+  //     } else {
+  //       _isloading = false;
+  //       notifyListeners();
+  //       // Handle failure response
+  //       print('Error: ${jsonData['message']}');
+  //       return null;
+  //     }
+  //   } else {
+  //     _isloading = false;
+  //     notifyListeners();
+  //     print('Failed to fetch data. Error: ${response.reasonPhrase}');
+  //     return null;
+  //   }
+  // }
 
-    if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
-      if (jsonData['success'] == true) {
-        _isloading = false;
-        notifyListeners();
-        final feedConsumptionList = (jsonData['feedConsumtion'] as List)
-            .map((item) => FeedConsumption.fromJson(item))
-            .toList();
-        return feedConsumptionList;
-      } else {
-        _isloading = false;
-        notifyListeners();
-        // Handle failure response
-        print('Error: ${jsonData['message']}');
-        return null;
-      }
-    } else {
-      _isloading = false;
-      notifyListeners();
-      print('Failed to fetch data. Error: ${response.reasonPhrase}');
-      return null;
-    }
-  }
+
 }
