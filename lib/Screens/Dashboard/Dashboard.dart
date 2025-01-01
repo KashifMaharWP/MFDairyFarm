@@ -21,6 +21,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../AdminScreen/DailyRecord/daily_record_screen.dart';
+
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
 
@@ -308,9 +310,7 @@ class _DashboardState extends State<Dashboard> {
                     viewContainer(
                         "Daily Record",
                         "lib/assets/dairyfarm.png",
-                        const sampleScreen(
-                            backgroundColor:
-                                Colors.yellow)) //DailyRecordScreen()),
+                        const  DailyRecordScreen()),
                   ],
                 ),
                 Column(

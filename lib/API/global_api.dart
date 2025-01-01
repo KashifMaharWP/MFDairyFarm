@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 
 class GlobalApi {
   //static String baseApi = "https://api.customizablewear.com/api/";
-  static String baseApi = "http://localhost:3000/api/";
+  static String baseApi = "https://sub.icreativezapp.com/api/";
   static String loginApi = "user/login";
   static String signUpAPI = "user/signup";
   static String addAnimal = "cow/register";
@@ -20,4 +20,7 @@ class GlobalApi {
   static String deleteMilkRecord = 'milk/deleteMilkRecordById';
   static String addMedical = 'medicalRecord/add';
   static String getMedicalRecord = 'medicalRecord/getMonthlyMedicalRecord/Dec';
+  static String getSoldMilk ="milkSale/getMilkSaleRecordByMonth/Dec";
+  static String addMilkSale = 'milkSale/addSaleMilk';
+
 }

@@ -217,4 +217,61 @@ class MilkProvider extends ChangeNotifier {
       print('Error: $e');
     }
   }
+
+
+
+   Future<void> saleMilk(
+      {required String venderName,
+      required String date,
+      required String milkAmount,
+      required String totalAmount,
+      required BuildContext context}) async {
+    _isLoading = true;
+    notifyListeners();
+    final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.addMilkSale}');
+    print(url);
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization':
+          "Bearer ${Provider.of<UserDetail>(context, listen: false).token}"
+    };
+
+    final body = jsonEncode({
+      'vendorName': venderName,
+      'date': date,
+      'amount_sold': int.parse(milkAmount),
+      'total_payment': int.parse(totalAmount),
+    });
+
+    try {
+      final response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        final userJson = jsonDecode(response.body);
+        print(userJson['message']);
+        SimpleToast.showSuccessToast(
+            context, "Milk Sold", "${userJson['message']}");
+        _isLoading = false;
+        notifyListeners();
+        //showSuccessSnackbar(userJson['message'], context);
+      } else {
+        final message = jsonDecode(response.body);
+        SimpleToast.showInfoToast(
+            context, "Error", "${message['message']}");
+        _isLoading = false;
+        notifyListeners();
+        //showErrorSnackbar(message['message'], context);
+      }
+    } catch (e) {
+      SimpleToast.showErrorToast(context, "Error occured", "$e");
+      _isLoading = false;
+      notifyListeners();
+      //showErrorSnackbar("An Error occured: $e", context);
+    }
+  }
 }

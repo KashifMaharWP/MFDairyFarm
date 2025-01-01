@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:developer';
+import 'package:dairyfarmflow/Model/soldmilk.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -9,6 +11,12 @@ import '../../Model/add_milk.dart';
 import '../user_detail.dart';
 
 class MilkRecordProvider extends ChangeNotifier {
+  String evening = "0";
+  String morning ="0";
+  String total ="0";
+  String get eveningMilk =>evening;
+  String get morningMilk =>morning;
+
   List<TodayMilkRecord> _milkRecords = [];
   Map<String, dynamic>? _milkCountData;
   bool _isLoading = true;
@@ -20,8 +28,10 @@ class MilkRecordProvider extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   Future<void> fetchMilkRecords(BuildContext context) async {
+    
     final date = DateFormat("EEE MMM dd yyyy").format(DateTime.now());
     print(date);
+
     _isLoading = true;
     _errorMessage = null;
     //notifyListeners();
@@ -34,6 +44,7 @@ class MilkRecordProvider extends ChangeNotifier {
     };
 
     try {
+  
       final response = await http.get(Uri.parse(apiUrl), headers: headers);
 
       if (response.statusCode == 200) {
@@ -44,7 +55,8 @@ class MilkRecordProvider extends ChangeNotifier {
           _milkRecords = records
               .map((record) => TodayMilkRecord.fromJson(record))
               .toList();
-          print(_milkRecords);
+        //  print(_milkRecords);
+          
         } else {
           _errorMessage = jsonResponse['message'] ?? 'Failed to fetch records';
         }
@@ -78,6 +90,12 @@ class MilkRecordProvider extends ChangeNotifier {
         final jsonData = json.decode(response.body) as Map<String, dynamic>;
         if (jsonData['success'] == true) {
           _milkCountData = jsonData;
+          morning =_milkCountData!['todayMilkCount'][0]['morning'].toString();
+          evening = _milkCountData!['todayMilkCount'][0]['evening'].toString();
+          total =(_milkCountData!['todayMilkCount'][0]['morning']+_milkCountData!['todayMilkCount'][0]['evening']).toString();
+         
+         
+          //print(_milkCountData!['todayMilkCount'][0]['morning']);
         } else {
           _errorMessage = jsonData['message'] ?? 'Failed to fetch milk count';
         }
@@ -92,4 +110,35 @@ class MilkRecordProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+
+
+  // Sold Milk Record Provider by Month
+
+  Future<SoldMilkModel?> fetchMilkSold(BuildContext context) async {
+  final headers = {
+    'Authorization':
+        'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
+  };
+  final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getSoldMilk}');
+
+  try {
+    final response = await http.get(url, headers: headers);
+
+    if (response.statusCode == 200) {
+     
+      return SoldMilkModel.fromJson(json.decode(response.body));
+    } else {
+     
+      final errorResponse = json.decode(response.body);
+      print("Error: ${errorResponse['message']}");
+     
+    }
+  } catch (e) {
+    
+    print("An error occurred: $e");
+    return null; 
+  }
+}
+
 }

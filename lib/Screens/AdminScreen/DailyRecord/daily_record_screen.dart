@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:dairyfarmflow/Model/soldmilk.dart';
 import 'package:dairyfarmflow/ReuseableWidgets/reuse_row.dart';
 import 'package:dairyfarmflow/ReuseableWidgets/row_withtext_andimage.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,10 @@ import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
+import 'package:provider/provider.dart';
+
+import '../../../Providers/FeedProviders/feed_provider.dart';
+import '../../../Providers/MilkProviders/milk_record.dart';
 
 class DailyRecordScreen extends StatefulWidget {
   const DailyRecordScreen({super.key});
@@ -15,8 +20,21 @@ class DailyRecordScreen extends StatefulWidget {
 }
 
 class _DailyRecordScreenState extends State<DailyRecordScreen> {
+  String Date='Dec';
+  @override
+  void initState() {
+   
+    super.initState();
+     Future.microtask(() =>
+        Provider.of<MilkRecordProvider>(context, listen: false).fetchMilkCount(context));
+       
+
+      
+        
+  }
   @override
   Widget build(BuildContext context) {
+     final milkProvider = Provider.of<MilkRecordProvider>(context);
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
@@ -34,60 +52,77 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
             height: screenHeight * .023,
           ),
           Expanded(
-              child: ListView.builder(
-            itemCount: 5,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: screenWidth * 0.95,
-                  height: screenHeight / 7,
-                  padding: EdgeInsets.all(paragraph),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(paragraph),
-                      boxShadow: [
-                        BoxShadow(
-                            color: greyGreenColor,
-                            blurRadius: 6,
-                            spreadRadius: 3,
-                            offset: const Offset(2, 0)),
-                      ]),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text1(
-                              fontColor: blackColor,
-                              fontSize: screenWidth * .055,
-                              text: "Customer Name"),
-                          Text1(
-                              fontColor: blackColor,
-                              fontSize: screenWidth * .055,
-                              text: "Liters")
-                        ],
-                      ),
-                      SizedBox(
-                        height: screenHeight * .023,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          RowWithTextAndImage(
-                              text1: "Morning", imgUrl: "lib/assets/sun.png"),
-                          RowWithTextAndImage(
-                            imgUrl: "lib/assets/moon.png",
-                            text1: "Evening",
-                          )
-                        ],
-                      )
-                    ],
+  child: FutureBuilder<SoldMilkModel?>(
+    future: milkProvider.fetchMilkSold(context),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return Center(child: CircularProgressIndicator());
+      } else if (snapshot.hasError) {
+        return Center(child: Text('An error occurred: ${snapshot.error}'));
+      } else if (snapshot.hasData && snapshot.data != null) {
+        final soldMilkData = snapshot.data!.monthlyMilkRecord ?? [];
+        return ListView.builder(
+          itemCount: soldMilkData.length,
+          itemBuilder: (context, index) {
+            final record = soldMilkData[index];
+            return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: screenWidth * 0.95,
+                    height: screenHeight / 7,
+                    padding: EdgeInsets.all(paragraph),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(paragraph),
+                        boxShadow: [
+                          BoxShadow(
+                              color: greyGreenColor,
+                              blurRadius: 6,
+                              spreadRadius: 3,
+                              offset: const Offset(2, 0)),
+                        ]),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text1(
+                                fontColor: blackColor,
+                                fontSize: screenWidth * .055,
+                                text: "${record.vendorName}"),
+                            Text1(
+                                fontColor: blackColor,
+                                fontSize: screenWidth * .055,
+                                text: "${record.amountSold}ltr")
+                          ],
+                        ),
+                        SizedBox(
+                          height: screenHeight * .023,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            RowWithTextAndImage(
+                                text1: "Morning", imgUrl: "lib/assets/sun.png"),
+                            RowWithTextAndImage(
+                              imgUrl: "lib/assets/moon.png",
+                              text1: "Evening",
+                            )
+                          ],
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
-          ))
+                );
+          },
+        );
+      } else {
+        return Center(child: Text('No data available'));
+      }
+    },
+  ),
+)
+
         ],
       ),
     );
@@ -95,6 +130,7 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
 }
 
 Widget pageHeaderContainer() {
+  
   return Material(
       elevation: 6,
       borderRadius: const BorderRadius.only(
@@ -151,15 +187,18 @@ Widget pageHeaderContainer() {
                     SizedBox(
                       height: screenHeight * .02,
                     ),
-                    ReuseRow(
-                      text1: "20",
-                      text2: "Morning",
-                      text3: "25",
-                      text4: "Evening",
-                      text5: "250",
-                      text6: "Total",
-                      img1: "lib/assets/sun.png",
-                      img2: "lib/assets/moon.png",
+                    Consumer<MilkRecordProvider>(
+                      builder: (context, milk, child) => 
+                       ReuseRow(
+                        text1: milk.morningMilk,
+                        text2: "Morning",
+                        text3: milk.eveningMilk,
+                        text4: "Evening",
+                        text5: milk.total,
+                        text6: "Total",
+                        img1: "lib/assets/sun.png",
+                        img2: "lib/assets/moon.png",
+                      ),
                     ),
                     const SizedBox(
                       height: 15,
@@ -266,3 +305,7 @@ Widget circleContainer(String text) {
         child: Text1(fontColor: blackColor, fontSize: paragraph, text: text)),
   );
 }
+
+
+
+
