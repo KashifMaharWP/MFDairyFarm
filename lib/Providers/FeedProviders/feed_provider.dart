@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:dairyfarmflow/API/global_api.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,14 +30,18 @@ class FeedProvider extends ChangeNotifier {
     final url =
         Uri.parse('${GlobalApi.baseApi}${GlobalApi.getFeedConsumption}$Date');
     final response = await http.get(url, headers: headers);
-//debugger();
+
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
+      //print(jsonData);
       if (jsonData['success'] == true) {
-        feedConsumptions = (jsonData['feedConsumtion'] as List)
+         print(jsonData['message']);
+
+        
+        feedConsumptions = (jsonData['feedConsumtionRecordMonthly'] as List)
             .map((item) => FeedConsumption.fromJson(item))
             .toList();
-
+           
         // Calculate total feed used
         totalFeedFromItem = feedConsumptions!.fold<dynamic>(
           0,
@@ -44,6 +49,7 @@ class FeedProvider extends ChangeNotifier {
         );
       } else {
         errorMessage = jsonData['message'];
+        print(jsonData['message']);
       }
     } else {
       errorMessage = response.reasonPhrase;

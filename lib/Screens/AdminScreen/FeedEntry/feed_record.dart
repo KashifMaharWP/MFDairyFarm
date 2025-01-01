@@ -24,13 +24,14 @@ class FeedRecord extends StatefulWidget {
 }
 
 class _FeedRecordState extends State<FeedRecord> {
-  String Date='Dec';
+ //final date = DateFormat("EEE MMM dd yyyy").format(DateTime.now());
+ String date= "Jan";
   @override
   void initState() {
     super.initState();
     final feedProvider = Provider.of<FeedProvider>(context, listen: false);
     //debugger();
-    feedProvider.fetchFeedConsumption(context,Date);
+    feedProvider.fetchFeedConsumption(context,date);
   }
 
   @override

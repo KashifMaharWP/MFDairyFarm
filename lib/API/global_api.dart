@@ -20,7 +20,9 @@ class GlobalApi {
   static String deleteMilkRecord = 'milk/deleteMilkRecordById';
   static String addMedical = 'medicalRecord/add';
   static String getMedicalRecord = 'medicalRecord/getMonthlyMedicalRecord/Dec';
-  static String getSoldMilk ="milkSale/getMilkSaleRecordByMonth/Dec";
+  static String getSoldMilk ="milkSale/getMilkSaleRecordByMonth/";
   static String addMilkSale = 'milkSale/addSaleMilk';
+  static String updateMilkSold = "milkSale/updateMilkSaleRecordById/";
+  static String daleteMilkSold = "milkSale/deleteMilkSaleRecordById/";
 
 }

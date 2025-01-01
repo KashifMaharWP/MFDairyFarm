@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_toast_message/simple_toast.dart';
 
 import '../../API/global_api.dart';
+import '../../Functions/showPopsScreen.dart';
 import '../../Model/add_milk.dart';
 import '../user_detail.dart';
 
@@ -116,11 +118,12 @@ class MilkRecordProvider extends ChangeNotifier {
   // Sold Milk Record Provider by Month
 
   Future<SoldMilkModel?> fetchMilkSold(BuildContext context) async {
+     final date = DateFormat("EEE MMM dd yyyy").format(DateTime.now());
   final headers = {
     'Authorization':
         'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
   };
-  final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getSoldMilk}');
+  final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getSoldMilk}$date');
 
   try {
     final response = await http.get(url, headers: headers);
@@ -140,5 +143,111 @@ class MilkRecordProvider extends ChangeNotifier {
     return null; 
   }
 }
+
+Future<void> upadetMilkSold(
+      {required String id,
+      required String vendorName,
+      required String datePicker,
+      required int amountSold,
+      required int totalPayment,
+      required BuildContext context}) async {
+    _isLoading = true;
+    notifyListeners();
+    final url =
+        Uri.parse('${GlobalApi.baseApi}${GlobalApi.updateMilkSold}$id');
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization':
+          "Bearer ${Provider.of<UserDetail>(context, listen: false).token}"
+    };
+
+    final body =
+        jsonEncode({'vendorName': vendorName, 'amount_sold': amountSold, 'total_payment': totalPayment, 'date':datePicker});
+
+    try {
+      final response = await http.patch(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        final userJson = jsonDecode(response.body);
+        print(userJson['message']);
+        SimpleToast.showSuccessToast(
+            context, "Milk Updated", "${userJson['message']}");
+        _isLoading = false;
+        notifyListeners();
+        //showSuccessSnackbar(userJson['message'], context);
+      } else {
+        final message = jsonDecode(response.body);
+        SimpleToast.showErrorToast(
+            context, "Updating Error", "${message['message']}");
+        _isLoading = false;
+        notifyListeners();
+        //showErrorSnackbar(message['message'], context);
+      }
+    } catch (e) {
+      SimpleToast.showErrorToast(context, "Error occured", "$e");
+      _isLoading = false;
+      notifyListeners();
+      // showErrorSnackbar("An Error occured: $e", context);
+    }
+  }
+
+
+   Future<void> deleteMilkSold({
+    required String id,
+    required BuildContext context,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+    final url =
+        Uri.parse('${GlobalApi.baseApi}${GlobalApi.daleteMilkSold}$id');
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization':
+          "Bearer ${Provider.of<UserDetail>(context, listen: false).token}",
+    };
+
+    try {
+      final response = await http.delete(url, headers: headers);
+
+      print('Response Status: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        print('Success Message: ${jsonResponse['message']}');
+        SimpleToast.showSuccessToast(
+            context, "Milk Deleted", "${jsonResponse['message']}");
+        _isLoading = false;
+        notifyListeners();
+        //showSuccessSnackbar(jsonResponse['message'], context);
+      } else {
+        try {
+          final message = jsonDecode(response.body);
+          SimpleToast.showErrorToast(
+              context, "Milk Added", "${message['message']}");
+          _isLoading = false;
+          notifyListeners();
+          //showErrorSnackbar(message['message'], context);
+        } catch (_) {
+          _isLoading = false;
+          notifyListeners();
+          showErrorSnackbar(
+              'Failed to delete milk record: ${response.body}', context);
+        }
+      }
+    } catch (e) {
+      _isLoading = false;
+      notifyListeners();
+      SimpleToast.showErrorToast(context, "Error occured", "$e");
+      // showErrorSnackbar("An error occurred: $e", context);
+      print('Error: $e');
+    }
+  }
 
 }
