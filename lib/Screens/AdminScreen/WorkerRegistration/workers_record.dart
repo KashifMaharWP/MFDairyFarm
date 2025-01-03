@@ -1,5 +1,8 @@
 import 'dart:convert';
 import 'package:dairyfarmflow/API/global_api.dart';
+import 'package:dairyfarmflow/Functions/customDatePicker.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/WorkerRegistration/add_worker_task.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
@@ -8,7 +11,10 @@ import 'package:dairyfarmflow/Model/workers.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import '../../../Widget/textFieldWidget1.dart';
 
 class WorkersRecord extends StatefulWidget {
   const WorkersRecord({super.key});
@@ -18,6 +24,11 @@ class WorkersRecord extends StatefulWidget {
 }
 
 class _WorkersRecordState extends State<WorkersRecord> {
+  DateTime? pickedDate;
+  TextEditingController workerName = TextEditingController();
+  TextEditingController datepiker = TextEditingController();
+  TextEditingController taskDescription = TextEditingController();
+  DateTime selectedDate = DateTime.now();
   @override
   Widget build(BuildContext context) {
     final token = Provider.of<UserDetail>(context, listen: false).token;
@@ -56,49 +67,55 @@ class _WorkersRecordState extends State<WorkersRecord> {
                             final worker = snapshot.data![index];
                             return Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                  width: screenWidth * 0.95,
-                                  height: screenHeight / 5,
-                                  padding: EdgeInsets.all(paragraph),
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius:
-                                          BorderRadius.circular(paragraph),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: greyGreenColor,
-                                            blurRadius: 6,
-                                            spreadRadius: 3,
-                                            offset: const Offset(2, 0)),
-                                      ]),
-                                  child: Row(
-                                    children: [
-                                      const CircleAvatar(
-                                        radius: 55,
-                                        backgroundImage: NetworkImage(
-                                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaXFahyLr8mW7OKfJ6YNcSbdpdz6erNOe-uQ&s"),
-                                      ),
-                                      SizedBox(
-                                        width: screenWidth * .05,
-                                      ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text1(
-                                              fontColor: blackColor,
-                                              fontSize: screenWidth * .055,
-                                              text: worker.name),
-                                          Text1(
-                                              fontColor: lightBlackColor,
-                                              fontSize: screenWidth * .05,
-                                              text: worker.registrationDate),
-                                        ],
-                                      )
-                                    ],
-                                  )),
+                              child: GestureDetector(
+                                onTap: (){
+                                 Navigator.push(context, MaterialPageRoute(builder: (context)=> AddWorkerTask(id: worker.id, name: worker.name,)));
+                                  
+                                },
+                                child: Container(
+                                    width: screenWidth * 0.95,
+                                    height: screenHeight / 5,
+                                    padding: EdgeInsets.all(paragraph),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(paragraph),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: greyGreenColor,
+                                              blurRadius: 6,
+                                              spreadRadius: 3,
+                                              offset: const Offset(2, 0)),
+                                        ]),
+                                    child: Row(
+                                      children: [
+                                        const CircleAvatar(
+                                          radius: 55,
+                                          backgroundImage: NetworkImage(
+                                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaXFahyLr8mW7OKfJ6YNcSbdpdz6erNOe-uQ&s"),
+                                        ),
+                                        SizedBox(
+                                          width: screenWidth * .05,
+                                        ),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text1(
+                                                fontColor: blackColor,
+                                                fontSize: screenWidth * .055,
+                                                text: worker.name),
+                                            Text1(
+                                                fontColor: lightBlackColor,
+                                                fontSize: screenWidth * .05,
+                                                text: worker.registrationDate),
+                                          ],
+                                        )
+                                      ],
+                                    )),
+                              ),
                             );
                           },
                         );
@@ -109,6 +126,121 @@ class _WorkersRecordState extends State<WorkersRecord> {
       ),
     );
   }
+
+  Future<void> _showMyDialog() async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Assign Task'),
+        content:  SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              customForm(),
+             
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Add Task'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+
+Widget customForm() {
+    return Padding(
+      padding: EdgeInsets.all(paragraph / 6),
+      child: Form(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            customTextFormField("Worker Name", CupertinoIcons.person),
+            TextFieldWidget1(
+              isReadOnly: true,
+              widgetcontroller: workerName,
+              fieldName: "Worker Name",
+              isPasswordField: false,
+            ),
+            SizedBox(height: paragraph),
+            customTextFormField("Date", CupertinoIcons.calendar),
+            dateContainer(),
+            SizedBox(height: paragraph),
+            customTextFormField("Task", CupertinoIcons.info_circle),
+            TextFieldWidget1(
+              // keyboardtype: TextInputType.number,
+              widgetcontroller: taskDescription,
+              fieldName: "Task Description",
+              isPasswordField: false,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget customTextFormField(String text, IconData customIcon) {
+    return Wrap(
+      alignment: WrapAlignment.start,
+      runAlignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.start,
+      children: [
+        Icon(customIcon, color: darkGreenColor),
+        Text1(fontColor: blackColor, fontSize: paragraph, text: text),
+      ],
+    );
+  }
+
+  Widget dateContainer() {
+    return InkWell(
+      onTap: () async {
+        pickedDate = await customDatePicker(context, selectedDate);
+        if (pickedDate != null) {
+          setState(() {
+            selectedDate = pickedDate as DateTime;
+          });
+        }
+      },
+      child: Container(
+        padding: EdgeInsets.all(paragraph - 7),
+        width: screenWidth,
+        height: screenHeight / 14,
+        decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.92),
+            border: Border.all(color: CupertinoColors.systemGrey, width: 1),
+            borderRadius: BorderRadius.circular(paragraph - 10),
+            boxShadow: const [
+              BoxShadow(
+                  color: CupertinoColors.systemGrey3,
+                  offset: Offset(0, 2),
+                  blurRadius: 8)
+            ]),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text1(
+                fontColor: blackColor,
+                fontSize: paragraph - 3,
+                text: DateFormat("EEE MMM dd yyyy").format(selectedDate)),
+            Icon(
+              CupertinoIcons.calendar,
+              color: darkGreenColor,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
 }
 
 Future<List<Worker>> fetchWorkers(BuildContext context) async {

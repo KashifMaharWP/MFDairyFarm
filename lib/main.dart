@@ -3,6 +3,7 @@ import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Providers/FeedProviders/feed_provider.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/milk_provider.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/milk_record.dart';
+import 'package:dairyfarmflow/Providers/MilkProviders/worker_provider.dart';
 import 'package:dairyfarmflow/Providers/animal_registratin_provider.dart';
 import 'package:dairyfarmflow/Providers/auth_provider.dart';
 import 'package:dairyfarmflow/Providers/register_user_provider.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => MilkProvider()),
         ChangeNotifierProvider(create: (context) => RegistrationProvider()),
         ChangeNotifierProvider(create: (context) => RegisterUserProvider()),
+        ChangeNotifierProvider(create: (context) => WorkerProvider()),
         ChangeNotifierProvider(
           create: (context) => MilkRecordProvider(),
         ),

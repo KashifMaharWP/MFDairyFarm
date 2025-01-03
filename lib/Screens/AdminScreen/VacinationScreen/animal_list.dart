@@ -1,37 +1,34 @@
 import 'dart:convert';
 
-import 'package:dairyfarmflow/API/global_api.dart';
-import 'package:dairyfarmflow/Class/colorPallete.dart';
-import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
-import 'package:dairyfarmflow/Class/textSizing.dart';
-import 'package:dairyfarmflow/Model/get_cow_model.dart';
-import 'package:dairyfarmflow/Providers/user_detail.dart';
-
-import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/add_evening_milk.dart';
-import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/add_morning_milk.dart';
-
-import 'package:dairyfarmflow/Widget/Text1.dart';
-import 'package:dairyfarmflow/Widget/custom_filter_widget.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/VacinationScreen/add_madicine.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import '../../../API/global_api.dart';
+import '../../../Class/colorPallete.dart';
+import '../../../Class/screenMediaQuery.dart';
+import '../../../Class/textSizing.dart';
+import '../../../Model/get_cow_model.dart';
+import '../../../Providers/user_detail.dart';
+import '../../../Widget/Text1.dart';
+import '../../../Widget/custom_filter_widget.dart';
 
-class AnimalRecord extends StatefulWidget {
-  const AnimalRecord({super.key});
+class AnimalList extends StatefulWidget {
+  const AnimalList({super.key});
 
   @override
-  State<AnimalRecord> createState() => _AnimalRecordState();
+  State<AnimalList> createState() => _AnimalListState();
 }
 
-class _AnimalRecordState extends State<AnimalRecord> {
+class _AnimalListState extends State<AnimalList> {
   @override
   String role = '';
 
   @override
   Widget build(BuildContext context) {
-    role = Provider.of<UserDetail>(context).role.toString();
+   // role = Provider.of<UserDetail>(context).role.toString();
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
@@ -40,9 +37,7 @@ class _AnimalRecordState extends State<AnimalRecord> {
         foregroundColor: Colors.white,
         centerTitle: true,
         shadowColor: Colors.black,
-        title: role == "Admin"
-            ? const Text("Animal Record")
-            : const Text("Add Milk"),
+        title:  const Text("Add Medical"),
       ),
       body: Column(
         children: [
@@ -87,60 +82,17 @@ class _AnimalRecordState extends State<AnimalRecord> {
                       return Padding(
                         padding: const EdgeInsets.all(5),
                         child: GestureDetector(
-                          onTap: role == "Admin"
-                              ? () {
-                                 // Navigator.push(context, MaterialPageRoute(builder: (context)=> const AnimalDetail()));
-                                }
-                              : () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        content: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            ListTile(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            AddMorningMilk(
-                                                              id: cow.id,
-                                                            )));
-                                              },
-                                              leading: Image(
-                                                image: const AssetImage(
-                                                    "lib/assets/sun.png"),
-                                                width: screenWidth * .075,
-                                                height: screenWidth * .075,
-                                              ),
-                                              title: const Text("Morning"),
-                                            ),
-                                            ListTile(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            AddEveningMilk(
-                                                                id: cow.id)));
-                                              },
-                                              leading: Image(
-                                                image: const AssetImage(
-                                                    "lib/assets/moon.png"),
-                                                width: screenWidth * .075,
-                                                height: screenWidth * .075,
-                                              ),
-                                              title: const Text("Evening"),
-                                            )
-                                          
-                                          ],
-                                        ),
-                                      );
-                                    },
+                          onTap: 
+                               () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          AddMedicine(id: cow.id),
+                                    ),
                                   );
                                 },
+                              
                           child: Container(
                             width: screenWidth * 0.95,
                             height: screenHeight / 3.5,

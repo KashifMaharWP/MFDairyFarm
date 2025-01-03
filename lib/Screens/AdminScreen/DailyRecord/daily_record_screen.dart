@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:dairyfarmflow/Model/soldmilk.dart';
+import 'package:dairyfarmflow/Providers/FeedProviders/feed_provider.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/milk_provider.dart';
 import 'package:dairyfarmflow/ReuseableWidgets/reuse_row.dart';
 import 'package:dairyfarmflow/ReuseableWidgets/row_withtext_andimage.dart';
@@ -37,6 +38,7 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
     super.initState();
      Future.microtask(() =>
         Provider.of<MilkRecordProvider>(context, listen: false).fetchMilkCount(context));
+        Provider.of<FeedProvider>(context, listen: false).fetchFeedCount(context);
        
 
       
@@ -365,13 +367,16 @@ Widget pageHeaderContainer() {
                         ],
                       ),
                     ),
-                    ReuseRow(
-                      text1: "100",
-                      text2: "Available",
-                      text3: "66",
-                      text4: "Used",
-                      text5: "166",
-                      text6: "Total",
+                    Consumer<FeedProvider>(
+                      builder: (context, value, child) => 
+                       ReuseRow(
+                        text1:  value.usedFeed.toString(),
+                        text2: "Total Used",
+                        text3: value.morningFeed.toString(),
+                        text4: "Morning",
+                        text5:  value.eveningFeed.toString(),
+                        text6: "Evening",
+                      ),
                     ),
                   ],
                 ),

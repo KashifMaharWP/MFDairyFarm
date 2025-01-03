@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:dairyfarmflow/API/global_api.dart';
+import 'package:dairyfarmflow/Model/feed_count.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -12,14 +12,27 @@ class FeedProvider extends ChangeNotifier {
   bool _isloading = false;
   bool get isLoading => _isloading;
   //bool isloading = false;
+  int? morningFeed=0;
+  int? eveningFeed=0;
+  
+  int usedFeed =0;
 
   String? errorMessage;
   int totalFeedFromItem = 0;
   int totalFeedStored = 0;
+  
 
   List<FeedConsumption>? feedConsumptions;
 
+
+  
+
+
+  
+
   Future<void> fetchFeedConsumption(BuildContext context,String Date) async {
+    
+  
     _isloading = true;
     //notifyListeners();
 
@@ -47,6 +60,7 @@ class FeedProvider extends ChangeNotifier {
           0,
           (sum, feed) => sum + feed.total,
         );
+        print("Used= $totalFeedFromItem");
       } else {
         errorMessage = jsonData['message'];
         print(jsonData['message']);
@@ -271,6 +285,55 @@ class FeedProvider extends ChangeNotifier {
   //     return null;
   //   }
   // }
+
+   Future<FeedCount?> fetchFeedCount(BuildContext context) async {
+    _isloading = true;
+    
+    notifyListeners();
+
+    final headers = {
+      'Authorization':
+          'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
+    };
+    final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getFeedConsumptionCount}');
+
+    try {
+      final response = await http.get(url, headers: headers);
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body) as Map<String, dynamic>;
+
+        FeedCount feedCount = FeedCount.fromJson(json.decode(response.body));
+        morningFeed = feedCount.todayFeedConsumtionCount![0].morning;
+        eveningFeed = feedCount.todayFeedConsumtionCount![0].evening;
+        usedFeed = morningFeed! + eveningFeed!;
+        
+        print(usedFeed);
+        if (jsonData['success'] == true) {
+          //print(jsonData);
+        
+         
+         
+         
+         
+          //print(_milkCountData!['todayMilkCount'][0]['morning']);
+        } else {
+          //_errorMessage = jsonData['message'] ?? 'Failed to fetch milk count';
+        }
+      } else {
+        // _errorMessage =
+        //     'HTTP Error: ${response.statusCode} - ${response.reasonPhrase}';
+      }
+    } catch (e) {
+      //_errorMessage = 'Exception occurred: $e';
+    } finally {
+      _isloading = false;
+      notifyListeners();
+    }
+  }
+
+
+
 
 
 }

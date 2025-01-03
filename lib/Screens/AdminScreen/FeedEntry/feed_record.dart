@@ -262,6 +262,7 @@ Widget pageHeaderContainer(BuildContext context, int consumedFeed, feeds) {
                                   0;
                               final totalFeedStored =
                                   feedAvailable + consumedFeed;
+                                  
 
                               // Display total feed stored
                               return wrapCircleContainer(

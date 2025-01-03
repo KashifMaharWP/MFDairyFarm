@@ -1,11 +1,14 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
+import 'package:dairyfarmflow/Model/Worker/task_model.dart';
+import 'package:dairyfarmflow/Providers/MilkProviders/worker_provider.dart';
 import 'package:dairyfarmflow/ReuseableWidgets/row_withtext_andimage.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class WorkerTask extends StatefulWidget {
   const WorkerTask({super.key});
@@ -15,8 +18,15 @@ class WorkerTask extends StatefulWidget {
 }
 
 class _WorkerTaskState extends State<WorkerTask> {
+
+  @override
+  void initState() {
+    Provider.of<WorkerProvider>(context, listen: false).fetchAllTasks(context);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
+     final workerProvider = Provider.of<WorkerProvider>(context);
     return Scaffold(
         backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
@@ -57,8 +67,18 @@ class _WorkerTaskState extends State<WorkerTask> {
               ),
               Container(
                 child: Expanded(
-                  child: ListView.builder(
-                      itemCount: 8,
+  child: FutureBuilder<TaskModel?>(
+    future: workerProvider.fetchAllTasks(context),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(child: CircularProgressIndicator());
+      } else if (snapshot.hasError) {
+        return Center(child: Text('An error occurred: ${snapshot.error}'));
+      } else if (snapshot.hasData && snapshot.data != null) {
+        final tasks = snapshot.data!.tasks ?? [];
+        //final soldMilkData = snapshot.data!.monthlyMilkRecord ?? [];
+        return ListView.builder(
+                      itemCount: tasks.length,
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -106,7 +126,7 @@ class _WorkerTaskState extends State<WorkerTask> {
                                               child: Text1(
                                                   fontColor: blackColor,
                                                   fontSize: screenWidth * .055,
-                                                  text: "Worker Name"),
+                                                  text: tasks[index].assignedTo!.name.toString()),
                                             ),
                                             Padding(
                                               padding:
@@ -140,8 +160,13 @@ class _WorkerTaskState extends State<WorkerTask> {
                                 ],
                               )),
                         );
-                      }),
-                ),
+                      });
+      } else {
+        return const Center(child: Text('No data available'));
+      }
+    },
+  ),
+)
               )
             ],
           ),
