@@ -73,13 +73,13 @@ class _DashboardState extends State<Dashboard> {
                               borderRadius: const BorderRadius.only(
                                   bottomLeft: Radius.circular(20),
                                   bottomRight: Radius.circular(20))),
-                          height: screenHeight / 6.2,
-                          width: screenWidth,
+                          height: header1*8,
+                          width: MediaQuery.of(context).size.width,
                           child: Padding(
                             padding: EdgeInsets.only(
-                                left: screenWidth * .045,
-                                right: screenWidth * .045,
-                                top: screenHeight * .025),
+                                left: header1 * .45,
+                                right: header1 * .45,
+                                top: header1 * .25),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -96,24 +96,24 @@ class _DashboardState extends State<Dashboard> {
                                       ),
                                     ),
                                     SizedBox(
-                                      width: screenWidth * .02,
+                                      width: header1 * .02,
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(
-                                          left: screenWidth * .02,
-                                          right: screenWidth * .02,
-                                          top: screenHeight * .035),
+                                          left: header1 * 2,
+                                          right: header1 * 2,
+                                          top: header1 *2),
                                       child: Column(
                                         children: [
                                           Text1(
                                               fontColor: whiteColor,
-                                              fontSize: screenWidth * .05,
+                                              fontSize: header1,
                                               text: "Welcome"),
                                           Consumer<UserDetail>(
                                             builder: (context, value, child) =>
                                                 Text1(
                                                     fontColor: whiteColor,
-                                                    fontSize: screenWidth * .05,
+                                                    fontSize: header1 ,
                                                     text:
                                                         value.name.toString()),
                                           ),
@@ -126,21 +126,21 @@ class _DashboardState extends State<Dashboard> {
                                   children: [
                                     Icon(
                                       Icons.notifications,
-                                      size: screenWidth * .095,
+                                      size: header1 *1.5,
                                       color: whiteColor,
                                     ),
                                     SizedBox(
-                                      width: screenWidth * .02,
+                                      width: header1/1.25,
                                     ),
                                     PopupMenuButton(
                                       icon: Icon(
                                         Icons.more_vert_outlined,
-                                        size: screenWidth * .065,
+                                        size: header1*1.5 ,
                                         color: whiteColor,
                                       ),
                                       elevation: 6,
-                                      offset: Offset(screenWidth * .05,
-                                          screenHeight * .055),
+                                      offset: Offset(header1 * 2,
+                                          header1 * 4),
                                       color: Colors.white,
                                       itemBuilder: (context) => [
                                         PopupMenuItem(
@@ -148,14 +148,14 @@ class _DashboardState extends State<Dashboard> {
                                             child: ListTile(
                                                 title: Text1(
                                                     fontColor: blackColor,
-                                                    fontSize: screenWidth * .05,
+                                                    fontSize: header1,
                                                     text: "Option1"))),
                                         PopupMenuItem(
                                             value: 2,
                                             child: ListTile(
                                               title: Text1(
                                                   fontColor: blackColor,
-                                                  fontSize: screenWidth * .05,
+                                                  fontSize: header1,
                                                   text: "Option2"),
                                             )),
                                         PopupMenuItem(
@@ -163,7 +163,7 @@ class _DashboardState extends State<Dashboard> {
                                             child: ListTile(
                                               title: Text1(
                                                   fontColor: blackColor,
-                                                  fontSize: screenWidth * .05,
+                                                  fontSize: header1,
                                                   text: "Option3"),
                                             )),
                                         PopupMenuItem(
@@ -171,7 +171,7 @@ class _DashboardState extends State<Dashboard> {
                                             child: ListTile(
                                               title: Text1(
                                                   fontColor: blackColor,
-                                                  fontSize: screenWidth * .05,
+                                                  fontSize: header1,
                                                   text: "Option2"),
                                             )),
                                       ],
@@ -184,7 +184,7 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         pageBodyContainer(),
                         SizedBox(
-                          height: screenHeight * .025,
+                          height: header1/8,
                         ),
                         pageHeaderContainer(),
                       ],
@@ -212,7 +212,7 @@ class _DashboardState extends State<Dashboard> {
   Widget pageHeaderContainer() {
     return Padding(
       padding:
-          EdgeInsets.only(right: screenWidth * .015, left: screenWidth * .015),
+          EdgeInsets.symmetric(horizontal: header2),
       child: Material(
           elevation: 6,
           borderRadius: const BorderRadius.only(
@@ -221,7 +221,7 @@ class _DashboardState extends State<Dashboard> {
               topLeft: Radius.circular(40),
               topRight: Radius.circular(40)),
           child: Container(
-              height: screenHeight / 4,
+              height: header1*8,
               width: double.infinity,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
@@ -237,7 +237,7 @@ class _DashboardState extends State<Dashboard> {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: screenHeight / 40,
+                      height: header1*2,
                     ),
                     //here is the code for the custom gridview boxes
                     gridButtons()
@@ -273,7 +273,7 @@ class _DashboardState extends State<Dashboard> {
                     ),
                     Text1(
                         fontColor: lightBlackColor,
-                        fontSize: screenWidth * .06,
+                        fontSize: header1,
                         text: DateFormat("MMMM yyyy").format(DateTime.now())),
                   ],
                 ),
@@ -364,11 +364,11 @@ class _DashboardState extends State<Dashboard> {
   //Circle Container
   Widget circleContainer(String text) {
     return Container(
-      width: screenWidth / 7,
-      height: screenWidth / 7,
+      width:  header1*2,
+      height: header1*2,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(screenWidth / 4),
+        borderRadius: BorderRadius.circular(header1* 4),
         boxShadow: [
           BoxShadow(
               color: greyGreenColor,
@@ -392,9 +392,9 @@ class _DashboardState extends State<Dashboard> {
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(paragraph),
-            width: screenWidth / 5,
-            height: screenWidth / 4.5,
+            padding: EdgeInsets.all(8),
+            width: header1* 4,
+            height: header1* 4,
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(paragraph),
@@ -407,7 +407,7 @@ class _DashboardState extends State<Dashboard> {
             child: Center(
                 child: Image(
               image: AssetImage(iconPath),
-              width: screenWidth / 8,
+              width: header1* 2,
             )),
           ),
           Text1(fontColor: lightBlackColor, fontSize: paragraph, text: text)

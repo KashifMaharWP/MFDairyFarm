@@ -62,11 +62,11 @@ class _AdminDashboardButtons extends State<AdminDashboardButtons> {
             children: [
               Container(
                 padding: EdgeInsets.all(paragraph),
-                width: screenWidth / 6,
-                height: screenWidth / 6,
+                width: 70,
+                height: 70,
                 decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(screenWidth / 5),
+                    borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
                           color: greyGreenColor,
@@ -75,14 +75,14 @@ class _AdminDashboardButtons extends State<AdminDashboardButtons> {
                     ]),
                 child: Center(
                     child: Image(
-                        image: AssetImage(iconPath), width: screenWidth / 4)),
+                        image: AssetImage(iconPath), width: 40)),
               ),
               Text1(fontColor: lightBlackColor, fontSize: paragraph, text: text)
             ],
           ),
           Positioned(
-              top: header1 * 1.8,
-              left: header1 * 2,
+              top: header1 * 2.3,
+              left: header1 * 2.6,
               child: Icon(
                 CupertinoIcons.plus_circle_fill,
                 size: header1 * 1.2,
