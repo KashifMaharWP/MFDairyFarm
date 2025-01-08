@@ -9,12 +9,15 @@ import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_toast_message/simple_toast.dart';
 
+import '../Model/AnimalDetails/animal_detail_model.dart';
 import '../Model/get_cow_model.dart';
 
 class AnimalRegistratinProvider extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
   String message = '';
+  String _milkCount='';
+ String get milkCount =>_milkCount;
   // get message => _message;
 
   Future<void> uploadAnimalData(BuildContext context, String animalNumber,
@@ -92,4 +95,34 @@ class AnimalRegistratinProvider extends ChangeNotifier {
     return null;
   }
 }
+
+
+  Future<AnimalDetailModel?> getAnimalDetailById(BuildContext context, String id)async{
+    final url = Uri.parse("${GlobalApi.baseApi}${GlobalApi.getAnimalDetailById}$id&date=Jan");
+    print(url);
+
+    var headers = {
+    'Authorization':
+        'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
+  };
+
+    try{
+      final response = await http.get(url,headers: headers);
+      AnimalDetailModel detailModel = AnimalDetailModel.fromJson(json.decode(response.body));
+      if(detailModel.success == true){
+        _milkCount =detailModel.milkCount.toString();
+        print(milkCount);
+        notifyListeners();
+        return detailModel;
+      }else{
+        return detailModel;
+      }
+
+
+
+    }catch(error){
+      print(error);
+
+    }
+  }
 }

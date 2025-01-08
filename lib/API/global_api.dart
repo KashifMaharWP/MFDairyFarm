@@ -30,5 +30,6 @@ class GlobalApi {
   static String getAllTasks ="task/getTasks";
   static String getTaskById ="task/getTaskByUserId/";
   static String taskStatus ='task/toggleTask/';
+  static String getAnimalDetailById ='milk/getMilkRecordOfMonthById?id=';
 
 }

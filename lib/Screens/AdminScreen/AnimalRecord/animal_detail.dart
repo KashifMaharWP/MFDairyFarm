@@ -1,20 +1,26 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
+import 'package:dairyfarmflow/Model/AnimalDetails/animal_detail_model.dart';
+import 'package:dairyfarmflow/Providers/animal_registratin_provider.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class AnimalDetail extends StatefulWidget {
-  const AnimalDetail({super.key});
+  String tag, url, id;
+   AnimalDetail({super.key,required this.tag, required this.url, required this.id});
 
   @override
   State<AnimalDetail> createState() => _AnimalDetailState();
 }
 
 class _AnimalDetailState extends State<AnimalDetail> {
+  
   @override
   Widget build(BuildContext context) {
+   final provider = Provider.of<AnimalRegistratinProvider>(context,listen: false);
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
@@ -36,9 +42,9 @@ class _AnimalDetailState extends State<AnimalDetail> {
                 decoration: BoxDecoration(
                     color: const Color.fromARGB(255, 159, 156, 156),
                     borderRadius: BorderRadius.circular(10)),
-                child: const Image(
+                child:  Image(
                     image: NetworkImage(
-                        "https://static.vecteezy.com/system/resources/thumbnails/023/651/804/small/dairy-cow-on-transparent-background-created-with-generative-ai-png.png"),
+                        widget.url),
                     fit: BoxFit.contain),
               ),
             ),
@@ -49,14 +55,17 @@ class _AnimalDetailState extends State<AnimalDetail> {
           ReuseableWidget(
             imgUrl: "lib/assets/cow.png",
             text1: "Animal",
-            text2: "Tag",
+            text2: widget.tag,
           ),
           SizedBox(
             width: screenWidth * .85,
             child: const Divider(),
           ),
-          ReuseableWidget(
-              imgUrl: "lib/assets/milk.png", text1: "Milk", text2: "Liters"),
+          Consumer<AnimalRegistratinProvider>(
+            builder: (context, value, child) => 
+             ReuseableWidget(
+                imgUrl: "lib/assets/milk.png", text1: "Milk", text2: "${value.milkCount} Liters"),
+          ),
           SizedBox(
             width: screenWidth * .85,
             child: const Divider(),
@@ -111,92 +120,110 @@ class _AnimalDetailState extends State<AnimalDetail> {
             height: screenHeight * .010,
           ),
           Expanded(
-              child: ListView.builder(
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Container(
-                        width: screenWidth * 0.95,
-                        height: screenHeight / 8.5,
-                        padding: EdgeInsets.all(paragraph),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(paragraph),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: greyGreenColor,
-                                  blurRadius: 6,
-                                  spreadRadius: 3,
-                                  offset: const Offset(2, 0)),
-                            ]),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.calendar_month_sharp,
-                                  color: darkGreenColor,
-                                ),
-                                SizedBox(
-                                  width: screenWidth * .005,
-                                ),
-                                Text1(
-                                    fontColor: lightBlackColor,
-                                    fontSize: paragraph,
-                                    text: DateFormat("dd MMMM yyyy")
-                                        .format(DateTime.now())),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: Image(
-                                          image:
-                                              AssetImage("lib/assets/sun.png")),
-                                    ),
-                                    SizedBox(
-                                      width: screenWidth * .005,
-                                    ),
-                                    Text1(
-                                        fontColor: lightBlackColor,
-                                        fontSize: screenWidth * .05,
-                                        text: "Morning")
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: Image(
-                                          image: AssetImage(
-                                              "lib/assets/moon.png")),
-                                    ),
-                                    SizedBox(
-                                      width: screenWidth * .005,
-                                    ),
-                                    Text1(
-                                        fontColor: lightBlackColor,
-                                        fontSize: screenWidth * .05,
-                                        text: "Evening")
-                                  ],
-                                )
-                              ],
-                            )
-                          ],
+              child: FutureBuilder<AnimalDetailModel?>(
+                future: provider.getAnimalDetailById(context,widget.id),
+                builder: (context, snapshot) {
+                   if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(
+                      child: Text('An error occurred: ${snapshot.error}'));
+                } else if (snapshot.hasData && snapshot.data != null) {
+                  final animal = snapshot.data!.milkProductionMonthlyRecord;
+                  return ListView.builder(
+                    itemCount: animal!.length,
+                    itemBuilder: (context, index) {
+                      final animalList = animal[index];
+                      return Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Container(
+                          width: screenWidth * 0.95,
+                          height: screenHeight / 8.5,
+                          padding: EdgeInsets.all(paragraph),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(paragraph),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: greyGreenColor,
+                                    blurRadius: 6,
+                                    spreadRadius: 3,
+                                    offset: const Offset(2, 0)),
+                              ]),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.calendar_month_sharp,
+                                    color: darkGreenColor,
+                                  ),
+                                  SizedBox(
+                                    width: screenWidth * .005,
+                                  ),
+                                  Text1(
+                                      fontColor: lightBlackColor,
+                                      fontSize: paragraph,
+                                      text: animalList.date.toString()),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: Image(
+                                            image:
+                                                AssetImage("lib/assets/sun.png")),
+                                      ),
+                                      SizedBox(
+                                        width: screenWidth * .005,
+                                      ),
+                                      Text1(
+                                          fontColor: lightBlackColor,
+                                          fontSize: screenWidth * .05,
+                                          text: animalList.morning.toString())
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: Image(
+                                            image: AssetImage(
+                                                "lib/assets/moon.png")),
+                                      ),
+                                      SizedBox(
+                                        width: screenWidth * .005,
+                                      ),
+                                      Text1(
+                                          fontColor: lightBlackColor,
+                                          fontSize: screenWidth * .05,
+                                          text: animalList.evening.toString())
+                                    ],
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  }))
+                      );
+                    });
+
+                }else{
+                  return Center(child: Text("No data"),);
+                }
+                  
+                }
+               
+              ))
         ],
       ),
     );

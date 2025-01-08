@@ -52,7 +52,7 @@ class AnimalRecordWidget extends StatelessWidget {
                     child: GestureDetector(
                       onTap: role == "Admin"
                           ? () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=> const AnimalDetail()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>  AnimalDetail(tag: cow.animalNumber.toString(), url: cow.image, id: cow.id,)));
                             }
                           : () {
                               showDialog(
