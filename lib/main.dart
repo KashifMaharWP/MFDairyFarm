@@ -26,8 +26,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    screenWidth = 393;
-    screenHeight = 830;
+    screenWidth = MediaQuery.of(context).size.width*0.70;
+    screenHeight = MediaQuery.of(context).size.height*0.70;
 
     return MultiProvider(
       providers: [
