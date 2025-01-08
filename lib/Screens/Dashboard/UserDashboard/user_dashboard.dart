@@ -4,21 +4,18 @@ import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/AnimalRecord/animalRecord.dart';
-import 'package:dairyfarmflow/Screens/AdminScreen/FeedEntry/add_evening_feed.dart';
-import 'package:dairyfarmflow/Screens/AdminScreen/FeedEntry/add_morining_feed.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/milk_record.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/VacinationScreen/animal_list.dart';
-import 'package:dairyfarmflow/Screens/AdminScreen/VacinationScreen/vacination_record.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/adminDashboard/adminDashboard.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/adminDashboard/profile_view.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/workerDashboard/workerDashboard.dart';
-import 'package:dairyfarmflow/Screens/SampleScreen.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:dairyfarmflow/Widget/my_drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import '../../Notifications/notification_screen.dart';
 
 class UserDashboard extends StatefulWidget {
   const UserDashboard({super.key});
@@ -196,8 +193,7 @@ class _UserDashboardState extends State<UserDashboard> {
               },
             )
           : iconIndex == 1
-              ? const sampleScreen(
-                  backgroundColor: Colors.yellow) //NotificationScreen()
+              ? const NotificationScreen()
               : const ProfileView(),
       bottomNavigationBar: CurvedNavigationBar(
         items: _navigationItems,
@@ -323,8 +319,8 @@ class _UserDashboardState extends State<UserDashboard> {
                     SizedBox(
                       height: paragraph,
                     ),
-                    viewContainer("Morning Feed", "lib/assets/sun.png",
-                        const AddMorningFeed()),
+                    // viewContainer("Morning Feed", "lib/assets/sun.png",
+                    //     const AddMorningFeed()),
                   ],
                 ),
                 Column(
@@ -334,8 +330,8 @@ class _UserDashboardState extends State<UserDashboard> {
                     SizedBox(
                       height: paragraph,
                     ),
-                    viewContainer("Evening Feed", "lib/assets/moon.png",
-                        const AddEveningFeed()),
+                    // viewContainer("Evening Feed", "lib/assets/moon.png",
+                    //     const AddEveningFeed()),
                   ],
                 ),
               ],

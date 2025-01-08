@@ -4,10 +4,12 @@ import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Model/add_milk.dart';
+import 'package:dairyfarmflow/Providers/Filter%20Provider/filter.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/milk_provider.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/add_evening_milk.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/add_morning_milk.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
+import 'package:dairyfarmflow/Widget/animali_record_widget.dart';
 import 'package:dairyfarmflow/Widget/customRoundButton.dart';
 import 'package:dairyfarmflow/Widget/textFieldWidget1.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,9 +19,9 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
-
 import '../../../Providers/MilkProviders/milk_record.dart';
 import '../../../Providers/user_detail.dart';
+import '../../../Widget/custom_filter_widget.dart';
 
 class MilkRecordScreen extends StatefulWidget {
   const MilkRecordScreen({super.key});
@@ -29,6 +31,7 @@ class MilkRecordScreen extends StatefulWidget {
 }
 
 class _MilkRecordScreenState extends State<MilkRecordScreen> {
+   String role = '';
   final TextEditingController _morningMilkContriller = TextEditingController();
   final TextEditingController _eveningMilkContriller = TextEditingController();
   final TextEditingController _totalMilkContriller = TextEditingController();
@@ -75,6 +78,7 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
   }
 
   Future<void> fetchMilkData() async {
+   
     try {
       final data = await fetchMilkCount(context);
       if (data != null && data['success'] == true) {
@@ -100,6 +104,7 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
   }
 
   void deleteRecord(String id) async {
+    
     await Provider.of<MilkProvider>(context, listen: false)
         .deleteMilkData(id: id, context: context);
     fetchMilkData();
@@ -108,13 +113,16 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
 
   @override
   Widget build(BuildContext context) {
+   
+    final selected = Provider.of<FilterProvider>(context).filtering;
+    
     final milkProvider =
         Provider.of<MilkRecordProvider>(context, listen: false);
 
     milkProvider.fetchMilkRecords(context);
 
     // print(eveningMilk);
-    final role = Provider.of<UserDetail>(context).role;
+     role = Provider.of<UserDetail>(context).role.toString();
     //  print(role);
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
@@ -204,11 +212,25 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
                           ],
                         ),
                       )))
-              : pageHeaderContainer(
-                  totalMilk == null ? "0" : totalMilk.toString(),
-                  morningMilk == null ? "0" : morningMilk.toString(),
-                  eveningMilk == null ? "0" : eveningMilk.toString()),
+              : Consumer<MilkRecordProvider>(
+                builder: (context, value, child) => 
+                 pageHeaderContainer(
+                    totalMilk == null ? "0" : value.total,
+                    morningMilk == null ? "0" :value.morningMilk,
+                    eveningMilk == null ? "0" : value.eveningMilk),
+              ),
           SizedBox(
+            height: screenHeight * .015,
+          ),
+          Container(
+                  width: screenWidth * 0.95,
+                  height: screenHeight * .07,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: const Center(child: customFiltersWidget()),
+                ),
+                 SizedBox(
             height: screenHeight * .015,
           ),
           Container(
@@ -233,7 +255,7 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
           SizedBox(
             height: paragraph / 4,
           ),
-          Consumer<MilkRecordProvider>(
+         selected == "Milk"? Consumer<MilkRecordProvider>(
             builder: (context, value, child) => Expanded(
                 child: value.milkRecords.isEmpty
                     ? Center(
@@ -248,6 +270,7 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
                     : ListView.builder(
                         itemCount: value.milkRecords.length,
                         itemBuilder: (BuildContext context, int index) {
+                         
                           final cow = value.milkRecords[index];
                           // print(cow);
                           return Padding(
@@ -352,6 +375,7 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
                                                                         context);
                                                                 Navigator.pop(
                                                                     context);
+                                                                    
                                                                 setState(() {
                                                                   fetchMilkData();
                                                                 });
@@ -537,12 +561,13 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
                 // Example widget
 
                 ),
-          ),
+          ):AnimalRecordWidget(role: role)
 
          
         ],
       ),
     );
+    
   }
 
   Future<dynamic> ShowDialog(BuildContext context, TodayMilkRecord cow) {
@@ -743,3 +768,5 @@ Widget customTextFormField(
     ],
   );
 }
+
+

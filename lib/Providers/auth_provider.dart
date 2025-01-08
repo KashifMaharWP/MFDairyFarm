@@ -96,6 +96,7 @@ class AuthProvider with ChangeNotifier {
 
       if (response.statusCode == 200) {
         final userJson = jsonDecode(response.body);
+       
         String role = userJson['user_']['role'];
 
         Provider.of<UserDetail>(context, listen: false).setUserDetail(userJson);

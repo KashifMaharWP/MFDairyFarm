@@ -11,6 +11,9 @@ import 'package:simple_toast_message/simple_toast.dart';
 class MilkProvider extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+
+
+  
   Future<void> sendMorningMilkData(
       {required String cowId,
       required String date,

@@ -7,37 +7,43 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class  customFiltersWidget extends StatefulWidget {
-  const customFiltersWidget({super.key});
+class  AnimalFilterWidget extends StatefulWidget {
+  const AnimalFilterWidget({super.key});
 
   @override
-  State<customFiltersWidget> createState() => _customFiltersWidgetState();
+  State<AnimalFilterWidget> createState() => _AnimalFilterWidgetState();
 }
 
-class _customFiltersWidgetState extends State<customFiltersWidget> {
-  String selectedFilter = "Add Milk";
+class _AnimalFilterWidgetState extends State<AnimalFilterWidget> {
+  String selectedFilter = "Available";
   String selectedDate = DateFormat("dd MMMM yyyy").format(DateTime.now());
   @override
   Widget build(BuildContext context) {
     return Wrap(
       children: [
         customFilter(
-          "Add Milk",
+          "Available",
           whiteColor,
           blackColor,
           darkGreenColor,
-          selectedFilter == "Add Milk",
+          selectedFilter == "Available",
         ),
-       const SizedBox(width: 60),
+       const SizedBox(width: 10),
         customFilter(
-          "Milk",
+          "Sold",
           whiteColor,
           blackColor,
           Colors.red,
-          selectedFilter == "Milk",
+          selectedFilter == "Sold",
         ),
        const SizedBox(width: 10),
-       
+        customFilter(
+          "All",
+          whiteColor,
+          blackColor,
+          Colors.amber,
+          selectedFilter == "All",
+        ),
       ],
     );
   }

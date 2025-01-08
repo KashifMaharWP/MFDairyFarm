@@ -1,6 +1,7 @@
 import 'package:dairyfarmflow/Class/myRoutes.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Providers/FeedProviders/feed_provider.dart';
+import 'package:dairyfarmflow/Providers/Filter%20Provider/filter.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/milk_provider.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/milk_record.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/worker_provider.dart';
@@ -41,6 +42,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => RegistrationProvider()),
         ChangeNotifierProvider(create: (context) => RegisterUserProvider()),
         ChangeNotifierProvider(create: (context) => WorkerProvider()),
+        ChangeNotifierProvider(create: (_)=> FilterProvider()),
+        //ChangeNotifierProvider(create: (_)=> CowsProvider()),
         ChangeNotifierProvider(
           create: (context) => MilkRecordProvider(),
         ),

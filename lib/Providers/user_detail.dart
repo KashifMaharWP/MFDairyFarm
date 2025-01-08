@@ -15,6 +15,7 @@ class UserDetail extends ChangeNotifier {
     email = userData['user_']['email'].toString();
     role = userData['user_']['role'].toString();
     token = userData['token'].toString();
+   
     //uncomment the below to get the picture
     //picture = userData['picture'].toString();
     //setting the User Preferences into the local store to analyze the user login and then access him through the local storage

@@ -88,7 +88,7 @@ class _VacinationRecordState extends State<VacinationRecord> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        const MedicalDetail()));
+                                                         MedicalDetail(id: record.cow.id, url: record.cow.image, tag: record.cow.animalNumber.toString(),)));
                                           },
                                           child: Container(
                                             decoration: BoxDecoration(

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dairyfarmflow/Model/Medical/details_model.dart';
 import 'package:dairyfarmflow/Model/medical.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -109,5 +110,32 @@ class AddMedical extends ChangeNotifier {
       SimpleToast.showErrorToast(context, "Error Message", "$e");
       //showErrorSnackbar("An error occurred: $e", context);
     }
+  }
+
+  Future<MedicalDetailModel?> fetchMedicalDetails(BuildContext context , String id)async{
+    final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getMedicalRecordById}');
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization':
+          "Bearer ${Provider.of<UserDetail>(context, listen: false).token}"
+    };
+    try{
+
+      final response = await http.get(url, headers: headers);
+      final jsonResponse = jsonDecode(response.body);
+      if(jsonResponse['success'] == true){
+       MedicalDetailModel model =MedicalDetailModel.fromJson(json.decode(response.body));
+       return model;
+      }else{
+        SimpleToast.showErrorToast(context, "Error", jsonResponse['message']);
+      }
+
+
+    }catch(err){
+      SimpleToast.showErrorToast(context, "Error", err.toString());
+
+    }
+    
   }
 }
