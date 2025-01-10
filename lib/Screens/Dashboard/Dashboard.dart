@@ -132,50 +132,51 @@ class _DashboardState extends State<Dashboard> {
                                     SizedBox(
                                       width: header1/1.25,
                                     ),
-                                    PopupMenuButton(
-                                      icon: Icon(
-                                        Icons.more_vert_outlined,
-                                        size: header1*1.5 ,
-                                        color: whiteColor,
-                                      ),
-                                      elevation: 6,
-                                      offset: Offset(header1 * 2,
-                                          header1 * 4),
-                                      color: Colors.white,
-                                      itemBuilder: (context) => [
-                                        PopupMenuItem(
-                                            value: 1,
-                                            child: ListTile(
-                                                title: Text1(
-                                                    fontColor: blackColor,
-                                                    fontSize: header1,
-                                                    text: "Option1"))),
-                                        PopupMenuItem(
-                                            value: 2,
-                                            child: ListTile(
-                                              title: Text1(
-                                                  fontColor: blackColor,
-                                                  fontSize: header1,
-                                                  text: "Option2"),
-                                            )),
-                                        PopupMenuItem(
-                                            value: 3,
-                                            child: ListTile(
-                                              title: Text1(
-                                                  fontColor: blackColor,
-                                                  fontSize: header1,
-                                                  text: "Option3"),
-                                            )),
-                                        PopupMenuItem(
-                                            value: 4,
-                                            child: ListTile(
-                                              title: Text1(
-                                                  fontColor: blackColor,
-                                                  fontSize: header1,
-                                                  text: "Option2"),
-                                            )),
-                                      ],
-                                    )
+                                    // PopupMenuButton(
+                                    //   icon: Icon(
+                                    //     Icons.more_vert_outlined,
+                                    //     size: header1*1.5 ,
+                                    //     color: whiteColor,
+                                    //   ),
+                                    //   elevation: 6,
+                                    //   offset: Offset(header1 * 2,
+                                    //       header1 * 4),
+                                    //   color: Colors.white,
+                                    //   itemBuilder: (context) => [
+                                    //     PopupMenuItem(
+                                    //         value: 1,
+                                    //         child: ListTile(
+                                    //             title: Text1(
+                                    //                 fontColor: blackColor,
+                                    //                 fontSize: header1,
+                                    //                 text: "Option1"))),
+                                    //     PopupMenuItem(
+                                    //         value: 2,
+                                    //         child: ListTile(
+                                    //           title: Text1(
+                                    //               fontColor: blackColor,
+                                    //               fontSize: header1,
+                                    //               text: "Option2"),
+                                    //         )),
+                                    //     PopupMenuItem(
+                                    //         value: 3,
+                                    //         child: ListTile(
+                                    //           title: Text1(
+                                    //               fontColor: blackColor,
+                                    //               fontSize: header1,
+                                    //               text: "Option3"),
+                                    //         )),
+                                    //     PopupMenuItem(
+                                    //         value: 4,
+                                    //         child: ListTile(
+                                    //           title: Text1(
+                                    //               fontColor: blackColor,
+                                    //               fontSize: header1,
+                                    //               text: "Option2"),
+                                    //         )),
+                                    //   ],
+                                    // )
+                                  
                                   ],
                                 )
                               ],
@@ -212,39 +213,20 @@ class _DashboardState extends State<Dashboard> {
   Widget pageHeaderContainer() {
     return Padding(
       padding:
-          EdgeInsets.symmetric(horizontal: header2),
-      child: Material(
-          elevation: 6,
-          borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(40),
-              bottomRight: Radius.circular(40),
-              topLeft: Radius.circular(40),
-              topRight: Radius.circular(40)),
-          child: Container(
-              height: header1*8,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                        color: greyGreenColor,
-                        blurRadius: 6,
-                        offset: const Offset(2, 2))
-                  ]),
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: header1*2,
-                    ),
-                    //here is the code for the custom gridview boxes
-                    gridButtons()
-                    // Text("data")
-                  ],
-                ),
-              ))),
+          EdgeInsets.symmetric(horizontal: 10),
+      child: Container(
+          height: header1*8,
+          width: double.infinity,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                    color: greyGreenColor,
+                    blurRadius: 6,
+                    offset: const Offset(2, 2))
+              ]),
+          child: gridButtons()),
     );
   }
 
@@ -260,28 +242,7 @@ class _DashboardState extends State<Dashboard> {
         padding: EdgeInsets.all(paragraph),
         child: Column(
           children: [
-            Container(
-              padding: const EdgeInsets.only(left: 10),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.calendar_month_sharp,
-                      color: darkGreenColor,
-                    ),
-                    Text1(
-                        fontColor: lightBlackColor,
-                        fontSize: header1,
-                        text: DateFormat("MMMM yyyy").format(DateTime.now())),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: paragraph,
-            ),
+            
             Container(
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -392,9 +353,9 @@ class _DashboardState extends State<Dashboard> {
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(8),
-            width: header1* 4,
-            height: header1* 4,
+            padding: const EdgeInsets.all(8),
+            width: header1* 5,
+            height: header1* 5,
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(paragraph),
@@ -407,10 +368,10 @@ class _DashboardState extends State<Dashboard> {
             child: Center(
                 child: Image(
               image: AssetImage(iconPath),
-              width: header1* 2,
+              width: 40,
             )),
           ),
-          Text1(fontColor: lightBlackColor, fontSize: paragraph, text: text)
+          Text1(fontColor: lightBlackColor, fontSize: 10, text: text)
         ],
       ),
     );

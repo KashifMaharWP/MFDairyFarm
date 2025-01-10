@@ -84,23 +84,23 @@ class _MyDrawerState extends State<MyDrawer> {
                     color: Colors.white),
               ),
             ),
-            ListTile(
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>  AddMilkSale()));
-              },
-              leading: Icon(
-                CupertinoIcons.chart_bar,
-                size: screenHeight * .035,
-                color: Colors.white,
-              ),
-              title: Text(
-                'Random',
-                style: TextStyle(
-                    fontSize: screenHeight * .03,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white),
-              ),
-            ),
+            // ListTile(
+            //   onTap: () {
+            //     Navigator.push(context, MaterialPageRoute(builder: (context)=>  AddMilkSale()));
+            //   },
+            //   leading: Icon(
+            //     CupertinoIcons.chart_bar,
+            //     size: screenHeight * .035,
+            //     color: Colors.white,
+            //   ),
+            //   title: Text(
+            //     'Random',
+            //     style: TextStyle(
+            //         fontSize: screenHeight * .03,
+            //         fontWeight: FontWeight.w400,
+            //         color: Colors.white),
+            //   ),
+            // ),
             ListTile(
               onTap: () async {
                 Provider.of<UserDetail>(context, listen: false)

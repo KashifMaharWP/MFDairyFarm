@@ -11,25 +11,25 @@ class FeedCount {
     if (json['todayFeedConsumtionCount'] != null) {
       todayFeedConsumtionCount = <TodayFeedConsumtionCount>[];
       json['todayFeedConsumtionCount'].forEach((v) {
-        todayFeedConsumtionCount!.add(new TodayFeedConsumtionCount.fromJson(v));
+        todayFeedConsumtionCount!.add(TodayFeedConsumtionCount.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
-    data['message'] = this.message;
-    if (this.todayFeedConsumtionCount != null) {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['success'] = success;
+    data['message'] = message;
+    if (todayFeedConsumtionCount != null) {
       data['todayFeedConsumtionCount'] =
-          this.todayFeedConsumtionCount!.map((v) => v.toJson()).toList();
+          todayFeedConsumtionCount!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class TodayFeedConsumtionCount {
-  Null? nId;
+  Null nId;
   int? morning;
   int? evening;
 
@@ -42,10 +42,10 @@ class TodayFeedConsumtionCount {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.nId;
-    data['morning'] = this.morning;
-    data['evening'] = this.evening;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = nId;
+    data['morning'] = morning;
+    data['evening'] = evening;
     return data;
   }
 }

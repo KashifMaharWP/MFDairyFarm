@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:flutter/cupertino.dart';
@@ -218,7 +217,7 @@ Widget pageHeaderContainer(BuildContext context, int consumedFeed, feeds) {
       borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40)),
       child: Container(
-          height: screenHeight / 5,
+          height: screenHeight / 4.8,
           width: double.infinity,
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(

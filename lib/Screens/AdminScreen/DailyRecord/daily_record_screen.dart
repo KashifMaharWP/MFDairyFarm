@@ -266,7 +266,7 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
                     },
                   );
                 } else {
-                  return Center(child: Text('No data available'));
+                  return const Center(child: Text('No data available'));
                 }
               },
             ),

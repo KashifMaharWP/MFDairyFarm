@@ -103,10 +103,18 @@ class _AddEveningMilkState extends State<AddEveningMilk> {
             //   isPasswordField: false,
             // ),
             SizedBox(height: paragraph),
-            customTextFormField("Date", CupertinoIcons.calendar),
+             Wrap(
+              alignment: WrapAlignment.start,
+              runAlignment: WrapAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.start,
+              children: [
+                Icon(Icons.calendar_month),
+                Text1(fontColor: blackColor, fontSize: header6, text: "Date"),
+              ],
+            ),
             dateContainer(),
             SizedBox(height: paragraph),
-            customTextFormField("Evening Milk", CupertinoIcons.calendar),
+            customTextFormField("Evening Milk", "lib/assets/milk.png"),
             TextFieldWidget1(
               keyboardtype: TextInputType.number,
               widgetcontroller: evening,
@@ -114,7 +122,7 @@ class _AddEveningMilkState extends State<AddEveningMilk> {
               isPasswordField: false,
             ),
             SizedBox(height: paragraph),
-            customTextFormField("Evening Feed", CupertinoIcons.calendar),
+            customTextFormField("Evening Feed", "lib/assets/feed.png"),
             TextFieldWidget1(
               keyboardtype: TextInputType.number,
               widgetcontroller: eveningfeed,
@@ -127,19 +135,19 @@ class _AddEveningMilkState extends State<AddEveningMilk> {
     );
   }
 
-  Widget customTextFormField(String text, IconData customIcon) {
+   Widget customTextFormField(String text, String customIcon) {
     return Wrap(
       alignment: WrapAlignment.start,
       runAlignment: WrapAlignment.center,
       crossAxisAlignment: WrapCrossAlignment.start,
       children: [
-        Icon(customIcon, color: darkGreenColor),
-        Text1(fontColor: blackColor, fontSize: paragraph, text: text),
+        Image.asset(customIcon,width: 20,),
+        Text1(fontColor: blackColor, fontSize: header6, text: text),
       ],
     );
   }
 
-  Widget dateContainer() {
+   Widget dateContainer() {
     return InkWell(
       onTap: () async {
         pickedDate = await customDatePicker(context, selectedDate);
@@ -151,12 +159,12 @@ class _AddEveningMilkState extends State<AddEveningMilk> {
       },
       child: Container(
         padding: EdgeInsets.all(paragraph - 7),
-        width: screenWidth,
-        height: screenHeight / 14,
+        width: double.infinity,
+        height: screenHeight / 10,
         decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.92),
             border: Border.all(color: CupertinoColors.systemGrey, width: 1),
-            borderRadius: BorderRadius.circular(paragraph - 10),
+            borderRadius: BorderRadius.circular(10),
             boxShadow: const [
               BoxShadow(
                   color: CupertinoColors.systemGrey3,
@@ -167,8 +175,8 @@ class _AddEveningMilkState extends State<AddEveningMilk> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text1(
-                fontColor: blackColor,
-                fontSize: paragraph - 3,
+                fontColor: Colors.black,
+                fontSize: paragraph ,
                 text: DateFormat("EEE MMM dd yyyy").format(selectedDate)),
             Icon(
               CupertinoIcons.calendar,
@@ -179,6 +187,5 @@ class _AddEveningMilkState extends State<AddEveningMilk> {
       ),
     );
   }
-
 //custom Text Form for Input entry
 }

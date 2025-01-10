@@ -8,7 +8,6 @@ import '../Class/colorPallete.dart';
 import '../Class/screenMediaQuery.dart';
 import '../Class/textSizing.dart';
 import '../Model/get_cow_model.dart';
-import '../Screens/AdminScreen/AnimalRecord/animalRecord.dart';
 
 
 class CowsList extends StatelessWidget {

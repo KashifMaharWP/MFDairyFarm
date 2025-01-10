@@ -136,6 +136,7 @@ class AddMedical extends ChangeNotifier {
       SimpleToast.showErrorToast(context, "Error", err.toString());
 
     }
+    return null;
     
   }
 }

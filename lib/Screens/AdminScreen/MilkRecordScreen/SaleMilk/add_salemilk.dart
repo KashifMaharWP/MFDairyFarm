@@ -18,7 +18,7 @@ import 'package:provider/provider.dart';
 
 class AddMilkSale extends StatefulWidget {
   
-  AddMilkSale({super.key,});
+  const AddMilkSale({super.key,});
 
   @override
   State<AddMilkSale> createState() => _AddMilkSaleState();
@@ -145,12 +145,12 @@ class _AddMilkSaleState extends State<AddMilkSale> {
       },
       child: Container(
         padding: EdgeInsets.all(paragraph - 7),
-        width: screenWidth,
-        height: screenHeight / 14,
+        width: double.infinity,
+        height: screenHeight / 10,
         decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.92),
             border: Border.all(color: CupertinoColors.systemGrey, width: 1),
-            borderRadius: BorderRadius.circular(paragraph - 10),
+            borderRadius: BorderRadius.circular(10),
             boxShadow: const [
               BoxShadow(
                   color: CupertinoColors.systemGrey3,
@@ -161,8 +161,8 @@ class _AddMilkSaleState extends State<AddMilkSale> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text1(
-                fontColor: blackColor,
-                fontSize: paragraph - 3,
+                fontColor: Colors.black,
+                fontSize: paragraph ,
                 text: DateFormat("EEE MMM dd yyyy").format(selectedDate)),
             Icon(
               CupertinoIcons.calendar,
@@ -173,6 +173,5 @@ class _AddMilkSaleState extends State<AddMilkSale> {
       ),
     );
   }
-
 //custom Text Form for Input entry
 }

@@ -2,16 +2,9 @@ import 'dart:convert';
 import 'package:dairyfarmflow/API/global_api.dart';
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
-import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Model/get_cow_model.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
-import 'package:dairyfarmflow/Screens/AdminScreen/AnimalRecord/animal_detail.dart';
-import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/add_evening_milk.dart';
-import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/add_morning_milk.dart';
-import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:dairyfarmflow/Widget/animal_filter.dart';
-import 'package:dairyfarmflow/Widget/custom_filter_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -53,19 +46,19 @@ class _AnimalRecordState extends State<AnimalRecord> {
           SizedBox(
             height: screenHeight * .015,
           ),
-          role == "Admin"
-              ? Container(
-                  width: screenWidth * 0.95,
-                  height: screenHeight * .07,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: const Center(child: AnimalFilterWidget()),
-                )
-              : const Center(),
-          SizedBox(
-            height: screenHeight * .015,
-          ),
+          // role == "Admin"
+          //     ? Container(
+          //         width: screenWidth * 0.95,
+          //         height: screenHeight * .07,
+          //         decoration: BoxDecoration(
+          //             color: Colors.white,
+          //             borderRadius: BorderRadius.circular(10)),
+          //         child: const Center(child: AnimalFilterWidget()),
+          //       )
+          //     : const Center(),
+          // SizedBox(
+          //   height: screenHeight * .015,
+          // ),
           
           AnimalRecordWidget(role: role),
         ],

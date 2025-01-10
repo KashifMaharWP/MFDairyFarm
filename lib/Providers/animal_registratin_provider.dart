@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:dairyfarmflow/API/global_api.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
@@ -13,11 +14,20 @@ import '../Model/AnimalDetails/animal_detail_model.dart';
 import '../Model/get_cow_model.dart';
 
 class AnimalRegistratinProvider extends ChangeNotifier {
+  CowsResponse? cowsList;
   bool _isLoading = false;
   bool get isLoading => _isLoading;
   String message = '';
   String _milkCount='';
  String get milkCount =>_milkCount;
+ bool _isDataFetched=false;
+
+ bool get isDataFetched=> _isDataFetched;
+
+ setIsDataFetched(bool value){
+  _isDataFetched=value;
+  notifyListeners();
+ }
   // get message => _message;
 
   Future<void> uploadAnimalData(BuildContext context, String animalNumber,
@@ -49,7 +59,7 @@ class AnimalRegistratinProvider extends ChangeNotifier {
     request.fields['animalNumber'] = animalNumber;
     request.fields['breed'] = breed;
     request.fields['age'] = int.parse(age).toString();
-
+    
     // Send request and handle response
     try {
       var response = await request.send();
@@ -71,7 +81,7 @@ class AnimalRegistratinProvider extends ChangeNotifier {
       SimpleToast.showErrorToast(context, "Error Message", message);
     }
   }
-  Future<CowsResponse?> fetchCows(BuildContext context) async {
+   fetchCows(BuildContext context) async {
   
   var headers = {
     'Authorization':
@@ -97,8 +107,9 @@ class AnimalRegistratinProvider extends ChangeNotifier {
 }
 
 
-  Future<AnimalDetailModel?> getAnimalDetailById(BuildContext context, String id)async{
-    final url = Uri.parse("${GlobalApi.baseApi}${GlobalApi.getAnimalDetailById}$id&date=Jan");
+  Future<AnimalDetailModel?> getAnimalDetailById(BuildContext context, String id,month)async{
+    setIsDataFetched(true);
+    final url = Uri.parse("${GlobalApi.baseApi}${GlobalApi.getAnimalDetailById}$id&date=${month}");
     print(url);
 
     var headers = {
@@ -109,10 +120,11 @@ class AnimalRegistratinProvider extends ChangeNotifier {
     try{
       final response = await http.get(url,headers: headers);
       AnimalDetailModel detailModel = AnimalDetailModel.fromJson(json.decode(response.body));
+      //debugger();
       if(detailModel.success == true){
         _milkCount =detailModel.milkCount.toString();
         print(milkCount);
-        notifyListeners();
+        setIsDataFetched(false);
         return detailModel;
       }else{
         return detailModel;
@@ -124,5 +136,6 @@ class AnimalRegistratinProvider extends ChangeNotifier {
       print(error);
 
     }
+    return null;
   }
 }

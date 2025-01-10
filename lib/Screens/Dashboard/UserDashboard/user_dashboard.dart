@@ -2,8 +2,12 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
+import 'package:dairyfarmflow/Model/Worker/task_model.dart';
+import 'package:dairyfarmflow/Providers/MilkProviders/worker_provider.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
+import 'package:dairyfarmflow/ReuseableWidgets/row_withtext_andimage.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/AnimalRecord/animalRecord.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/SaleMilk/add_salemilk.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/milk_record.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/VacinationScreen/animal_list.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/adminDashboard/adminDashboard.dart';
@@ -47,6 +51,22 @@ class _UserDashboardState extends State<UserDashboard> {
   ];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      Provider.of<WorkerProvider>(context, listen: false)
+          .fetchAllTasks(context);
+    });
+  }
+
+  @override
+void dispose() {
+  // Cancel any ongoing tasks or subscriptions here
+  super.dispose();
+}
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const MyDrawer(),
@@ -67,8 +87,8 @@ class _UserDashboardState extends State<UserDashboard> {
                               borderRadius: const BorderRadius.only(
                                   bottomLeft: Radius.circular(20),
                                   bottomRight: Radius.circular(20))),
-                          height: screenHeight / 7,
-                          width: screenWidth,
+                          height: screenHeight / 3.5,
+                          width: double.infinity,
                           child: Padding(
                             padding: EdgeInsets.only(
                                 left: screenWidth * .045,
@@ -98,10 +118,12 @@ class _UserDashboardState extends State<UserDashboard> {
                                           right: screenWidth * .02,
                                           top: screenHeight * .035),
                                       child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text1(
                                               fontColor: whiteColor,
-                                              fontSize: screenWidth * .05,
+                                              fontSize: 25,
                                               text: "Welcome"),
                                           Consumer<UserDetail>(
                                             builder: (context, value, child) =>
@@ -115,62 +137,6 @@ class _UserDashboardState extends State<UserDashboard> {
                                     ),
                                   ],
                                 ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.notifications,
-                                      size: screenWidth * .095,
-                                      color: whiteColor,
-                                    ),
-                                    SizedBox(
-                                      width: screenWidth * .02,
-                                    ),
-                                    PopupMenuButton(
-                                      icon: Icon(
-                                        Icons.more_vert_outlined,
-                                        size: screenWidth * .065,
-                                        color: whiteColor,
-                                      ),
-                                      elevation: 6,
-                                      offset: Offset(screenWidth * .05,
-                                          screenHeight * .055),
-                                      color: Colors.white,
-                                      itemBuilder: (context) => [
-                                        PopupMenuItem(
-                                            value: 1,
-                                            child: ListTile(
-                                                title: Text1(
-                                                    fontColor: blackColor,
-                                                    fontSize: screenWidth * .05,
-                                                    text: "Option1"))),
-                                        PopupMenuItem(
-                                            value: 2,
-                                            child: ListTile(
-                                              title: Text1(
-                                                  fontColor: blackColor,
-                                                  fontSize: screenWidth * .05,
-                                                  text: "Option2"),
-                                            )),
-                                        PopupMenuItem(
-                                            value: 3,
-                                            child: ListTile(
-                                              title: Text1(
-                                                  fontColor: blackColor,
-                                                  fontSize: screenWidth * .05,
-                                                  text: "Option3"),
-                                            )),
-                                        PopupMenuItem(
-                                            value: 4,
-                                            child: ListTile(
-                                              title: Text1(
-                                                  fontColor: blackColor,
-                                                  fontSize: screenWidth * .05,
-                                                  text: "Option2"),
-                                            )),
-                                      ],
-                                    )
-                                  ],
-                                )
                               ],
                             ),
                           ),
@@ -259,28 +225,28 @@ class _UserDashboardState extends State<UserDashboard> {
         padding: EdgeInsets.all(paragraph),
         child: Column(
           children: [
-            Container(
-              padding: const EdgeInsets.only(left: 10),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.calendar_month_sharp,
-                      color: darkGreenColor,
-                    ),
-                    Text1(
-                        fontColor: lightBlackColor,
-                        fontSize: screenWidth * .06,
-                        text: DateFormat("MMMM yyyy").format(DateTime.now())),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: screenHeight * .001,
-            ),
+            // Container(
+            //   padding: const EdgeInsets.only(left: 10),
+            //   child: Align(
+            //     alignment: Alignment.bottomLeft,
+            //     child: Row(
+            //       crossAxisAlignment: CrossAxisAlignment.center,
+            //       children: [
+            //         Icon(
+            //           Icons.calendar_month_sharp,
+            //           color: darkGreenColor,
+            //         ),
+            //         Text1(
+            //             fontColor: lightBlackColor,
+            //             fontSize: screenWidth * .06,
+            //             text: DateFormat("MMMM yyyy").format(DateTime.now())),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+            // SizedBox(
+            //   height: screenHeight * .001,
+            // ),
             Container(
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -310,37 +276,127 @@ class _UserDashboardState extends State<UserDashboard> {
                 //         const DailyRecordScreen()),
                 //   ],
                 // ),
-                Column(
-                  children: [
-                    //Replace Sample Screen with following
-                    //VacinationRecord()
-                    viewContainer("Medical Record", "lib/assets/medical.png",
-                        const AnimalList()),
-                    SizedBox(
-                      height: paragraph,
-                    ),
-                    // viewContainer("Morning Feed", "lib/assets/sun.png",
-                    //     const AddMorningFeed()),
-                  ],
+                viewContainer("Medical Record", "lib/assets/medical.png",
+                    const AnimalList()),
+                SizedBox(
+                  height: paragraph,
                 ),
-                Column(
-                  children: [
-                    viewContainer("Milk(ltr)", "lib/assets/milk.png",
-                        const MilkRecordScreen()),
-                    SizedBox(
-                      height: paragraph,
-                    ),
-                    // viewContainer("Evening Feed", "lib/assets/moon.png",
-                    //     const AddEveningFeed()),
-                  ],
+                viewContainer("Milk(ltr)", "lib/assets/milk.png",
+                    const MilkRecordScreen()),
+                SizedBox(
+                  height: paragraph,
                 ),
+
+                viewContainer("Milk Sale", "lib/assets/milkSale.png",
+                    const AddMilkSale()),
+
               ],
             ),
             SizedBox(
               height: screenHeight * .033,
             ),
-            viewContainer(
-                "Add Milk", "lib/assets/addMilk.jpg", const AnimalRecord()),
+            // viewContainer(
+            //     "Add Milk", "lib/assets/addMilk.jpg", const AnimalRecord()),
+
+            Container(
+                height: screenHeight / 1.5,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Consumer<WorkerProvider>(
+  builder: (context, workerProvider, child) {
+    final tasks = workerProvider.TaskList?.tasks;
+
+    if (workerProvider.isTaskLoading) {
+      return const Center(child: CircularProgressIndicator());
+    } else if (tasks != null && tasks.isNotEmpty) {
+      return ListView.builder(
+        itemCount: tasks.length,
+        itemBuilder: (context, index) {
+          final usertask = tasks[index];
+          // Create a ValueNotifier for each task's checkbox state
+          final checkboxValueNotifier = ValueNotifier<bool>(
+            usertask.taskStatus ?? false,
+          );
+
+          return Container(
+            margin: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+            //padding: EdgeInsets.all(10),
+           decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+        spreadRadius: 5,
+        blurRadius: 7,
+        offset: Offset(0, 3),
+            )]
+           ),
+            child: ListTile(
+              leading: ValueListenableBuilder<bool>(
+                valueListenable: checkboxValueNotifier,
+                builder: (context, value, child) {
+                  return Checkbox(
+                    value: value,
+                    onChanged: (bool? newValue) async {
+                      if (newValue != null) {
+                        // Update the UI immediately
+                        checkboxValueNotifier.value = newValue;
+            
+                        // Call the updateTask function
+                        workerProvider.updateTask(
+                          context, 
+                          usertask.sId.toString(),
+                        );
+            
+                        // Optionally, refetch the updated task or manage the state accordingly
+                        checkboxValueNotifier.value = workerProvider
+                                .TaskList?.tasks?[index].taskStatus ??
+                            false;
+                      }
+                    },
+                  );
+                },
+              ),
+              title: Text1(
+                fontColor: blackColor,
+                fontSize: header1,
+                text: usertask.description.toString(),
+              ),
+              // subtitle:Icon(usertask.taskStatus.toString()=='true'?Icons.check:Icons.close) ,
+              // // Text1(
+              // //   fontColor: lightBlackColor,
+              // //   fontSize: header5,
+              // //   text: usertask.taskStatus.toString(),
+              // // ),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Task Description'),
+                    content: Text(usertask.description ?? 'No Description Available'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text('Close'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          );
+        },
+      );
+    } else {
+      return const Center(child: Text('No data available'));
+    }
+  },
+)
+
+                )
           ],
         ),
       ),
@@ -397,8 +453,8 @@ class _UserDashboardState extends State<UserDashboard> {
         children: [
           Container(
             padding: EdgeInsets.all(paragraph),
-            width: screenWidth / 4.2,
-            height: screenWidth / 4.2,
+            width: screenWidth / 2.8,
+            height: screenWidth / 2.8,
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(paragraph),
@@ -411,10 +467,10 @@ class _UserDashboardState extends State<UserDashboard> {
             child: Center(
                 child: Image(
               image: AssetImage(iconPath),
-              width: screenWidth / 8,
+              width: screenWidth / 5,
             )),
           ),
-          Text1(fontColor: lightBlackColor, fontSize: paragraph, text: text)
+          Text1(fontColor: lightBlackColor, fontSize: paragraph + 4, text: text)
         ],
       ),
     );
@@ -440,25 +496,23 @@ Widget wrapContainer() {
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
-          Expanded(
-            child: Column(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                wrapCircleContainer("25", "Animal"),
-                SizedBox(
-                  height: paragraph / 4,
-                ),
-                Container(
-                  height: 1,
-                  width: screenWidth / 3.8,
-                  color: CupertinoColors.systemGrey6,
-                ),
-                SizedBox(
-                  height: paragraph / 2,
-                ),
-                wrapCircleContainer("5", "Baby"),
-              ],
-            ),
+          Column(
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              wrapCircleContainer("25", "Animal"),
+              SizedBox(
+                height: paragraph / 4,
+              ),
+              Container(
+                height: 1,
+                width: screenWidth / 3.8,
+                color: CupertinoColors.systemGrey6,
+              ),
+              SizedBox(
+                height: paragraph / 2,
+              ),
+              wrapCircleContainer("5", "Baby"),
+            ],
           ),
           Container(
             height: screenHeight / 4,

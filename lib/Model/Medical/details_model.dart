@@ -11,18 +11,18 @@ class MedicalDetailModel {
     if (json['cowMedicalRecord'] != null) {
       cowMedicalRecord = <CowMedicalRecord>[];
       json['cowMedicalRecord'].forEach((v) {
-        cowMedicalRecord!.add(new CowMedicalRecord.fromJson(v));
+        cowMedicalRecord!.add(CowMedicalRecord.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
-    data['message'] = this.message;
-    if (this.cowMedicalRecord != null) {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['success'] = success;
+    data['message'] = message;
+    if (cowMedicalRecord != null) {
       data['cowMedicalRecord'] =
-          this.cowMedicalRecord!.map((v) => v.toJson()).toList();
+          cowMedicalRecord!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -48,18 +48,18 @@ class CowMedicalRecord {
     vaccineType = json['vaccineType'];
     dairyFarmId = json['dairyFarmId'];
     createdBy = json['createdBy'] != null
-        ? new CreatedBy.fromJson(json['createdBy'])
+        ? CreatedBy.fromJson(json['createdBy'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['date'] = this.date;
-    data['vaccineType'] = this.vaccineType;
-    data['dairyFarmId'] = this.dairyFarmId;
-    if (this.createdBy != null) {
-      data['createdBy'] = this.createdBy!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['date'] = date;
+    data['vaccineType'] = vaccineType;
+    data['dairyFarmId'] = dairyFarmId;
+    if (createdBy != null) {
+      data['createdBy'] = createdBy!.toJson();
     }
     return data;
   }
@@ -77,9 +77,9 @@ class CreatedBy {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['_id'] = this.sId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['_id'] = sId;
     return data;
   }
 }

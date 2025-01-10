@@ -11,18 +11,18 @@ class SoldMilkModel {
     if (json['monthlyMilkRecord'] != null) {
       monthlyMilkRecord = <MonthlyMilkRecord>[];
       json['monthlyMilkRecord'].forEach((v) {
-        monthlyMilkRecord!.add(new MonthlyMilkRecord.fromJson(v));
+        monthlyMilkRecord!.add(MonthlyMilkRecord.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
-    data['message'] = this.message;
-    if (this.monthlyMilkRecord != null) {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['success'] = success;
+    data['message'] = message;
+    if (monthlyMilkRecord != null) {
       data['monthlyMilkRecord'] =
-          this.monthlyMilkRecord!.map((v) => v.toJson()).toList();
+          monthlyMilkRecord!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -57,14 +57,14 @@ class MonthlyMilkRecord {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['vendorName'] = this.vendorName;
-    data['amount_sold'] = this.amountSold;
-    data['date'] = this.date;
-    data['total_payment'] = this.totalPayment;
-    data['dairyFarmId'] = this.dairyFarmId;
-    data['__v'] = this.iV;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['vendorName'] = vendorName;
+    data['amount_sold'] = amountSold;
+    data['date'] = date;
+    data['total_payment'] = totalPayment;
+    data['dairyFarmId'] = dairyFarmId;
+    data['__v'] = iV;
     return data;
   }
 }

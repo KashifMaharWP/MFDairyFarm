@@ -17,21 +17,21 @@ class AnimalDetailModel {
       milkProductionMonthlyRecord = <MilkProductionMonthlyRecord>[];
       json['milkProductionMonthlyRecord'].forEach((v) {
         milkProductionMonthlyRecord!
-            .add(new MilkProductionMonthlyRecord.fromJson(v));
+            .add(MilkProductionMonthlyRecord.fromJson(v));
       });
     }
     milkCount = json['milkCount'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
-    data['message'] = this.message;
-    if (this.milkProductionMonthlyRecord != null) {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['success'] = success;
+    data['message'] = message;
+    if (milkProductionMonthlyRecord != null) {
       data['milkProductionMonthlyRecord'] =
-          this.milkProductionMonthlyRecord!.map((v) => v.toJson()).toList();
+          milkProductionMonthlyRecord!.map((v) => v.toJson()).toList();
     }
-    data['milkCount'] = this.milkCount;
+    data['milkCount'] = milkCount;
     return data;
   }
 }
@@ -59,19 +59,19 @@ class MilkProductionMonthlyRecord {
     total = json['total'];
     date = json['date'];
     createdBy = json['createdBy'] != null
-        ? new CreatedBy.fromJson(json['createdBy'])
+        ? CreatedBy.fromJson(json['createdBy'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['morning'] = this.morning;
-    data['evening'] = this.evening;
-    data['total'] = this.total;
-    data['date'] = this.date;
-    if (this.createdBy != null) {
-      data['createdBy'] = this.createdBy!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['morning'] = morning;
+    data['evening'] = evening;
+    data['total'] = total;
+    data['date'] = date;
+    if (createdBy != null) {
+      data['createdBy'] = createdBy!.toJson();
     }
     return data;
   }
@@ -89,9 +89,9 @@ class CreatedBy {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['_id'] = this.sId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['_id'] = sId;
     return data;
   }
 }

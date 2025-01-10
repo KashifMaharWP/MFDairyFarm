@@ -84,7 +84,7 @@ class _WorkerTaskState extends State<WorkerTask> {
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
                               width: screenWidth * 0.95,
-                              height: screenHeight / 4,
+                              height: screenHeight / 3.8,
                               padding: EdgeInsets.all(paragraph),
                               decoration: BoxDecoration(
                                   color: Colors.white,
@@ -104,7 +104,7 @@ class _WorkerTaskState extends State<WorkerTask> {
                                       const Column(
                                         children: [
                                           CircleAvatar(
-                                              radius: 55,
+                                              radius: 35,
                                               backgroundImage: AssetImage(
                                                   "lib/assets/farmWorker.png")),
                                         ],
@@ -180,7 +180,7 @@ Widget pageHeaderContainer() {
       borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40)),
       child: Container(
-          height: screenHeight / 5,
+          height: screenHeight / 4.8,
           width: double.infinity,
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(

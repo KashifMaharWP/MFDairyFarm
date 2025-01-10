@@ -1,5 +1,6 @@
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Model/get_cow_model.dart';
+import 'package:dairyfarmflow/Providers/CowProvider/cows_provider.dart';
 import 'package:dairyfarmflow/Providers/animal_registratin_provider.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,7 +14,7 @@ import '../Screens/AdminScreen/AnimalRecord/animal_detail.dart';
 import '../Screens/AdminScreen/MilkRecordScreen/add_evening_milk.dart';
 import '../Screens/AdminScreen/MilkRecordScreen/add_morning_milk.dart';
 
-class AnimalRecordWidget extends StatelessWidget {
+class AnimalRecordWidget extends StatefulWidget {
   const AnimalRecordWidget({
     super.key,
     required this.role,
@@ -22,35 +23,46 @@ class AnimalRecordWidget extends StatelessWidget {
   final String role;
 
   @override
+  State<AnimalRecordWidget> createState() => _AnimalRecordWidgetState();
+}
+
+
+class _AnimalRecordWidgetState extends State<AnimalRecordWidget> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      Provider.of<CowsProvider>(context,listen: false).fetchCows(context);
+  });
+  }
+  @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Consumer<AnimalRegistratinProvider>(
-        builder: (context, value, child) => 
-         FutureBuilder<CowsResponse?>(
-          future: value.fetchCows(context),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
+      child: Consumer<CowsProvider>(
+        builder: (context, cowsProvider, child){
+  
+            if (cowsProvider.isCowListLoad) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (snapshot.hasError) {
-              return const Center(
-                child: Text("Error fetching cows data"),
-              );
-            } else if (!snapshot.hasData || snapshot.data == null) {
-              return const Center(
-                child: Text("No cows data found"),
-              );
-            } else {
-              final cows = snapshot.data!.cows;
-              return ListView.builder(
+            }  else {
+              final cows = cowsProvider.cowList?.cows??[];
+              return GridView.builder(
+                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // Two items per row
+                  crossAxisSpacing: 10, // Spacing between columns
+                  mainAxisSpacing: 2, // Spacing between rows
+                  childAspectRatio:
+                      screenWidth / (screenHeight / 1.8), // Adjust as needed
+                ),
                 itemCount: cows.length,
                 itemBuilder: (BuildContext context, int index) {
                   final cow = cows[index];
                   return Padding(
                     padding: const EdgeInsets.all(5),
                     child: GestureDetector(
-                      onTap: role == "Admin"
+                      onTap: widget.role == "Admin"
                           ? () {
                               Navigator.push(context, MaterialPageRoute(builder: (context)=>  AnimalDetail(tag: cow.animalNumber.toString(), url: cow.image, id: cow.id,)));
                             }
@@ -104,10 +116,11 @@ class AnimalRecordWidget extends StatelessWidget {
                                 },
                               );
                             },
+                      child: Expanded(
                       child: Container(
-                        width: screenWidth * 0.95,
-                        height: screenHeight / 3.5,
-                        padding: EdgeInsets.all(paragraph),
+                        width: screenWidth + 10,
+                        height: screenHeight + 10,
+                        padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(paragraph),
@@ -125,35 +138,55 @@ class AnimalRecordWidget extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  height: screenHeight * .18,
-                                  width: screenWidth * .8,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.network(
-                                      cow.image,
-                                      fit: BoxFit.fill,
+                                Expanded(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
                                     ),
+                                    height: screenHeight * .20,
+                                    width: screenWidth * .58,
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.network(
+                                          cow.image,
+                                          fit: BoxFit.fill,
+                                        )),
                                   ),
                                 ),
-                               
+                                // role == "Admin"
+                                //     ? InkWell(
+                                //         onTap: () {
+                                //           Navigator.push(
+                                //               context,
+                                //               MaterialPageRoute(
+                                //                   builder: (context) =>
+                                //                       feedEntryPage(
+                                //                         id: cow.id,
+                                //                       )));
+                                //         },
+                                //         child: Icon(
+                                //           Icons.more_vert,
+                                //           color: darkGreenColor,
+                                //           size: screenWidth * .070,
+                                //         ),
+                                //       )
+                                //     : const Center(),
                               ],
                             ),
                             SizedBox(
-                              height: screenHeight * .025,
+                              height: 8,
                             ),
-                            Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Icon(
                                       CupertinoIcons.tag_fill,
                                       color: darkGreenColor,
+                                      size: 18,
                                     ),
                                     SizedBox(
                                       width: screenWidth * .007,
@@ -165,12 +198,15 @@ class AnimalRecordWidget extends StatelessWidget {
                                     ),
                                   ],
                                 ),
+                                SizedBox(
+                                  height: 8,
+                                ),
                                 Row(
                                   children: [
                                     Image.asset(
                                       "lib/assets/cowbreed.png",
-                                      width: screenWidth * .055,
-                                      height: screenWidth * .055,
+                                      width: screenWidth * .060,
+                                      height: screenWidth * .060,
                                     ),
                                     SizedBox(
                                       width: screenWidth * .007,
@@ -182,12 +218,15 @@ class AnimalRecordWidget extends StatelessWidget {
                                     ),
                                   ],
                                 ),
+                                SizedBox(
+                                  height: 8,
+                                ),
                                 Row(
                                   children: [
                                     Icon(
-                                      CupertinoIcons
-                                          .money_dollar_circle_fill,
+                                      CupertinoIcons.money_dollar_circle_fill,
                                       color: darkGreenColor,
+                                      size: 18,
                                     ),
                                     SizedBox(
                                       width: screenWidth * .007,
@@ -206,12 +245,13 @@ class AnimalRecordWidget extends StatelessWidget {
                         ),
                       ),
                     ),
+                   ),
                   );
                 },
               );
             }
           },
-        ),
+        
       ),
     );
   }

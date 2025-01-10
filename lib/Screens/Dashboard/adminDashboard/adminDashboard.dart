@@ -21,11 +21,13 @@ class _AdminDashboardButtons extends State<AdminDashboardButtons> {
   Widget build(BuildContext context) {
     return Expanded(
       child: GridView(
+        padding: EdgeInsets.only(left: 20,top: 20,),
+        physics: NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
-            mainAxisSpacing: 15,
+            mainAxisSpacing: 0,
             crossAxisSpacing: 15,
-            mainAxisExtent: 110),
+            mainAxisExtent: 100),
         children: [
           viewContainer("Animal", "lib/assets/cowEntry.png", () async {
             // Navigate to animalRegistrationPage and get the save function
@@ -59,11 +61,13 @@ class _AdminDashboardButtons extends State<AdminDashboardButtons> {
       child: Stack(
         children: [
           Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                 padding: EdgeInsets.all(paragraph),
-                width: 70,
-                height: 70,
+                width: 60,
+                height: 60,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
@@ -75,19 +79,19 @@ class _AdminDashboardButtons extends State<AdminDashboardButtons> {
                     ]),
                 child: Center(
                     child: Image(
-                        image: AssetImage(iconPath), width: 40)),
+                        image: AssetImage(iconPath), width: 35)),
               ),
-              Text1(fontColor: lightBlackColor, fontSize: paragraph, text: text)
+              Text1(fontColor: lightBlackColor, fontSize: paragraph, text: text),
             ],
           ),
           Positioned(
-              top: header1 * 2.3,
-              left: header1 * 2.6,
-              child: Icon(
-                CupertinoIcons.plus_circle_fill,
-                size: header1 * 1.2,
-                color: darkGreenColor,
-              ))
+          bottom: 35,
+          right: 35,
+          child: Icon(
+            CupertinoIcons.plus_circle_fill,
+            size: header1 * 1.2,
+            color: darkGreenColor,
+          ))
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dairyfarmflow/API/global_api.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +13,17 @@ import '../user_detail.dart';
 
 class WorkerProvider extends ChangeNotifier {
   bool isLoading = false;
+  bool _isTaskLoading=false;
+  bool get isTaskLoading => _isTaskLoading;
+  TaskModel? TaskList;
+  
+
+   
+
+  setTaskLoading(bool value) {
+    _isTaskLoading = value;
+    notifyListeners();
+  }
 
   Future<void> addTask(BuildContext context, String id, String description,
       String dueDate, String createdtAt) async {
@@ -53,9 +65,8 @@ class WorkerProvider extends ChangeNotifier {
 
   // Get All Workers Tasks 
 
-  Future<TaskModel?> fetchAllTasks(BuildContext context)async{
-    isLoading =true;
-    notifyListeners();
+  fetchAllTasks(BuildContext context)async{
+     setTaskLoading(true);
     final url = Uri.parse("${GlobalApi.baseApi}${GlobalApi.getAllTasks}");
     try{
 
@@ -64,28 +75,32 @@ class WorkerProvider extends ChangeNotifier {
         'Authorization':
             'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
       };
-
+      //debugger();
       final response = await http.get(url, headers: headers);
-      TaskModel taskModel = TaskModel.fromJson(json.decode(response.body));
+        final taskResponse=json.decode(response.body);
+      TaskModel TaskmodelList = TaskModel.fromJson(taskResponse);
       if(response.statusCode == 200){
-       return taskModel;
-
+        TaskList=TaskmodelList;
+        setTaskLoading(false);
+       return TaskList;
       }else{
-        SimpleToast.showErrorToast(context, "Error", taskModel.message.toString());
+        SimpleToast.showErrorToast(context, "Error", TaskmodelList.message.toString());
+        setTaskLoading(false);
       }
 
     }catch(e){
       SimpleToast.showErrorToast(context, "Error", e.toString());
     }
+    return TaskList;
 
   }
 
-  Future<UserTaskModel?> fetchTaskById(BuildContext context)async{
+  fetchTaskById(BuildContext context)async{
    // final id = Provider.of<UserDetail>(context, listen: false).id;
     String id ='67727231fa6ea6db2684d557';
    
     isLoading =true;
-    notifyListeners();
+    //notifyListeners();
     final url = Uri.parse("${GlobalApi.baseApi}${GlobalApi.getTaskById}$id");
     print(url);
     try{
@@ -93,52 +108,54 @@ class WorkerProvider extends ChangeNotifier {
         'Authorization':
             'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
       };
+      //debugger();
       final response = await http.get(url, headers: headers);
-      UserTaskModel model = UserTaskModel.fromJson(json.decode(response.body));
-     
-      if(model.success == true){
-        SimpleToast.showSuccessToast(context, "Success", "${model.message}");
-        
-        return model;
-      }else{
-        SimpleToast.showErrorToast(context, "Error", model.message.toString());
+      final taskResponse=json.decode(response.body);
+      TaskModel TaskmodelList = TaskModel.fromJson(taskResponse);
+      if(response.statusCode=='200'){
+        TaskList=TaskmodelList;
+        return TaskList;
       }
-      
-
-
 
     }catch(err){
       SimpleToast.showErrorToast(context, "Error", err.toString());
 
     }
+    return TaskList;
     
   }
 
 
-  Future<void> upadateTask(BuildContext context,String id) async{
-    isLoading =true;
-    notifyListeners();
+   updateTask(BuildContext context,String id) async{
+    //setTaskLoading(true);
     final url = Uri.parse("${GlobalApi.baseApi}${GlobalApi.taskStatus}$id");
     try{
       final headers = {
         'Authorization':
             'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
       };
+      //debugger();
       final respnonse = await http.patch(url, headers: headers);
       final jsonResponse = jsonDecode(respnonse.body);
       if(jsonResponse['success']== true){
+        final index =
+            TaskList!.tasks!.indexWhere((task) => task!.sId == id);
+        if (index != -1) {
+            //TaskModel task=TaskList.tasks;
+            TaskList!.tasks![index].taskStatus = !(TaskList?.tasks![index].taskStatus??false);
+        }
+        
+        //setTaskLoading(false);
         notifyListeners();
-        SimpleToast.showSuccessToast(context, 'Success', jsonResponse['message']);
+        //SimpleToast.showSuccessToast(context, 'Success', jsonResponse['message']);
       }
       else{
-        
         SimpleToast.showErrorToast(context, "Error", jsonResponse['message']);
+       // setTaskLoading(false);
       }
-
-
     }
     catch(err){
-      SimpleToast.showErrorToast(context, "Error", err.toString());
+      //SimpleToast.showErrorToast(context, "Error", err.toString());
 
     }
 

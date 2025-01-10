@@ -289,7 +289,7 @@ class FeedProvider extends ChangeNotifier {
    Future<FeedCount?> fetchFeedCount(BuildContext context) async {
     _isloading = true;
     
-    notifyListeners();
+    //notifyListeners();
 
     final headers = {
       'Authorization':
@@ -330,6 +330,7 @@ class FeedProvider extends ChangeNotifier {
       _isloading = false;
       notifyListeners();
     }
+    return null;
   }
 
 

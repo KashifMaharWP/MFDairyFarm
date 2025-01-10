@@ -13,18 +13,18 @@ class MilkRecordModel {
       milkProductionMonthlyRecord = <MilkProductionMonthlyRecord>[];
       json['milkProductionMonthlyRecord'].forEach((v) {
         milkProductionMonthlyRecord!
-            .add(new MilkProductionMonthlyRecord.fromJson(v));
+            .add(MilkProductionMonthlyRecord.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
-    data['message'] = this.message;
-    if (this.milkProductionMonthlyRecord != null) {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['success'] = success;
+    data['message'] = message;
+    if (milkProductionMonthlyRecord != null) {
       data['milkProductionMonthlyRecord'] =
-          this.milkProductionMonthlyRecord!.map((v) => v.toJson()).toList();
+          milkProductionMonthlyRecord!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -58,24 +58,24 @@ class MilkProductionMonthlyRecord {
     total = json['total'];
     date = json['date'];
     createdBy = json['createdBy'] != null
-        ? new CreatedBy.fromJson(json['createdBy'])
+        ? CreatedBy.fromJson(json['createdBy'])
         : null;
-    cow = json['cow'] != null ? new Cow.fromJson(json['cow']) : null;
+    cow = json['cow'] != null ? Cow.fromJson(json['cow']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['cowId'] = this.cowId;
-    data['morning'] = this.morning;
-    data['evening'] = this.evening;
-    data['total'] = this.total;
-    data['date'] = this.date;
-    if (this.createdBy != null) {
-      data['createdBy'] = this.createdBy!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['cowId'] = cowId;
+    data['morning'] = morning;
+    data['evening'] = evening;
+    data['total'] = total;
+    data['date'] = date;
+    if (createdBy != null) {
+      data['createdBy'] = createdBy!.toJson();
     }
-    if (this.cow != null) {
-      data['cow'] = this.cow!.toJson();
+    if (cow != null) {
+      data['cow'] = cow!.toJson();
     }
     return data;
   }
@@ -93,9 +93,9 @@ class CreatedBy {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['_id'] = this.sId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['_id'] = sId;
     return data;
   }
 }
@@ -114,10 +114,10 @@ class Cow {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['animalNumber'] = this.animalNumber;
-    data['_id'] = this.sId;
-    data['image'] = this.image;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['animalNumber'] = animalNumber;
+    data['_id'] = sId;
+    data['image'] = image;
     return data;
   }
 }

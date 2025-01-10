@@ -61,11 +61,19 @@ class _AnimalDetailState extends State<AnimalDetail> {
             width: screenWidth * .85,
             child: const Divider(),
           ),
+          
           Consumer<AnimalRegistratinProvider>(
-            builder: (context, value, child) => 
-             ReuseableWidget(
-                imgUrl: "lib/assets/milk.png", text1: "Milk", text2: "${value.milkCount} Liters"),
-          ),
+            builder: (context, animalRegProvider, child) {
+              animalRegProvider.getAnimalDetailById(context,widget.id, month)
+              if(animalRegProvider.isDataFetched){
+                return Center(child: CircularProgressIndicator(color: blackColor,));
+              }
+              else{
+              return Column(
+                children: [
+                ReuseableWidget(
+                imgUrl: "lib/assets/milk.png", text1: "Milk", text2: "${animalRegProvider.milkCount} Liters"),
+          
           SizedBox(
             width: screenWidth * .85,
             child: const Divider(),
@@ -138,7 +146,7 @@ class _AnimalDetailState extends State<AnimalDetail> {
                         padding: const EdgeInsets.all(4.0),
                         child: Container(
                           width: screenWidth * 0.95,
-                          height: screenHeight / 8.5,
+                          height: screenHeight / 7,
                           padding: EdgeInsets.all(paragraph),
                           decoration: BoxDecoration(
                               color: Colors.white,
@@ -218,12 +226,17 @@ class _AnimalDetailState extends State<AnimalDetail> {
                     });
 
                 }else{
-                  return Center(child: Text("No data"),);
+                  return const Center(child: Text("No data"),);
                 }
                   
                 }
                
-              ))
+              )
+              )
+                ],
+              );
+             } } 
+            )
         ],
       ),
     );

@@ -51,7 +51,7 @@ class TextFieldWidget1State extends State<TextFieldWidget1> {
             //prefixIcon: Icon(widget.widgeticon),
             hintStyle: GoogleFonts.nunito(
               textStyle:
-                  TextStyle(color: lightBlackColor, fontSize: paragraph - 3),
+                  TextStyle(color: lightBlackColor, fontSize: paragraph+3),
             ),
             suffixIcon: widget.isPasswordField
                 ? GestureDetector(
@@ -65,6 +65,7 @@ class TextFieldWidget1State extends State<TextFieldWidget1> {
                         : CupertinoIcons.lock_fill))
                 : const IgnorePointer(),
             hintText: widget.fieldName,
+            
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide(color: greyGreenColor, width: 1))

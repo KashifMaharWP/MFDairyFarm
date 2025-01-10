@@ -63,7 +63,7 @@ class _VacinationRecordState extends State<VacinationRecord> {
                           padding: const EdgeInsets.all(5),
                           child: Container(
                             width: screenWidth * 0.95,
-                            height: screenHeight / 3.5,
+                            height: screenHeight / 3.4,
                             padding: EdgeInsets.all(paragraph),
                             decoration: BoxDecoration(
                                 color: Colors.white,

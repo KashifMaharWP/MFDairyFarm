@@ -14,7 +14,7 @@ class MyRoutes {
   static Map<String, WidgetBuilder> getRoutes() {
     return {
       login: (context) => const LoginPage(),
-      homePage: (context) => home(),
+      homePage: (context) => const home(),
       dashboard: (context) => const Dashboard(),
       animalRegistration: (context) => const AnimalRegistrationPage(),
       // feedEntry: (context) => const feedEntryPage(),

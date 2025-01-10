@@ -4,7 +4,6 @@ import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Model/Medical/details_model.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Providers/Medical/add_medical.dart';
@@ -39,7 +38,7 @@ class _MedicalDetailState extends State<MedicalDetail> {
             padding: const EdgeInsets.only(top: 21),
             child: Center(
               child: Container(
-                height: screenHeight / 3,
+                height: screenHeight / 2.8,
                 width: screenWidth / 1.1,
                 decoration: BoxDecoration(
                     color: const Color.fromARGB(255, 159, 156, 156),
@@ -83,10 +82,10 @@ class _MedicalDetailState extends State<MedicalDetail> {
                     itemBuilder: (context, index) {
                       final record = medical[index];
                       return Padding(
-                        padding: const EdgeInsets.all(4.0),
+                        padding: const EdgeInsets.all(5.0),
                         child: Container(
                           width: screenWidth * 0.95,
-                          height: screenHeight / 8.5,
+                          height: screenHeight / 6,
                           padding: EdgeInsets.all(paragraph),
                           decoration: BoxDecoration(
                               color: Colors.white,

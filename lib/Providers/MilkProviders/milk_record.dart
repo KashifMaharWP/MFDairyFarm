@@ -152,6 +152,7 @@ class MilkRecordProvider extends ChangeNotifier {
     print("An error occurred: $e");
     return null; 
   }
+  return null;
 }
 
 Future<void> upadetMilkSold(

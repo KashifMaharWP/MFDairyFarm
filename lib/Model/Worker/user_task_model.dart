@@ -11,17 +11,17 @@ class UserTaskModel {
     if (json['tasks'] != null) {
       tasks = <Tasks>[];
       json['tasks'].forEach((v) {
-        tasks!.add(new Tasks.fromJson(v));
+        tasks!.add(Tasks.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
-    data['message'] = this.message;
-    if (this.tasks != null) {
-      data['tasks'] = this.tasks!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['success'] = success;
+    data['message'] = message;
+    if (tasks != null) {
+      data['tasks'] = tasks!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -59,15 +59,15 @@ class Tasks {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['description'] = this.description;
-    data['taskStatus'] = this.taskStatus;
-    data['assignedTo'] = this.assignedTo;
-    data['createdAt'] = this.createdAt;
-    data['dueDate'] = this.dueDate;
-    data['dairyFarmId'] = this.dairyFarmId;
-    data['__v'] = this.iV;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['description'] = description;
+    data['taskStatus'] = taskStatus;
+    data['assignedTo'] = assignedTo;
+    data['createdAt'] = createdAt;
+    data['dueDate'] = dueDate;
+    data['dairyFarmId'] = dairyFarmId;
+    data['__v'] = iV;
     return data;
   }
 }
