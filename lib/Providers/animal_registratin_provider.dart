@@ -21,6 +21,7 @@ class AnimalRegistratinProvider extends ChangeNotifier {
   String _milkCount='';
  String get milkCount =>_milkCount;
  bool _isDataFetched=false;
+ AnimalDetailModel? animalDetail;
 
  bool get isDataFetched=> _isDataFetched;
 
@@ -107,7 +108,7 @@ class AnimalRegistratinProvider extends ChangeNotifier {
 }
 
 
-  Future<AnimalDetailModel?> getAnimalDetailById(BuildContext context, String id,month)async{
+   getAnimalDetailById(BuildContext context, String id,month)async{
     setIsDataFetched(true);
     final url = Uri.parse("${GlobalApi.baseApi}${GlobalApi.getAnimalDetailById}$id&date=${month}");
     print(url);
@@ -123,19 +124,11 @@ class AnimalRegistratinProvider extends ChangeNotifier {
       //debugger();
       if(detailModel.success == true){
         _milkCount =detailModel.milkCount.toString();
-        print(milkCount);
+        animalDetail=detailModel;
         setIsDataFetched(false);
-        return detailModel;
-      }else{
-        return detailModel;
       }
-
-
-
     }catch(error){
-      print(error);
-
+      
     }
-    return null;
   }
 }

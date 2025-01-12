@@ -69,27 +69,27 @@ class _AnimalRecordState extends State<AnimalRecord> {
 
 
 
-Future<CowsResponse?> fetchCows(BuildContext context) async {
+// Future<CowsResponse?> fetchCows(BuildContext context) async {
   
-  var headers = {
-    'Authorization':
-        'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
-  };
-  var request = http.Request(
-    'GET',
-    Uri.parse('${GlobalApi.baseApi}${GlobalApi.getAnimal}'),
-  );
+//   var headers = {
+//     'Authorization':
+//         'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
+//   };
+//   var request = http.Request(
+//     'GET',
+//     Uri.parse('${GlobalApi.baseApi}${GlobalApi.getAnimal}'),
+//   );
 
-  request.headers.addAll(headers);
-  http.StreamedResponse response = await request.send();
-  if (response.statusCode == 200) {
-    final jsonString = await response.stream.bytesToString();
-    final jsonData = json.decode(jsonString);
-    return CowsResponse.fromJson(jsonData);
-  } else {
-    if (kDebugMode) {
-      print("Error: ${response.reasonPhrase}");
-    }
-    return null;
-  }
-}
+//   request.headers.addAll(headers);
+//   http.StreamedResponse response = await request.send();
+//   if (response.statusCode == 200) {
+//     final jsonString = await response.stream.bytesToString();
+//     final jsonData = json.decode(jsonString);
+//     return CowsResponse.fromJson(jsonData);
+//   } else {
+//     if (kDebugMode) {
+//       print("Error: ${response.reasonPhrase}");
+//     }
+//     return null;
+//   }
+// }

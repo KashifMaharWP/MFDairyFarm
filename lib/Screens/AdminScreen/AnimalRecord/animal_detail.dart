@@ -17,7 +17,15 @@ class AnimalDetail extends StatefulWidget {
 }
 
 class _AnimalDetailState extends State<AnimalDetail> {
-  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      Provider.of<AnimalRegistratinProvider>(context,listen: false).getAnimalDetailById(context, widget.id, "jan");
+  });
+  }
+
   @override
   Widget build(BuildContext context) {
    final provider = Provider.of<AnimalRegistratinProvider>(context,listen: false);
@@ -33,26 +41,30 @@ class _AnimalDetailState extends State<AnimalDetail> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 21),
-            child: Center(
-              child: Container(
-                height: screenHeight / 3,
-                width: screenWidth / 1.1,
-                decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 159, 156, 156),
-                    borderRadius: BorderRadius.circular(10)),
-                child:  Image(
-                    image: NetworkImage(
-                        widget.url),
-                    fit: BoxFit.contain),
-              ),
+          Center(
+            child: ClipRRect(
+             borderRadius: BorderRadius.all(Radius.circular(10)),
+              child:  Image(
+                  image: NetworkImage(
+                      widget.url),
+                  fit: BoxFit.contain),
             ),
           ),
           SizedBox(
             height: screenHeight * .025,
           ),
-          ReuseableWidget(
+          
+          
+          Consumer<AnimalRegistratinProvider>(
+            builder: (context, animalRegProvider, child) {
+              if(animalRegProvider.isDataFetched){
+                return Center(child: CircularProgressIndicator(color: blackColor,));
+              }
+              else{
+              return Column(
+                children: [
+
+                  ReuseableWidget(
             imgUrl: "lib/assets/cow.png",
             text1: "Animal",
             text2: widget.tag,
@@ -61,65 +73,67 @@ class _AnimalDetailState extends State<AnimalDetail> {
             width: screenWidth * .85,
             child: const Divider(),
           ),
-          
-          Consumer<AnimalRegistratinProvider>(
-            builder: (context, animalRegProvider, child) {
-              animalRegProvider.getAnimalDetailById(context,widget.id, month)
-              if(animalRegProvider.isDataFetched){
-                return Center(child: CircularProgressIndicator(color: blackColor,));
-              }
-              else{
-              return Column(
-                children: [
                 ReuseableWidget(
                 imgUrl: "lib/assets/milk.png", text1: "Milk", text2: "${animalRegProvider.milkCount} Liters"),
-          
-          SizedBox(
+
+                 SizedBox(
             width: screenWidth * .85,
             child: const Divider(),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 35, right: 35, top: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    const SizedBox(
-                      height: 30,
-                      width: 30,
-                      child: Image(
-                        image: AssetImage("lib/assets/medical.png"),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text1(
-                        fontColor: lightBlackColor,
-                        fontSize: screenWidth * .05,
-                        text: "Vacinated"),
-                  ],
-                ),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.check,
-                      color: Colors.green,
-                      size: 30,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text1(
-                        fontColor: lightBlackColor,
-                        fontSize: screenWidth * .05,
-                        text: "Yes"),
-                  ],
-                ),
-              ],
+                ReuseableWidget(
+                imgUrl: "lib/assets/medical.png", text1: "Vacination", text2: "2"),
+               ],
+              );
+           } } 
             ),
-          ),
+
+          // SizedBox(
+          //   width: screenWidth * .85,
+          //   child: const Divider(),
+          // ),
+          // Padding(
+          //   padding: const EdgeInsets.only(left: 35, right: 35, top: 8),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       Row(
+          //         children: [
+          //           const SizedBox(
+          //             height: 30,
+          //             width: 30,
+          //             child: Image(
+          //               image: AssetImage("lib/assets/medical.png"),
+          //             ),
+          //           ),
+          //           const SizedBox(
+          //             width: 10,
+          //           ),
+          //           Text1(
+          //               fontColor: lightBlackColor,
+          //               fontSize: screenWidth * .05,
+          //               text: "Vacinated"),
+          //         ],
+          //       ),
+          //       Row(
+          //         children: [
+          //           const Icon(
+          //             Icons.check,
+          //             color: Colors.green,
+          //             size: 30,
+          //           ),
+          //           const SizedBox(
+          //             width: 10,
+          //           ),
+          //           Text1(
+          //               fontColor: lightBlackColor,
+          //               fontSize: screenWidth * .05,
+          //               text: "Yes"),
+          //         ],
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          
           SizedBox(
             width: screenWidth * .85,
             child: const Divider(),
@@ -128,16 +142,12 @@ class _AnimalDetailState extends State<AnimalDetail> {
             height: screenHeight * .010,
           ),
           Expanded(
-              child: FutureBuilder<AnimalDetailModel?>(
-                future: provider.getAnimalDetailById(context,widget.id),
-                builder: (context, snapshot) {
-                   if (snapshot.connectionState == ConnectionState.waiting) {
+              child: Consumer<AnimalRegistratinProvider>(
+                builder: (context, animalProvider,child) {
+                   if (animalProvider.isDataFetched) {
                   return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(
-                      child: Text('An error occurred: ${snapshot.error}'));
-                } else if (snapshot.hasData && snapshot.data != null) {
-                  final animal = snapshot.data!.milkProductionMonthlyRecord;
+                }  else{
+                  final animal = animalProvider.animalDetail?.milkProductionMonthlyRecord??[];
                   return ListView.builder(
                     itemCount: animal!.length,
                     itemBuilder: (context, index) {
@@ -224,19 +234,13 @@ class _AnimalDetailState extends State<AnimalDetail> {
                         ),
                       );
                     });
-
-                }else{
-                  return const Center(child: Text("No data"),);
+          
                 }
-                  
                 }
                
               )
               )
-                ],
-              );
-             } } 
-            )
+            
         ],
       ),
     );
