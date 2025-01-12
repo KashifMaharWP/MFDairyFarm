@@ -19,9 +19,18 @@ class MedicalDetail extends StatefulWidget {
 }
 
 class _MedicalDetailState extends State<MedicalDetail> {
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      Provider.of<AddMedical>(context,listen: false).fetchMedicalDetails(context, widget.id);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-     final provider = Provider.of<AddMedical>(context);
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
@@ -34,22 +43,10 @@ class _MedicalDetailState extends State<MedicalDetail> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 21),
-            child: Center(
-              child: Container(
-                height: screenHeight / 2.8,
-                width: screenWidth / 1.1,
-                decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 159, 156, 156),
-                    borderRadius: BorderRadius.circular(10)),
-                child:  Image(
-                    image: NetworkImage(
-                       widget.url),
-                    fit: BoxFit.contain),
-              ),
-            ),
-          ),
+          Image(
+              image: NetworkImage(
+                 widget.url),
+              fit: BoxFit.contain),
           SizedBox(
             height: screenHeight * .025,
           ),
@@ -63,22 +60,25 @@ class _MedicalDetailState extends State<MedicalDetail> {
             width: screenWidth * .85,
             child: const Divider(),
           ),
+          ReuseableWidget(
+            imgUrl: "lib/assets/cow.png",
+            text1: "Animal",
+            text2: widget.tag,
+          ),
           SizedBox(
             height: screenHeight * .010,
           ),
           Expanded(
-              child: FutureBuilder<MedicalDetailModel?>(
-                future: provider.fetchMedicalDetails(context, widget.id),
-                builder: (context, snapshot){
-                  if (snapshot.connectionState == ConnectionState.waiting) {
+              child: Consumer<AddMedical>(
+                
+                builder: (context,medicalProvider, child){
+                  if (medicalProvider.isLoading) {
                   return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                }
+                } 
                  else{
-                  final medical =snapshot.data!.cowMedicalRecord;
+                  final medical =medicalProvider.singleMedicalDetail?.cowMedicalRecord??[];
                    return  ListView.builder(
-                    itemCount: medical!.length,
+                    itemCount: medical.length,
                     itemBuilder: (context, index) {
                       final record = medical[index];
                       return Padding(

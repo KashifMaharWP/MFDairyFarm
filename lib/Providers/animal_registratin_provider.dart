@@ -122,7 +122,7 @@ class AnimalRegistratinProvider extends ChangeNotifier {
       final response = await http.get(url,headers: headers);
       AnimalDetailModel detailModel = AnimalDetailModel.fromJson(json.decode(response.body));
       //debugger();
-      if(detailModel.success == true){
+      if(response.statusCode==200){
         _milkCount =detailModel.milkCount.toString();
         animalDetail=detailModel;
         setIsDataFetched(false);

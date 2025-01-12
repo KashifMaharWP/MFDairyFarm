@@ -38,17 +38,17 @@ class _AnimalRecordWidgetState extends State<AnimalRecordWidget> {
   }
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Consumer<CowsProvider>(
-        builder: (context, cowsProvider, child){
-  
-            if (cowsProvider.isCowListLoad) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }  else {
-              final cows = cowsProvider.cowList?.cows??[];
-              return GridView.builder(
+    return Consumer<CowsProvider>(
+      builder: (context, cowsProvider, child){
+      
+          if (cowsProvider.isCowListLoad) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }  else {
+            final cows = cowsProvider.cowList?.cows??[];
+            return Flexible(
+              child: GridView.builder(
                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2, // Two items per row
                   crossAxisSpacing: 10, // Spacing between columns
@@ -116,7 +116,6 @@ class _AnimalRecordWidgetState extends State<AnimalRecordWidget> {
                                 },
                               );
                             },
-                      child: Expanded(
                       child: Container(
                         width: screenWidth + 10,
                         height: screenHeight + 10,
@@ -138,20 +137,18 @@ class _AnimalRecordWidgetState extends State<AnimalRecordWidget> {
                           children: [
                             Row(
                               children: [
-                                Expanded(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    height: screenHeight * .20,
-                                    width: screenWidth * .58,
-                                    child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image.network(
-                                          cow.image,
-                                          fit: BoxFit.fill,
-                                        )),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
+                                  height: screenHeight * .20,
+                                  width: screenWidth * .58,
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.network(
+                                        cow.image,
+                                        fit: BoxFit.fill,
+                                      )),
                                 ),
                                 // role == "Admin"
                                 //     ? InkWell(
@@ -244,15 +241,14 @@ class _AnimalRecordWidgetState extends State<AnimalRecordWidget> {
                           ],
                         ),
                       ),
-                    ),
                    ),
                   );
                 },
-              );
-            }
-          },
-        
-      ),
+              ),
+            );
+          }
+        },
+      
     );
   }
 }

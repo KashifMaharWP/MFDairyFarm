@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dairyfarmflow/Model/Medical/details_model.dart';
 import 'package:dairyfarmflow/Model/medical.dart';
@@ -14,24 +15,26 @@ import '../user_detail.dart';
 class AddMedical extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
-
+  MedicalRecordResponse? medicalData;
+  MedicalDetailModel? singleMedicalDetail;
   final List<MedicalRecordResponse> _milkRecords = [];
   //Map<String, dynamic>? _milkCountData;
   // bool _isLoading = true;
   String? _errorMessage;
 
+setIsLoading(bool value){
+  _isLoading=value;
+notifyListeners();
+}
   List<MedicalRecordResponse> get milkRecords => _milkRecords;
   //Map<String, dynamic>? get milkCountData => _milkCountData;
 
   String? get errorMessage => _errorMessage;
 
-  Future<List<MonthlyMedicalRecord>> fetchMedicalRecords(
+  fetchMedicalRecords(
       BuildContext context) async {
+        setIsLoading(true);
     final date = DateFormat("EEE MMM dd yyyy").format(DateTime.now());
-    if (kDebugMode) {
-      print(date);
-    }
-
     final String token =
         Provider.of<UserDetail>(context, listen: false).token.toString();
     final String apiUrl = '${GlobalApi.baseApi}${GlobalApi.getMedicalRecord}';
@@ -44,22 +47,13 @@ class AddMedical extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
-
-        if (jsonResponse['success'] == true) {
-          // Parse and return the list of monthly medical records
-          return (jsonResponse['monthlyMedicalRecord'] as List)
-              .map((record) => MonthlyMedicalRecord.fromJson(record))
-              .toList();
-        } else {
-          throw Exception(jsonResponse['message'] ?? 'Failed to fetch records');
-        }
-      } else {
-        throw Exception(
-            'HTTP Error: ${response.statusCode} - ${response.reasonPhrase}');
-      }
-    } catch (e) {
+        MedicalRecordResponse detailModel = MedicalRecordResponse.fromJson(jsonResponse);
+        medicalData=detailModel;
+         setIsLoading(false);
+      } } catch (e) {
       throw Exception('Exception occurred: $e');
     }
+     setIsLoading(false);
   }
 
   Future<void> addMedicalRecord(
@@ -112,9 +106,9 @@ class AddMedical extends ChangeNotifier {
     }
   }
 
-  Future<MedicalDetailModel?> fetchMedicalDetails(BuildContext context , String id)async{
+  fetchMedicalDetails(BuildContext context , String id)async{
     final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getMedicalRecordById}');
-
+setIsLoading(true);
     final headers = {
       'Content-Type': 'application/json',
       'Authorization':
@@ -124,19 +118,15 @@ class AddMedical extends ChangeNotifier {
 
       final response = await http.get(url, headers: headers);
       final jsonResponse = jsonDecode(response.body);
-      if(jsonResponse['success'] == true){
+        //debugger();
+      if(response.statusCode==200){
        MedicalDetailModel model =MedicalDetailModel.fromJson(json.decode(response.body));
-       return model;
-      }else{
-        SimpleToast.showErrorToast(context, "Error", jsonResponse['message']);
+        singleMedicalDetail=model;
+       setIsLoading(false);
       }
-
-
     }catch(err){
       SimpleToast.showErrorToast(context, "Error", err.toString());
-
+setIsLoading(false);
     }
-    return null;
-    
   }
 }

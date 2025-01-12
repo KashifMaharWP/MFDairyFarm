@@ -18,6 +18,16 @@ class VacinationRecord extends StatefulWidget {
 
 class _VacinationRecordState extends State<VacinationRecord> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<AddMedical>(context, listen: false)
+          .fetchMedicalRecords(context);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final provider = Provider.of<AddMedical>(context);
     return Scaffold(
@@ -32,29 +42,24 @@ class _VacinationRecordState extends State<VacinationRecord> {
       ),
       body: Column(
         children: [
-          // SizedBox(
-          //   height: screenHeight * .015,
-          // ),
-          // Container(
-          //     width: screenWidth * 0.95,
-          //     height: screenHeight * .07,
-          //     decoration: BoxDecoration(
-          //         color: Colors.white, borderRadius: BorderRadius.circular(10)),
-          //     child: const Center(child: customFiltersWidget())),
-          SizedBox(
-            height: screenHeight * .015,
-          ),
+          
           Expanded(
-            child: FutureBuilder<List<MonthlyMedicalRecord>>(
-              future: provider.fetchMedicalRecords(context),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+            child: Consumer<AddMedical>(
+              builder: (context, medicalProvider, child) {
+                if (medicalProvider.isLoading) {
                   return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                  final records = snapshot.data!;
-                  return ListView.builder(
+                } else {
+                  final records =
+                      medicalProvider.medicalData?.monthlyMedicalRecords ?? [];
+
+                  return GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // Two items per row
+                        crossAxisSpacing: 10, // Spacing between columns
+                        mainAxisSpacing: 2, // Spacing between rows
+                        childAspectRatio: screenWidth /
+                            (screenHeight / 1.8), // Adjust as needed
+                      ),
                       itemCount: records.length,
                       itemBuilder: (BuildContext context, int index) {
                         final record = records[index];
@@ -62,8 +67,8 @@ class _VacinationRecordState extends State<VacinationRecord> {
                         return Padding(
                           padding: const EdgeInsets.all(5),
                           child: Container(
-                            width: screenWidth * 0.95,
-                            height: screenHeight / 3.4,
+                            width: screenWidth + 10,
+                            height: screenHeight + 10,
                             padding: EdgeInsets.all(paragraph),
                             decoration: BoxDecoration(
                                 color: Colors.white,
@@ -78,82 +83,77 @@ class _VacinationRecordState extends State<VacinationRecord> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Row(
-                                  children: [
-                                    Column(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                         MedicalDetail(id: record.cow.id, url: record.cow.image, tag: record.cow.animalNumber.toString(),)));
-                                          },
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                //color: const Color.fromARGB(255, 210, 203, 203),
-                                                borderRadius:
-                                                    BorderRadius.circular(20)),
-                                            child: Image(
-                                              image: NetworkImage(
-                                                  record.cow.image),
-                                              fit: BoxFit.fill,
-                                            ),
-                                            height: screenHeight * .18,
-                                            width: screenWidth * .8,
-                                            //color: Colors.red,
-                                          ),
-                                        ),
-                                      ],
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                MedicalDetail(
+                                                  id: record.cow.id ?? '',
+                                                  url: record.cow.image,
+                                                  tag: record
+                                                      .cow.animalNumber
+                                                      .toString(),
+                                              
+                                                )));
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.circular(20),
                                     ),
-                                    InkWell(
-                                      onTap: () {},
-                                      child: Icon(
-                                        Icons.more_vert,
-                                        size: screenWidth * .065,
-                                      ),
-                                    ),
-                                  ],
+                                    height: screenHeight * .20,
+                                    width: screenWidth * .58,
+                                    child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(10),
+                                        child: Image.network(
+                                          record.cow.image,
+                                          fit: BoxFit.fill,
+                                        )),
+                                  ),
                                 ),
                                 SizedBox(
-                                  height: screenHeight * .025,
+                                  height: 8,
                                 ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
                                       children: [
                                         Icon(
                                           CupertinoIcons.tag_fill,
                                           color: darkGreenColor,
+                                          size: 18,
                                         ),
                                         SizedBox(
                                           width: screenWidth * .007,
                                         ),
                                         Text1(
                                             fontColor: lightBlackColor,
-                                            fontSize: screenWidth * .05,
+                                            fontSize: screenWidth * .04,
                                             text: record.cow.animalNumber
                                                 .toString()),
                                       ],
                                     ),
+                                    SizedBox(height: 5,),
                                     Row(
                                       children: [
                                         Image(
                                           image: const AssetImage(
                                               "lib/assets/medical.png"),
-                                          width: screenWidth * .055,
-                                          height: screenWidth * .055,
+                                          width: screenWidth * .060,
+                                          height: screenWidth * .060,
                                         ),
                                         SizedBox(
                                           width: screenWidth * .007,
                                         ),
                                         Text1(
                                             fontColor: lightBlackColor,
-                                            fontSize: screenWidth * .05,
-                                            text: record.date),
+                                            fontSize: screenWidth * .04,
+                                            text: record.vaccineType),
                                       ],
                                     ),
                                     // Row(
@@ -179,7 +179,6 @@ class _VacinationRecordState extends State<VacinationRecord> {
                         );
                       });
                 }
-                return const Center();
               },
             ),
           ),
