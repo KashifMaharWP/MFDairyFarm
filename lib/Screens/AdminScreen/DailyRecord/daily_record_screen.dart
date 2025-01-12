@@ -199,11 +199,11 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
                             children: [
                               SlidableAction(
                                 onPressed: (context) async {
-                                  await Provider.of<MilkRecordProvider>(context,
-                                          listen: false)
-                                      .deleteMilkSold(
-                                          id: record.sId.toString(),
-                                          context: context);
+                                  // await Provider.of<MilkRecordProvider>(context,
+                                  //         listen: false)
+                                  //     .deleteMilkSold(
+                                  //         id: record.sId.toString(),
+                                  //         context: context);
                                   //deleteRecord(cow.id);
                                 },
                                 backgroundColor: Colors.red,
@@ -213,7 +213,7 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
                             ],
                           ),
                           child: Container(
-                            width: screenWidth * 0.95,
+                            width: double.infinity,
                             height: screenHeight / 7,
                             padding: EdgeInsets.all(paragraph),
                             decoration: BoxDecoration(

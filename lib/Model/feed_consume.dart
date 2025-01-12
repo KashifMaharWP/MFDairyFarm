@@ -1,3 +1,26 @@
+class FeedConsumptionResponse {
+  final bool? success;
+  final String? message;
+  final List<FeedConsumption>? feedConsumptionRecordMonthly;
+
+  FeedConsumptionResponse({
+    this.success,
+    this.message,
+    this.feedConsumptionRecordMonthly,
+  });
+
+  factory FeedConsumptionResponse.fromJson(Map<String, dynamic> json) {
+    return FeedConsumptionResponse(
+      success: json['success'],
+      message: json['message'],
+      feedConsumptionRecordMonthly: json['feedConsumtionRecordMonthly'] != null
+          ? (json['feedConsumtionRecordMonthly'] as List)
+              .map((item) => FeedConsumption.fromJson(item))
+              .toList()
+          : null,
+    );
+  }
+}
 class FeedConsumption {
   final String? id;
   final int? morning;

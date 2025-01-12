@@ -126,14 +126,14 @@ class MilkRecordProvider extends ChangeNotifier {
 
   // Sold Milk Record Provider by Month
 
-  Future<SoldMilkModel?> fetchMilkSold(BuildContext context) async {
+  Future<SoldMilkModel?> fetchMilkSold(BuildContext context,) async {
    
      final date = DateFormat("EEE MMM dd yyyy").format(DateTime.now());
   final headers = {
     'Authorization':
         'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
   };
-  final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getSoldMilk}$date');
+  final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getSoldMilk}jan');
 
   try {
     final response = await http.get(url, headers: headers);

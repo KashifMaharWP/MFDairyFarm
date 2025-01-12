@@ -67,15 +67,12 @@ class _WorkerTaskState extends State<WorkerTask> {
               ),
               Container(
                 child: Expanded(
-  child: FutureBuilder<TaskModel?>(
-    future: workerProvider.fetchAllTasks(context),
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
+  child: Consumer<WorkerProvider>(
+    builder: (context, workerProvider, child) {
+      if (workerProvider.isLoading) {
         return const Center(child: CircularProgressIndicator());
-      } else if (snapshot.hasError) {
-        return Center(child: Text('An error occurred: ${snapshot.error}'));
-      } else if (snapshot.hasData && snapshot.data != null) {
-        final tasks = snapshot.data!.tasks ?? [];
+      } else {
+        final tasks = workerProvider.TaskList?.tasks ?? [];
         //final soldMilkData = snapshot.data!.monthlyMilkRecord ?? [];
         return ListView.builder(
                       itemCount: tasks.length,
@@ -161,8 +158,6 @@ class _WorkerTaskState extends State<WorkerTask> {
                               )),
                         );
                       });
-      } else {
-        return const Center(child: Text('No data available'));
       }
     },
   ),

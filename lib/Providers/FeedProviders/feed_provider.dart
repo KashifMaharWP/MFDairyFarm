@@ -12,7 +12,7 @@ import '../../Model/feed_consume.dart';
 class FeedProvider extends ChangeNotifier {
   bool _isloading = false;
   bool get isLoading => _isloading;
-  List<FeedConsumption>? feedConsumeRecord;
+  FeedConsumptionResponse? feedConsumeRecord;
   //bool isloading = false;
   int? morningFeed=0;
   int? eveningFeed=0;
@@ -24,7 +24,7 @@ class FeedProvider extends ChangeNotifier {
   int totalFeedStored = 0;
   
 
-  List<FeedConsumption>? feedConsumptions;
+  //List<FeedConsumption>? feedConsumptions;
 
   Future<void> fetchFeedConsumption(BuildContext context,String Date) async {
     try{
@@ -35,12 +35,12 @@ final headers = {
     final url =
         Uri.parse('${GlobalApi.baseApi}${GlobalApi.getFeedConsumption}Jan');
     final response = await http.get(url, headers: headers);
-      debugger();
+     // debugger();
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
       //print(jsonData);
-      FeedConsumption feedModel=FeedConsumption.fromJson(jsonData);
-      feedConsumptions?.add(feedModel);
+      FeedConsumptionResponse feedModel=FeedConsumptionResponse.fromJson(jsonData);
+      feedConsumeRecord=feedModel;
       }
     }catch(e){
         print(e);

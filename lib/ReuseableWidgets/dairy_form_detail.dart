@@ -24,6 +24,7 @@ class DairyFormDetail extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 decoration: BoxDecoration(
@@ -36,32 +37,33 @@ class DairyFormDetail extends StatelessWidget {
                           spreadRadius: 3,
                           offset: const Offset(2, 0)),
                     ]),
-                margin: EdgeInsets.only(top: screenHeight / 94),
+                //margin: EdgeInsets.only(top: screenHeight / 94),
                 height: screenHeight / 3,
-                width: screenWidth,
+                width: double.infinity,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            wrapCircleContainer("25", "Animal"),
-                            SizedBox(
-                              height: paragraph / 4,
-                            ),
-                            Container(
-                              height: 1,
-                              width: screenWidth / 3.8,
-                              color: CupertinoColors.systemGrey6,
-                            ),
-                            SizedBox(
-                              height: paragraph / 2,
-                            ),
-                            wrapCircleContainer("5", "Baby"),
-                          ],
-                        ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          wrapCircleContainer("25", "Animal"),
+                          SizedBox(
+                            height: paragraph / 4,
+                          ),
+                          Container(
+                            height: 1,
+                            width: screenWidth / 3.8,
+                            color: CupertinoColors.systemGrey6,
+                          ),
+                          SizedBox(
+                            height: paragraph / 2,
+                          ),
+                          wrapCircleContainer("5", "Baby"),
+                        ],
                       ),
                       Container(
                         height: screenHeight / 4,
@@ -93,6 +95,7 @@ class DairyFormDetail extends StatelessWidget {
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           wrapCircleContainer("5", "Pregnent"),
                           SizedBox(
@@ -113,6 +116,8 @@ class DairyFormDetail extends StatelessWidget {
                   ),
                 ),
               ),
+
+              
             ],
           ),
         ));
@@ -139,8 +144,8 @@ Widget wrapCircleContainer(String text, label) {
 
 Widget circleContainer(String text) {
   return Container(
-    width: screenWidth / 7,
-    height: screenWidth / 7,
+    width: screenWidth / 6,
+    height: screenWidth / 6,
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(screenWidth / 4),
@@ -154,6 +159,6 @@ Widget circleContainer(String text) {
     ),
     child: Center(
         child: Text1(
-            fontColor: blackColor, fontSize: paragraph / 1.1, text: text)),
+            fontColor: blackColor, fontSize: paragraph, text: text)),
   );
 }
