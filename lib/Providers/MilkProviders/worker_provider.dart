@@ -28,7 +28,7 @@ class WorkerProvider extends ChangeNotifier {
   Future<void> addTask(BuildContext context, String id, String description,
       String dueDate, String createdtAt) async {
     isLoading = true;
-    notifyListeners();
+    //notifyListeners();
 
     final url = Uri.parse("${GlobalApi.baseApi}${GlobalApi.addTask}");
     try {
@@ -82,7 +82,7 @@ class WorkerProvider extends ChangeNotifier {
       if(response.statusCode == 200){
         TaskList=TaskmodelList;
         setTaskLoading(false);
-       return TaskList;
+      
       }else{
         SimpleToast.showErrorToast(context, "Error", TaskmodelList.message.toString());
         setTaskLoading(false);
@@ -91,7 +91,7 @@ class WorkerProvider extends ChangeNotifier {
     }catch(e){
       SimpleToast.showErrorToast(context, "Error", e.toString());
     }
-    return TaskList;
+    
 
   }
 

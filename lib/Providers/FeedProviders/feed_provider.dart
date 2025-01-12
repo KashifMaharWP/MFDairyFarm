@@ -33,7 +33,7 @@ final headers = {
           'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
     };
     final url =
-        Uri.parse('${GlobalApi.baseApi}${GlobalApi.getFeedConsumption}Jan');
+        Uri.parse('${GlobalApi.baseApi}${GlobalApi.getFeedConsumption}Jan 2025');
     final response = await http.get(url, headers: headers);
      // debugger();
     if (response.statusCode == 200) {

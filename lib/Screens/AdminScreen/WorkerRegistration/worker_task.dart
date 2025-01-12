@@ -21,8 +21,11 @@ class _WorkerTaskState extends State<WorkerTask> {
 
   @override
   void initState() {
-    Provider.of<WorkerProvider>(context, listen: false).fetchAllTasks(context);
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_){
+    Provider.of<WorkerProvider>(context, listen: false).fetchAllTasks(context);
+
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -77,86 +80,18 @@ class _WorkerTaskState extends State<WorkerTask> {
         return ListView.builder(
                       itemCount: tasks.length,
                       itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                              width: screenWidth * 0.95,
-                              height: screenHeight / 3.8,
-                              padding: EdgeInsets.all(paragraph),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius:
-                                      BorderRadius.circular(paragraph),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: greyGreenColor,
-                                        blurRadius: 6,
-                                        spreadRadius: 3,
-                                        offset: const Offset(2, 0)),
-                                  ]),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      const Column(
-                                        children: [
-                                          CircleAvatar(
-                                              radius: 35,
-                                              backgroundImage: AssetImage(
-                                                  "lib/assets/farmWorker.png")),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        width: screenWidth * .05,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 4),
-                                              child: Text1(
-                                                  fontColor: blackColor,
-                                                  fontSize: screenWidth * .055,
-                                                  text: tasks[index].assignedTo!.name.toString()),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 4),
-                                              child: RowWithTextAndImage(
-                                                  text1: "Total",
-                                                  imgUrl:
-                                                      "lib/assets/builder.png"),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 4),
-                                              child: RowWithTextAndImage(
-                                                  text1: "Complete",
-                                                  imgUrl:
-                                                      "lib/assets/Check.png"),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 4),
-                                              child: RowWithTextAndImage(
-                                                  text1: "Not Complete",
-                                                  imgUrl:
-                                                      "lib/assets/cross.png"),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )),
-                        );
+                        final task=tasks[index];
+                        return Card(
+            margin: EdgeInsets.all(8.0),
+            child: ListTile(
+              title: Text(task.description.toString()),
+              subtitle: Text(task.assignedTo!.name.toString()),
+              leading: Icon(
+                task.assignedTo!.name != '' ? Icons.person : Icons.person_outline,
+                color: task.assignedTo!.name != null ? Colors.green : Colors.red,
+              ),
+            ),
+          );
                       });
       }
     },
