@@ -14,63 +14,60 @@ class FeedProvider extends ChangeNotifier {
   bool get isLoading => _isloading;
   FeedConsumptionResponse? feedConsumeRecord;
   //bool isloading = false;
-  int? morningFeed=0;
-  int? eveningFeed=0;
-  
-  int usedFeed =0;
+  int? morningFeed = 0;
+  int? eveningFeed = 0;
+
+  int usedFeed = 0;
 
   String? errorMessage;
   int totalFeedFromItem = 0;
   int totalFeedStored = 0;
-  
 
   //List<FeedConsumption>? feedConsumptions;
 
-  Future<void> fetchFeedConsumption(BuildContext context,String Date) async {
-    try{
-final headers = {
-      'Authorization':
-          'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
-    };
-    final url =
-        Uri.parse('${GlobalApi.baseApi}${GlobalApi.getFeedConsumption}Jan 2025');
-    final response = await http.get(url, headers: headers);
-     // debugger();
-    if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
-      //print(jsonData);
-      FeedConsumptionResponse feedModel=FeedConsumptionResponse.fromJson(jsonData);
-      feedConsumeRecord=feedModel;
+  Future<void> fetchFeedConsumption(BuildContext context, String month) async {
+    try {
+      final headers = {
+        'Authorization':
+            'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
+      };
+      final url = Uri.parse(
+          '${GlobalApi.baseApi}${GlobalApi.getFeedConsumption}$month');
+      final response = await http.get(url, headers: headers);
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        //print(jsonData);
+        FeedConsumptionResponse feedModel =
+            FeedConsumptionResponse.fromJson(jsonData);
+        feedConsumeRecord = feedModel;
       }
-    }catch(e){
-        print(e);
+    } catch (e) {
+      print(e);
     }
-    
-    //   if (jsonData['success'] == true) {
-    //      print(jsonData['message']);
-
-        
-    //     feedConsumptions = (jsonData['feedConsumtionRecordMonthly'] as List)
-    //         .map((item) => FeedConsumption.fromJson(item))
-    //         .toList();
-           
-    //     // Calculate total feed used
-    //     totalFeedFromItem = feedConsumptions!.fold<dynamic>(
-    //       0,
-    //       (sum, feed) => sum + feed.total,
-    //     );
-    //     print("Used= $totalFeedFromItem");
-    //   } else {
-    //     errorMessage = jsonData['message'];
-    //     print(jsonData['message']);
-    //   }
-    // } else {
-    //   errorMessage = response.reasonPhrase;
-    // }
-
-    // _isloading = false;
-    // notifyListeners();
   }
+  //   if (jsonData['success'] == true) {
+  //      print(jsonData['message']);
+
+  //     feedConsumptions = (jsonData['feedConsumtionRecordMonthly'] as List)
+  //         .map((item) => FeedConsumption.fromJson(item))
+  //         .toList();
+
+  //     // Calculate total feed used
+  //     totalFeedFromItem = feedConsumptions!.fold<dynamic>(
+  //       0,
+  //       (sum, feed) => sum + feed.total,
+  //     );
+  //     print("Used= $totalFeedFromItem");
+  //   } else {
+  //     errorMessage = jsonData['message'];
+  //     print(jsonData['message']);
+  //   }
+  // } else {
+  //   errorMessage = response.reasonPhrase;
+  // }
+
+  // _isloading = false;
+  // notifyListeners();
 
   Future<int?> fetchFeed(BuildContext context) async {
     final headers = {
@@ -91,9 +88,8 @@ final headers = {
   }
 
   Future<void> sendMorningFeedData(
-      {
-        required String cowId,
-        required String date,
+      {required String cowId,
+      required String date,
       required String morning,
       required BuildContext context}) async {
     _isloading = true;
@@ -122,7 +118,7 @@ final headers = {
 
       if (response.statusCode == 201) {
         final message = jsonDecode(response.body);
-         print(message['message']);
+        print(message['message']);
         SimpleToast.showSuccessToast(
             context, "Feed Added", "${message['message']}");
         _isloading = false;
@@ -130,7 +126,7 @@ final headers = {
         // showSuccessSnackbar(message['message'], context);
       } else {
         final message = jsonDecode(response.body);
-         print(message['message']);
+        print(message['message']);
         SimpleToast.showInfoToast(
             context, "Feed Already Added", "${message['message']}");
         _isloading = false;
@@ -146,9 +142,8 @@ final headers = {
   }
 
   Future<void> sendEveningFeedData(
-      {
-        required String cowId,
-        required String date,
+      {required String cowId,
+      required String date,
       required String evening,
       required BuildContext context}) async {
     _isloading = true;
@@ -162,7 +157,7 @@ final headers = {
     };
 
     final body = jsonEncode({
-      'cowId':cowId,
+      'cowId': cowId,
       'date': date,
       'evening': int.parse(evening),
     });
@@ -176,7 +171,7 @@ final headers = {
 
       if (response.statusCode == 201) {
         final message = jsonDecode(response.body);
-         print(message['message']);
+        print(message['message']);
         SimpleToast.showSuccessToast(
             context, "Feed Added", "${message['message']}");
         _isloading = false;
@@ -260,7 +255,7 @@ final headers = {
   //   final url =
   //       Uri.parse('${GlobalApi.baseApi}${GlobalApi.getFeedConsumption}/$Date');
   //   final response = await http.get(url, headers: headers);
-    
+
   //   if (response.statusCode == 200) {
   //     final jsonData = json.decode(response.body);
   //     if (jsonData['success'] == true) {
@@ -285,16 +280,17 @@ final headers = {
   //   }
   // }
 
-   Future<FeedCount?> fetchFeedCount(BuildContext context) async {
+  Future<FeedCount?> fetchFeedCount(BuildContext context) async {
     _isloading = true;
-    
+
     //notifyListeners();
 
     final headers = {
       'Authorization':
           'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
     };
-    final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getFeedConsumptionCount}');
+    final url =
+        Uri.parse('${GlobalApi.baseApi}${GlobalApi.getFeedConsumptionCount}');
 
     try {
       final response = await http.get(url, headers: headers);
@@ -306,15 +302,11 @@ final headers = {
         morningFeed = feedCount.todayFeedConsumtionCount![0].morning;
         eveningFeed = feedCount.todayFeedConsumtionCount![0].evening;
         usedFeed = morningFeed! + eveningFeed!;
-        
+
         print(usedFeed);
         if (jsonData['success'] == true) {
           //print(jsonData);
-        
-         
-         
-         
-         
+
           //print(_milkCountData!['todayMilkCount'][0]['morning']);
         } else {
           //_errorMessage = jsonData['message'] ?? 'Failed to fetch milk count';
@@ -331,9 +323,4 @@ final headers = {
     }
     return null;
   }
-
-
-
-
-
 }

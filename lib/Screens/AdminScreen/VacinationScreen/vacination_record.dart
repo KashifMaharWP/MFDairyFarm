@@ -42,7 +42,6 @@ class _VacinationRecordState extends State<VacinationRecord> {
       ),
       body: Column(
         children: [
-          
           Expanded(
             child: Consumer<AddMedical>(
               builder: (context, medicalProvider, child) {
@@ -88,26 +87,21 @@ class _VacinationRecordState extends State<VacinationRecord> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                MedicalDetail(
+                                            builder: (context) => MedicalDetail(
                                                   id: record.cow.id ?? '',
                                                   url: record.cow.image,
-                                                  tag: record
-                                                      .cow.animalNumber
+                                                  tag: record.cow.animalNumber
                                                       .toString(),
-                                              
                                                 )));
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(20),
+                                      borderRadius: BorderRadius.circular(20),
                                     ),
                                     height: screenHeight * .20,
                                     width: screenWidth * .58,
                                     child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(10),
+                                        borderRadius: BorderRadius.circular(10),
                                         child: Image.network(
                                           record.cow.image,
                                           fit: BoxFit.fill,
@@ -118,8 +112,9 @@ class _VacinationRecordState extends State<VacinationRecord> {
                                   height: 8,
                                 ),
                                 Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
                                       children: [
@@ -134,11 +129,13 @@ class _VacinationRecordState extends State<VacinationRecord> {
                                         Text1(
                                             fontColor: lightBlackColor,
                                             fontSize: screenWidth * .04,
-                                            text: "Tag: ${record.cow.animalNumber
-                                                .toString()}"),
+                                            text: record.cow.animalNumber
+                                                .toString()),
                                       ],
                                     ),
-                                    SizedBox(height: 5,),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
                                     Row(
                                       children: [
                                         Image(
@@ -153,7 +150,8 @@ class _VacinationRecordState extends State<VacinationRecord> {
                                         Text1(
                                             fontColor: lightBlackColor,
                                             fontSize: screenWidth * .04,
-                                            text: "Vacination: ${record.totalVaccine.toString()}"),
+                                            text:
+                                                "Vacination: ${record.totalVaccine.toString()}"),
                                       ],
                                     ),
                                     // Row(

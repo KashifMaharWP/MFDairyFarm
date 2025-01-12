@@ -22,22 +22,23 @@ class AddMedical extends ChangeNotifier {
   // bool _isLoading = true;
   String? _errorMessage;
 
-setIsLoading(bool value){
-  _isLoading=value;
-notifyListeners();
-}
+  setIsLoading(bool value) {
+    _isLoading = value;
+    notifyListeners();
+  }
+
   List<MedicalRecordResponse> get milkRecords => _milkRecords;
   //Map<String, dynamic>? get milkCountData => _milkCountData;
 
   String? get errorMessage => _errorMessage;
 
-  fetchMedicalRecords(
-      BuildContext context) async {
-        setIsLoading(true);
+  fetchMedicalRecords(BuildContext context) async {
+    setIsLoading(true);
     final date = DateFormat("EEE MMM dd yyyy").format(DateTime.now());
     final String token =
         Provider.of<UserDetail>(context, listen: false).token.toString();
-    final String apiUrl = '${GlobalApi.baseApi}${GlobalApi.getMedicalRecord}/${date}';
+    final String apiUrl =
+        '${GlobalApi.baseApi}${GlobalApi.getMedicalRecord}/${date}';
     final headers = {
       'Authorization': 'Bearer $token',
     };
@@ -45,16 +46,18 @@ notifyListeners();
     try {
       final response = await http.get(Uri.parse(apiUrl), headers: headers);
 
-       // debugger();
+      // debugger();
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
-        MedicalRecordResponse detailModel = MedicalRecordResponse.fromJson(jsonResponse);
-        medicalData=detailModel;
-         setIsLoading(false);
-      } } catch (e) {
+        MedicalRecordResponse detailModel =
+            MedicalRecordResponse.fromJson(jsonResponse);
+        medicalData = detailModel;
+        setIsLoading(false);
+      }
+    } catch (e) {
       throw Exception('Exception occurred: $e');
     }
-     setIsLoading(false);
+    setIsLoading(false);
   }
 
   Future<void> addMedicalRecord(
@@ -107,28 +110,28 @@ notifyListeners();
     }
   }
 
-  fetchMedicalDetails(BuildContext context , String id)async{
-    final date = DateFormat("EEE MMM dd yyyy").format(DateTime.now());
-    final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getMedicalRecordById}/${id}/${date}');
-setIsLoading(true);
+  fetchMedicalDetails(BuildContext context, String id, String month) async {
+    final url = Uri.parse(
+        '${GlobalApi.baseApi}${GlobalApi.getMedicalRecordById}/${id}/$month');
+    setIsLoading(true);
     final headers = {
       'Content-Type': 'application/json',
       'Authorization':
           "Bearer ${Provider.of<UserDetail>(context, listen: false).token}"
     };
-    try{
-
+    try {
       final response = await http.get(url, headers: headers);
       final jsonResponse = jsonDecode(response.body);
-       // debugger();
-      if(response.statusCode==200){
-       MedicalDetailModel model =MedicalDetailModel.fromJson(json.decode(response.body));
-        singleMedicalDetail=model;
-       setIsLoading(false);
+      // debugger();
+      if (response.statusCode == 200) {
+        MedicalDetailModel model =
+            MedicalDetailModel.fromJson(json.decode(response.body));
+        singleMedicalDetail = model;
+        setIsLoading(false);
       }
-    }catch(err){
+    } catch (err) {
       SimpleToast.showErrorToast(context, "Error", err.toString());
-setIsLoading(false);
+      setIsLoading(false);
     }
   }
 }

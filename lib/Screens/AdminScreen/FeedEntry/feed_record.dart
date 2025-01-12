@@ -23,19 +23,45 @@ class FeedRecord extends StatefulWidget {
 }
 
 class _FeedRecordState extends State<FeedRecord> {
- //final date = DateFormat("EEE MMM dd yyyy").format(DateTime.now());
- String date= "Jan 2025";
+  //final date = DateFormat("EEE MMM dd yyyy").format(DateTime.now());
+  // String date = "Jan 2025";
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   final feedProvider = Provider.of<FeedProvider>(context, listen: false);
+  //   //debugger();
+  //   feedProvider.fetchFeedConsumption(context, date);
+  // }
+  late DateTime _currentMonth;
+  late DateTime _selectedMonth;
+  void _goToPreviousMonth() {
+    setState(() {
+      _selectedMonth =
+          DateTime(_selectedMonth.year, _selectedMonth.month - 1, 1);
+    });
+  }
+
+  // Navigate to the next month
+  void _goToNextMonth() {
+    setState(() {
+      _selectedMonth =
+          DateTime(_selectedMonth.year, _selectedMonth.month + 1, 1);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    _currentMonth = DateTime.now(); // Initialize with the current month
+    _selectedMonth = _currentMonth;
     final feedProvider = Provider.of<FeedProvider>(context, listen: false);
-    //debugger();
-    feedProvider.fetchFeedConsumption(context,date);
+    feedProvider.fetchFeedConsumption(context, 'jan');
   }
 
   @override
   Widget build(BuildContext context) {
     final feedProvider = Provider.of<FeedProvider>(context);
+    String monthName = DateFormat('MMM yyyy').format(_selectedMonth);
 
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
@@ -45,7 +71,57 @@ class _FeedRecordState extends State<FeedRecord> {
         foregroundColor: Colors.white,
         centerTitle: true,
         shadowColor: Colors.black,
-        title: const Text("Feed Record"),
+        title: Padding(
+          padding: const EdgeInsets.only(
+            right: 40,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Show the '<' button to go to the previous month, if it's  the current year
+              IconButton(
+                  icon: Icon(Icons.keyboard_arrow_left_sharp),
+                  color: Colors.white,
+                  onPressed: () {
+                    // if (DateTime(_selectedMonth.year, _selectedMonth.month - 1, 1)
+                    //         .year !=
+                    //     _currentMonth.year) {
+                    //   // Show Snackbar if the year is not the current year
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     SnackBar(
+                    //         content: Text(
+                    //             'You can only see the records of the current year.')),
+                    //   );
+                    // } else {
+                    _goToPreviousMonth();
+                    final feedProvider =
+                        Provider.of<FeedProvider>(context, listen: false);
+                    feedProvider.fetchFeedConsumption(context, 'jan');
+
+                    //   }
+                  } //_goToPreviousMonth,
+                  ),
+              // Display the current selected month in the middle
+              Text(
+                monthName,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              // Show the '>' button to go to the next month, if it's not the current month
+              IconButton(
+                icon: Icon(Icons.keyboard_arrow_right_sharp),
+                color: Colors.white,
+                onPressed: () {
+                  if (_selectedMonth.month != _currentMonth.month) {
+                    _goToNextMonth();
+                    final feedProvider =
+                        Provider.of<FeedProvider>(context, listen: false);
+                    feedProvider.fetchFeedConsumption(context, 'jan');
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
       ),
       body: Column(
         children: [
@@ -73,8 +149,8 @@ class _FeedRecordState extends State<FeedRecord> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                             Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
@@ -120,8 +196,7 @@ class _FeedRecordState extends State<FeedRecord> {
                           ),
                         )),
                   ))
-              : pageHeaderContainer(
-                  context, feedProvider.totalFeedFromItem, 0),
+              : pageHeaderContainer(context, feedProvider.totalFeedFromItem, 0),
           SizedBox(height: screenHeight * .015),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -136,69 +211,63 @@ class _FeedRecordState extends State<FeedRecord> {
             ],
           ),
           SizedBox(height: screenHeight * .010),
-          
-       Consumer<FeedProvider>(
-                builder: (context,feedProvider,child) {
-                 
-                  if(feedProvider.isLoading){
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  else{
-                     final feedConsumed=feedProvider.feedConsumeRecord?.feedConsumptionRecordMonthly??[];
-                    return Flexible(
-                        child: ListView.builder(
-                            itemCount: feedConsumed.length,
-                            itemBuilder: (context, index) {
-                              final feed = feedConsumed[index];
-                              return Card(
-                                color: Colors.white,
-                                elevation: 2.0,
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: screenHeight * .025,
-                                    horizontal: screenWidth * .025,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          SizedBox(
-                                            height: screenHeight * .035,
-                                            width: screenHeight * .035,
-                                            child: const Image(
-                                              image: AssetImage(
-                                                  "lib/assets/wanda.png"),
-                                              fit: BoxFit.fill,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: screenWidth * .015,
-                                          ),
-                                          Text1(
-                                            fontColor: lightBlackColor,
-                                            fontSize: screenWidth * .05,
-                                            text: "${feed.date}",
-                                          ),
-                                        ],
-                                      ),
-                                      Text1(
-                                        fontColor: lightBlackColor,
-                                        fontSize: screenWidth * .05,
-                                        text: "${feed.total} Kg",
-                                      ),
-                                    ],
+          Consumer<FeedProvider>(builder: (context, feedProvider, child) {
+            if (feedProvider.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              final feedConsumed = feedProvider
+                      .feedConsumeRecord?.feedConsumptionRecordMonthly ??
+                  [];
+              return Flexible(
+                child: ListView.builder(
+                  itemCount: feedConsumed.length,
+                  itemBuilder: (context, index) {
+                    final feed = feedConsumed[index];
+                    return Card(
+                      color: Colors.white,
+                      elevation: 2.0,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: screenHeight * .025,
+                          horizontal: screenWidth * .025,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                SizedBox(
+                                  height: screenHeight * .035,
+                                  width: screenHeight * .035,
+                                  child: const Image(
+                                    image: AssetImage("lib/assets/wanda.png"),
+                                    fit: BoxFit.fill,
                                   ),
                                 ),
-                              );
-                            },
-                          ),
-                      );
-                  }
-                  
-                }
-              )
+                                SizedBox(
+                                  width: screenWidth * .015,
+                                ),
+                                Text1(
+                                  fontColor: lightBlackColor,
+                                  fontSize: screenWidth * .05,
+                                  text: "${feed.date}",
+                                ),
+                              ],
+                            ),
+                            Text1(
+                              fontColor: lightBlackColor,
+                              fontSize: screenWidth * .05,
+                              text: "${feed.total} Kg",
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            }
+          })
         ],
       ),
     );
@@ -239,16 +308,13 @@ Widget pageHeaderContainer(BuildContext context, int consumedFeed, feeds) {
                           return wrapCircleContainer("0", "Total");
                         } else if (snapshot.hasError) {
                           return wrapCircleContainer("0", "Total");
-                        } else if (snapshot.hasData &&
-                            snapshot.data != null) {
+                        } else if (snapshot.hasData && snapshot.data != null) {
                           final feedAvailable = int.tryParse(snapshot
                                   .data['feedInventory']['feedAmount']
                                   .toString()) ??
                               0;
-                          final totalFeedStored =
-                              feedAvailable + consumedFeed;
-                              
-            
+                          final totalFeedStored = feedAvailable + consumedFeed;
+
                           // Display total feed stored
                           return wrapCircleContainer(
                               "$totalFeedStored", "Total");
@@ -282,8 +348,7 @@ Widget pageHeaderContainer(BuildContext context, int consumedFeed, feeds) {
                           return wrapCircleContainer("0", "Available");
                         } else if (snapshot.hasError) {
                           return wrapCircleContainer("0", "Available");
-                        } else if (snapshot.hasData &&
-                            snapshot.data != null) {
+                        } else if (snapshot.hasData && snapshot.data != null) {
                           return wrapCircleContainer(
                               "${snapshot.data['feedInventory']['feedAmount']}",
                               "Available");

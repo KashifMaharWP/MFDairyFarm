@@ -27,8 +27,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    screenWidth = MediaQuery.of(context).size.width*0.70;
-    screenHeight = MediaQuery.of(context).size.height*0.70;
+    screenWidth = MediaQuery.of(context).size.width * 0.70;
+    screenHeight = MediaQuery.of(context).size.height * 0.70;
 
     return MultiProvider(
       providers: [
@@ -43,8 +43,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => RegistrationProvider()),
         ChangeNotifierProvider(create: (context) => RegisterUserProvider()),
         ChangeNotifierProvider(create: (context) => WorkerProvider()),
-        ChangeNotifierProvider(create: (_)=> FilterProvider()),
-        ChangeNotifierProvider(create: (_)=> CowsProvider()),
+        ChangeNotifierProvider(create: (_) => FilterProvider()),
+        ChangeNotifierProvider(create: (_) => CowsProvider()),
         ChangeNotifierProvider(
           create: (context) => MilkRecordProvider(),
         ),
