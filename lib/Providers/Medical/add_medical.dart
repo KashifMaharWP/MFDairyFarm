@@ -37,7 +37,7 @@ notifyListeners();
     final date = DateFormat("EEE MMM dd yyyy").format(DateTime.now());
     final String token =
         Provider.of<UserDetail>(context, listen: false).token.toString();
-    final String apiUrl = '${GlobalApi.baseApi}${GlobalApi.getMedicalRecord}';
+    final String apiUrl = '${GlobalApi.baseApi}${GlobalApi.getMedicalRecord}/${date}';
     final headers = {
       'Authorization': 'Bearer $token',
     };
@@ -45,6 +45,7 @@ notifyListeners();
     try {
       final response = await http.get(Uri.parse(apiUrl), headers: headers);
 
+       // debugger();
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
         MedicalRecordResponse detailModel = MedicalRecordResponse.fromJson(jsonResponse);
@@ -107,7 +108,8 @@ notifyListeners();
   }
 
   fetchMedicalDetails(BuildContext context , String id)async{
-    final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getMedicalRecordById}');
+    final date = DateFormat("EEE MMM dd yyyy").format(DateTime.now());
+    final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getMedicalRecordById}/${id}/${date}');
 setIsLoading(true);
     final headers = {
       'Content-Type': 'application/json',
@@ -118,7 +120,7 @@ setIsLoading(true);
 
       final response = await http.get(url, headers: headers);
       final jsonResponse = jsonDecode(response.body);
-        //debugger();
+       // debugger();
       if(response.statusCode==200){
        MedicalDetailModel model =MedicalDetailModel.fromJson(json.decode(response.body));
         singleMedicalDetail=model;

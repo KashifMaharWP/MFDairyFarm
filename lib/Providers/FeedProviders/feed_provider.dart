@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:dairyfarmflow/API/global_api.dart';
 import 'package:dairyfarmflow/Model/feed_count.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
@@ -11,6 +12,7 @@ import '../../Model/feed_consume.dart';
 class FeedProvider extends ChangeNotifier {
   bool _isloading = false;
   bool get isLoading => _isloading;
+  List<FeedConsumption>? feedConsumeRecord;
   //bool isloading = false;
   int? morningFeed=0;
   int? eveningFeed=0;
@@ -24,53 +26,50 @@ class FeedProvider extends ChangeNotifier {
 
   List<FeedConsumption>? feedConsumptions;
 
-
-  
-
-
-  
-
   Future<void> fetchFeedConsumption(BuildContext context,String Date) async {
-    
-  
-    _isloading = true;
-    //notifyListeners();
-
-    final headers = {
+    try{
+final headers = {
       'Authorization':
           'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
     };
     final url =
-        Uri.parse('${GlobalApi.baseApi}${GlobalApi.getFeedConsumption}$Date');
+        Uri.parse('${GlobalApi.baseApi}${GlobalApi.getFeedConsumption}Jan');
     final response = await http.get(url, headers: headers);
-
+      debugger();
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
       //print(jsonData);
-      if (jsonData['success'] == true) {
-         print(jsonData['message']);
+      FeedConsumption feedModel=FeedConsumption.fromJson(jsonData);
+      feedConsumptions?.add(feedModel);
+      }
+    }catch(e){
+        print(e);
+    }
+    
+    //   if (jsonData['success'] == true) {
+    //      print(jsonData['message']);
 
         
-        feedConsumptions = (jsonData['feedConsumtionRecordMonthly'] as List)
-            .map((item) => FeedConsumption.fromJson(item))
-            .toList();
+    //     feedConsumptions = (jsonData['feedConsumtionRecordMonthly'] as List)
+    //         .map((item) => FeedConsumption.fromJson(item))
+    //         .toList();
            
-        // Calculate total feed used
-        totalFeedFromItem = feedConsumptions!.fold<dynamic>(
-          0,
-          (sum, feed) => sum + feed.total,
-        );
-        print("Used= $totalFeedFromItem");
-      } else {
-        errorMessage = jsonData['message'];
-        print(jsonData['message']);
-      }
-    } else {
-      errorMessage = response.reasonPhrase;
-    }
+    //     // Calculate total feed used
+    //     totalFeedFromItem = feedConsumptions!.fold<dynamic>(
+    //       0,
+    //       (sum, feed) => sum + feed.total,
+    //     );
+    //     print("Used= $totalFeedFromItem");
+    //   } else {
+    //     errorMessage = jsonData['message'];
+    //     print(jsonData['message']);
+    //   }
+    // } else {
+    //   errorMessage = response.reasonPhrase;
+    // }
 
-    _isloading = false;
-    notifyListeners();
+    // _isloading = false;
+    // notifyListeners();
   }
 
   Future<int?> fetchFeed(BuildContext context) async {

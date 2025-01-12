@@ -24,7 +24,7 @@ class FeedRecord extends StatefulWidget {
 
 class _FeedRecordState extends State<FeedRecord> {
  //final date = DateFormat("EEE MMM dd yyyy").format(DateTime.now());
- String date= "Jan";
+ String date= "Jan 2025";
   @override
   void initState() {
     super.initState();
@@ -47,15 +47,14 @@ class _FeedRecordState extends State<FeedRecord> {
         shadowColor: Colors.black,
         title: const Text("Feed Record"),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: screenWidth * .015),
-        child: Column(
-          children: [
-            feedProvider.isLoading
-                ? Shimmer(
-                    color: Colors.white,
+      body: Column(
+        children: [
+          feedProvider.isLoading
+              ? Shimmer(
+                  color: Colors.white,
+                  child: Center(
                     child: Container(
-                        height: screenHeight / 5,
+                        height: screenHeight / 4,
                         width: double.infinity,
                         decoration: BoxDecoration(
                             borderRadius: const BorderRadius.only(
@@ -69,143 +68,138 @@ class _FeedRecordState extends State<FeedRecord> {
                                   offset: const Offset(2, 2))
                             ]),
                         child: Padding(
-                          padding: const EdgeInsets.all(15.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SizedBox(
-                                height: screenHeight * .02,
-                              ),
-
-                              //here is the code for the custom gridview boxes
-
-                              Column(
+                             Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const CircleAvatar(
-                                        backgroundColor: Colors.grey,
-                                        radius: 30,
-                                      ),
-                                      SizedBox(
-                                        height: paragraph / 4,
-                                      ),
-                                      Container(
-                                        width: 1,
-                                        height: screenWidth / 3.5,
-                                        color: CupertinoColors.systemGrey6,
-                                      ),
-                                      const CircleAvatar(
-                                        backgroundColor: Colors.grey,
-                                        radius: 30,
-                                      ),
-                                      SizedBox(
-                                        height: paragraph / 4,
-                                      ),
-                                      Container(
-                                        width: 01,
-                                        height: screenWidth / 3.8,
-                                        color: CupertinoColors.systemGrey6,
-                                      ),
-                                      const CircleAvatar(
-                                        backgroundColor: Colors.grey,
-                                        radius: 30,
-                                      ),
-                                      SizedBox(
-                                        height: paragraph / 4,
-                                      ),
-                                      Container(
-                                        width: 0,
-                                        height: screenWidth / 3.8,
-                                        color: CupertinoColors.systemGrey6,
-                                      ),
-                                    ],
-                                  )
+                                  const CircleAvatar(
+                                    backgroundColor: Colors.grey,
+                                    radius: 25,
+                                  ),
+                                  SizedBox(
+                                    height: paragraph / 4,
+                                  ),
+                                  Container(
+                                    width: 1,
+                                    height: screenWidth / 3.5,
+                                    color: CupertinoColors.systemGrey6,
+                                  ),
+                                  const CircleAvatar(
+                                    backgroundColor: Colors.grey,
+                                    radius: 25,
+                                  ),
+                                  SizedBox(
+                                    height: paragraph / 4,
+                                  ),
+                                  Container(
+                                    width: 01,
+                                    height: screenWidth / 3.8,
+                                    color: CupertinoColors.systemGrey6,
+                                  ),
+                                  const CircleAvatar(
+                                    backgroundColor: Colors.grey,
+                                    radius: 25,
+                                  ),
+                                  SizedBox(
+                                    height: paragraph / 4,
+                                  ),
+                                  Container(
+                                    width: 0,
+                                    height: screenWidth / 3.8,
+                                    color: CupertinoColors.systemGrey6,
+                                  ),
                                 ],
                               )
                             ],
                           ),
-                        )))
-                : pageHeaderContainer(
-                    context, feedProvider.totalFeedFromItem, 0),
-            SizedBox(height: screenHeight * .025),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(Icons.calendar_month_sharp, color: darkGreenColor),
-                SizedBox(width: screenWidth * .010),
-                Text1(
-                  fontColor: lightBlackColor,
-                  fontSize: screenWidth * .05,
-                  text: DateFormat("MMMM yyyy").format(DateTime.now()),
-                ),
-              ],
-            ),
-            SizedBox(height: screenHeight * .010),
-            Expanded(
-              child: feedProvider.isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : feedProvider.errorMessage != null
-                      ? Center(
-                          child: Text(feedProvider.errorMessage!),
-                        )
-                      : feedProvider.feedConsumptions == null
-                          ? const Center(
-                              child: Text("No feed data found"),
-                            )
-                          : ListView.builder(
-                              itemCount: feedProvider.feedConsumptions!.length,
-                              itemBuilder: (context, index) {
-                                final feed =
-                                    feedProvider.feedConsumptions![index];
-                                return Card(
-                                  color: Colors.white,
-                                  elevation: 2.0,
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: screenHeight * .025,
-                                      horizontal: screenWidth * .025,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            SizedBox(
-                                              height: screenHeight * .035,
-                                              width: screenHeight * .035,
-                                              child: const Image(
-                                                image: AssetImage(
-                                                    "lib/assets/wanda.png"),
-                                                fit: BoxFit.fill,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: screenWidth * .015,
-                                            ),
-                                            Text1(
-                                              fontColor: lightBlackColor,
-                                              fontSize: screenWidth * .05,
-                                              text: "${feed.date}",
-                                            ),
-                                          ],
-                                        ),
-                                        Text1(
-                                          fontColor: lightBlackColor,
-                                          fontSize: screenWidth * .05,
-                                          text: "${feed.total} Kg",
-                                        ),
-                                      ],
-                                    ),
+                        )),
+                  ))
+              : pageHeaderContainer(
+                  context, feedProvider.totalFeedFromItem, 0),
+          SizedBox(height: screenHeight * .015),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(Icons.calendar_month_sharp, color: darkGreenColor),
+              SizedBox(width: screenWidth * .010),
+              Text1(
+                fontColor: lightBlackColor,
+                fontSize: screenWidth * .05,
+                text: DateFormat("MMMM yyyy").format(DateTime.now()),
+              ),
+            ],
+          ),
+          SizedBox(height: screenHeight * .010),
+          
+       Consumer<FeedProvider>(
+                builder: (context,feedProvider,child) {
+                 
+                  if(feedProvider.isLoading){
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  else{
+                     final feedConsumed=feedProvider.feedConsumeRecord??[];
+                    return Flexible(
+                        child: ListView.builder(
+                            itemCount: feedConsumed.length,
+                            itemBuilder: (context, index) {
+                              final feed = feedConsumed[index];
+                              return Card(
+                                color: Colors.white,
+                                elevation: 2.0,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: screenHeight * .025,
+                                    horizontal: screenWidth * .025,
                                   ),
-                                );
-                              },
-                            ),
-            ),
-          ],
-        ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          SizedBox(
+                                            height: screenHeight * .035,
+                                            width: screenHeight * .035,
+                                            child: const Image(
+                                              image: AssetImage(
+                                                  "lib/assets/wanda.png"),
+                                              fit: BoxFit.fill,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: screenWidth * .015,
+                                          ),
+                                          Text1(
+                                            fontColor: lightBlackColor,
+                                            fontSize: screenWidth * .05,
+                                            text: "${feed.date}",
+                                          ),
+                                        ],
+                                      ),
+                                      Text1(
+                                        fontColor: lightBlackColor,
+                                        fontSize: screenWidth * .05,
+                                        text: "${feed.total} Kg",
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                      );
+                  }
+                  
+                }
+              )
+        ],
       ),
     );
   }
@@ -217,7 +211,7 @@ Widget pageHeaderContainer(BuildContext context, int consumedFeed, feeds) {
       borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40)),
       child: Container(
-          height: screenHeight / 4.8,
+          height: screenHeight / 4.5,
           width: double.infinity,
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(
@@ -231,91 +225,81 @@ Widget pageHeaderContainer(BuildContext context, int consumedFeed, feeds) {
                     offset: const Offset(2, 2))
               ]),
           child: Padding(
-            padding: const EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(8),
             child: Column(
               children: [
-                SizedBox(
-                  height: screenHeight * .02,
-                ),
-
-                //here is the code for the custom gridview boxes
-
-                Column(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        FutureBuilder<dynamic>(
-                          future: fetchFeed(context),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return wrapCircleContainer("0", "Total");
-                            } else if (snapshot.hasError) {
-                              return wrapCircleContainer("0", "Total");
-                            } else if (snapshot.hasData &&
-                                snapshot.data != null) {
-                              final feedAvailable = int.tryParse(snapshot
-                                      .data['feedInventory']['feedAmount']
-                                      .toString()) ??
-                                  0;
-                              final totalFeedStored =
-                                  feedAvailable + consumedFeed;
-                                  
-
-                              // Display total feed stored
-                              return wrapCircleContainer(
-                                  "$totalFeedStored", "Total");
-                            } else {
-                              return wrapCircleContainer("0", "Total");
-                            }
-                          },
-                        ),
-                        SizedBox(
-                          height: paragraph / 4,
-                        ),
-                        Container(
-                          width: 1,
-                          height: screenWidth / 3.8,
-                          color: CupertinoColors.systemGrey6,
-                        ),
-                        wrapCircleContainer(consumedFeed.toString(), "Used"),
-                        SizedBox(
-                          height: paragraph / 4,
-                        ),
-                        Container(
-                          width: 1,
-                          height: screenWidth / 3.8,
-                          color: CupertinoColors.systemGrey6,
-                        ),
-                        FutureBuilder<dynamic>(
-                          future: fetchFeed(context),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return wrapCircleContainer("0", "Available");
-                            } else if (snapshot.hasError) {
-                              return wrapCircleContainer("0", "Available");
-                            } else if (snapshot.hasData &&
-                                snapshot.data != null) {
-                              return wrapCircleContainer(
-                                  "${snapshot.data['feedInventory']['feedAmount']}",
-                                  "Available");
-                            } else {
-                              return const Text('No data available');
-                            }
-                          },
-                        ),
-                        SizedBox(
-                          height: paragraph / 4,
-                        ),
-                        Container(
-                          width: 0,
-                          height: screenWidth / 3.8,
-                          color: CupertinoColors.systemGrey6,
-                        ),
-                      ],
-                    )
+                    FutureBuilder<dynamic>(
+                      future: fetchFeed(context),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return wrapCircleContainer("0", "Total");
+                        } else if (snapshot.hasError) {
+                          return wrapCircleContainer("0", "Total");
+                        } else if (snapshot.hasData &&
+                            snapshot.data != null) {
+                          final feedAvailable = int.tryParse(snapshot
+                                  .data['feedInventory']['feedAmount']
+                                  .toString()) ??
+                              0;
+                          final totalFeedStored =
+                              feedAvailable + consumedFeed;
+                              
+            
+                          // Display total feed stored
+                          return wrapCircleContainer(
+                              "$totalFeedStored", "Total");
+                        } else {
+                          return wrapCircleContainer("0", "Total");
+                        }
+                      },
+                    ),
+                    SizedBox(
+                      height: paragraph / 4,
+                    ),
+                    Container(
+                      width: 1,
+                      height: screenWidth / 3.8,
+                      color: CupertinoColors.systemGrey6,
+                    ),
+                    wrapCircleContainer(consumedFeed.toString(), "Used"),
+                    SizedBox(
+                      height: paragraph / 4,
+                    ),
+                    Container(
+                      width: 1,
+                      height: screenWidth / 3.8,
+                      color: CupertinoColors.systemGrey6,
+                    ),
+                    FutureBuilder<dynamic>(
+                      future: fetchFeed(context),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return wrapCircleContainer("0", "Available");
+                        } else if (snapshot.hasError) {
+                          return wrapCircleContainer("0", "Available");
+                        } else if (snapshot.hasData &&
+                            snapshot.data != null) {
+                          return wrapCircleContainer(
+                              "${snapshot.data['feedInventory']['feedAmount']}",
+                              "Available");
+                        } else {
+                          return const Text('No data available');
+                        }
+                      },
+                    ),
+                    SizedBox(
+                      height: paragraph / 4,
+                    ),
+                    Container(
+                      width: 0,
+                      height: screenWidth / 3.8,
+                      color: CupertinoColors.systemGrey6,
+                    ),
                   ],
                 )
               ],
@@ -332,7 +316,7 @@ Widget wrapCircleContainer(String text, label) {
       children: [
         circleContainer(text),
         const SizedBox(
-          height: 2,
+          height: 5,
         ),
         Text1(fontColor: lightBlackColor, fontSize: paragraph, text: label)
       ],
@@ -342,8 +326,8 @@ Widget wrapCircleContainer(String text, label) {
 
 Widget circleContainer(String text) {
   return Container(
-    width: screenWidth / 7,
-    height: screenWidth / 7,
+    width: screenWidth / 5.5,
+    height: screenWidth / 5.5,
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(screenWidth / 4),

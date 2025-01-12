@@ -30,92 +30,102 @@ class MedicalRecordResponse {
 }
 
 class MonthlyMedicalRecord {
-  final String id;
-  final String date;
-  final String vaccineType;
-  final String dairyFarmId;
-  final CreatedBy createdBy;
   final Cow cow;
+  final int totalVaccine;
+  final List<MedicalRecord> medicalRecords;
 
   MonthlyMedicalRecord({
-    required this.id,
-    required this.date,
-    required this.vaccineType,
-    required this.dairyFarmId,
-    required this.createdBy,
     required this.cow,
+    required this.totalVaccine,
+    required this.medicalRecords,
   });
 
   factory MonthlyMedicalRecord.fromJson(Map<String, dynamic> json) {
     return MonthlyMedicalRecord(
-      id: json['_id'],
-      date: json['date'],
-      vaccineType: json['vaccineType'],
-      dairyFarmId: json['dairyFarmId'],
-      createdBy: CreatedBy.fromJson(json['createdBy']),
       cow: Cow.fromJson(json['cow']),
+      totalVaccine: json['totalVaccine'],
+      medicalRecords: (json['medicalRecords'] as List)
+          .map((record) => MedicalRecord.fromJson(record))
+          .toList(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      '_id': id,
-      'date': date,
-      'vaccineType': vaccineType,
-      'dairyFarmId': dairyFarmId,
-      'createdBy': createdBy.toJson(),
       'cow': cow.toJson(),
+      'totalVaccine': totalVaccine,
+      'medicalRecords': medicalRecords.map((record) => record.toJson()).toList(),
     };
   }
 }
 
-class CreatedBy {
-  final String name;
+class MedicalRecord {
   final String id;
+  final String cowId;
+  final String date;
+  final String vaccineType;
+  final String dairyFarmId;
+  final String createdBy;
+  final int version;
 
-  CreatedBy({
-    required this.name,
+  MedicalRecord({
     required this.id,
+    required this.cowId,
+    required this.date,
+    required this.vaccineType,
+    required this.dairyFarmId,
+    required this.createdBy,
+    required this.version,
   });
 
-  factory CreatedBy.fromJson(Map<String, dynamic> json) {
-    return CreatedBy(
-      name: json['name'],
+  factory MedicalRecord.fromJson(Map<String, dynamic> json) {
+    return MedicalRecord(
       id: json['_id'],
+      cowId: json['cowId'],
+      date: json['date'],
+      vaccineType: json['vaccineType'],
+      dairyFarmId: json['dairyFarmId'],
+      createdBy: json['createdBy'],
+      version: json['__v'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'name': name,
       '_id': id,
+      'cowId': cowId,
+      'date': date,
+      'vaccineType': vaccineType,
+      'dairyFarmId': dairyFarmId,
+      'createdBy': createdBy,
+      '__v': version,
     };
   }
 }
 
 class Cow {
-  final int animalNumber;
   final String id;
+  final int animalNumber;
   final String image;
 
   Cow({
-    required this.animalNumber,
     required this.id,
+    required this.animalNumber,
     required this.image,
   });
 
   factory Cow.fromJson(Map<String, dynamic> json) {
     return Cow(
-      animalNumber: json['animalNumber'],
       id: json['_id'],
+      animalNumber: json['animalNumber'],
       image: json['image'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'animalNumber': animalNumber,
       '_id': id,
+      'animalNumber': animalNumber,
       'image': image,
     };
   }

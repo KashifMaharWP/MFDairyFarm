@@ -5,6 +5,7 @@ class FeedConsumption {
   final int? total;
   final String? date;
   final CreatedBy? createdBy;
+  final Cow? cow;
 
   FeedConsumption({
     this.id,
@@ -13,6 +14,7 @@ class FeedConsumption {
     this.total,
     this.date,
     this.createdBy,
+    this.cow,
   });
 
   factory FeedConsumption.fromJson(Map<String, dynamic> json) {
@@ -25,6 +27,7 @@ class FeedConsumption {
       createdBy: json['createdBy'] != null
           ? CreatedBy.fromJson(json['createdBy'])
           : null,
+      cow: json['cow'] != null ? Cow.fromJson(json['cow']) : null,
     );
   }
 }
@@ -39,6 +42,22 @@ class CreatedBy {
     return CreatedBy(
       name: json['name'],
       id: json['_id'],
+    );
+  }
+}
+
+class Cow {
+  final int? animalNumber;
+  final String? id;
+  final String? image;
+
+  Cow({this.animalNumber, this.id, this.image});
+
+  factory Cow.fromJson(Map<String, dynamic> json) {
+    return Cow(
+      animalNumber: json['animalNumber'],
+      id: json['_id'],
+      image: json['image'],
     );
   }
 }

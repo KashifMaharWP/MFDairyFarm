@@ -134,8 +134,8 @@ class _VacinationRecordState extends State<VacinationRecord> {
                                         Text1(
                                             fontColor: lightBlackColor,
                                             fontSize: screenWidth * .04,
-                                            text: record.cow.animalNumber
-                                                .toString()),
+                                            text: "Tag: ${record.cow.animalNumber
+                                                .toString()}"),
                                       ],
                                     ),
                                     SizedBox(height: 5,),
@@ -153,7 +153,7 @@ class _VacinationRecordState extends State<VacinationRecord> {
                                         Text1(
                                             fontColor: lightBlackColor,
                                             fontSize: screenWidth * .04,
-                                            text: record.vaccineType),
+                                            text: "Vacination: ${record.totalVaccine.toString()}"),
                                       ],
                                     ),
                                     // Row(
