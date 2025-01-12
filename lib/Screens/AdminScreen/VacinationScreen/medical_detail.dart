@@ -60,11 +60,6 @@ class _MedicalDetailState extends State<MedicalDetail> {
             width: screenWidth * .85,
             child: const Divider(),
           ),
-          ReuseableWidget(
-            imgUrl: "lib/assets/cow.png",
-            text1: "Animal",
-            text2: widget.tag,
-          ),
           SizedBox(
             height: screenHeight * .010,
           ),
