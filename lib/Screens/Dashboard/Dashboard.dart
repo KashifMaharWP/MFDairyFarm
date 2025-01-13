@@ -54,158 +54,161 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: const MyDrawer(),
-      resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.grey.shade100,
-      body: iconIndex == 0
-          ? LayoutBuilder(
-              builder: (context, constraints) {
-                return SingleChildScrollView(
-                  child: ConstrainedBox(
-                    constraints:
-                        BoxConstraints(maxHeight: constraints.maxHeight),
-                    child: Column(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              color: darkGreenColor,
-                              borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(20),
-                                  bottomRight: Radius.circular(20))),
-                          height: header1*8,
-                          width: MediaQuery.of(context).size.width,
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                left: header1 * .45,
-                                right: header1 * .45,
-                                top: header1 * .25),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        Scaffold.of(context).openDrawer();
-                                      },
-                                      child: const CircleAvatar(
-                                        backgroundImage: AssetImage(
-                                            "lib/assets/farmWorker.png"),
-                                        radius: 30,
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        drawer: const MyDrawer(),
+        resizeToAvoidBottomInset: true,
+        backgroundColor: Colors.grey.shade100,
+        body: iconIndex == 0
+            ? LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints:
+                          BoxConstraints(maxHeight: constraints.maxHeight),
+                      child: Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                                color: darkGreenColor,
+                                borderRadius: const BorderRadius.only(
+                                    bottomLeft: Radius.circular(20),
+                                    bottomRight: Radius.circular(20))),
+                            height: header1*8,
+                            width: MediaQuery.of(context).size.width,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: header1 * .45,
+                                  right: header1 * .45,
+                                  top: header1 * .25),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          Scaffold.of(context).openDrawer();
+                                        },
+                                        child: const CircleAvatar(
+                                          backgroundImage: AssetImage(
+                                              "lib/assets/farmWorker.png"),
+                                          radius: 30,
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      width: header1 * .02,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          left: header1 * 2,
-                                          right: header1 * 2,
-                                          top: header1 *2),
-                                      child: Column(
-                                        children: [
-                                          Text1(
-                                              fontColor: whiteColor,
-                                              fontSize: header1,
-                                              text: "Welcome"),
-                                          Consumer<UserDetail>(
-                                            builder: (context, value, child) =>
-                                                Text1(
-                                                    fontColor: whiteColor,
-                                                    fontSize: header1 ,
-                                                    text:
-                                                        value.name.toString()),
-                                          ),
-                                        ],
+                                      SizedBox(
+                                        width: header1 * .02,
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.notifications,
-                                      size: header1 *1.5,
-                                      color: whiteColor,
-                                    ),
-                                    SizedBox(
-                                      width: header1/1.25,
-                                    ),
-                                    // PopupMenuButton(
-                                    //   icon: Icon(
-                                    //     Icons.more_vert_outlined,
-                                    //     size: header1*1.5 ,
-                                    //     color: whiteColor,
-                                    //   ),
-                                    //   elevation: 6,
-                                    //   offset: Offset(header1 * 2,
-                                    //       header1 * 4),
-                                    //   color: Colors.white,
-                                    //   itemBuilder: (context) => [
-                                    //     PopupMenuItem(
-                                    //         value: 1,
-                                    //         child: ListTile(
-                                    //             title: Text1(
-                                    //                 fontColor: blackColor,
-                                    //                 fontSize: header1,
-                                    //                 text: "Option1"))),
-                                    //     PopupMenuItem(
-                                    //         value: 2,
-                                    //         child: ListTile(
-                                    //           title: Text1(
-                                    //               fontColor: blackColor,
-                                    //               fontSize: header1,
-                                    //               text: "Option2"),
-                                    //         )),
-                                    //     PopupMenuItem(
-                                    //         value: 3,
-                                    //         child: ListTile(
-                                    //           title: Text1(
-                                    //               fontColor: blackColor,
-                                    //               fontSize: header1,
-                                    //               text: "Option3"),
-                                    //         )),
-                                    //     PopupMenuItem(
-                                    //         value: 4,
-                                    //         child: ListTile(
-                                    //           title: Text1(
-                                    //               fontColor: blackColor,
-                                    //               fontSize: header1,
-                                    //               text: "Option2"),
-                                    //         )),
-                                    //   ],
-                                    // )
-                                  
-                                  ],
-                                )
-                              ],
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: header1 * 2,
+                                            right: header1 * 2,
+                                            top: header1 *2),
+                                        child: Column(
+                                          children: [
+                                            Text1(
+                                                fontColor: whiteColor,
+                                                fontSize: header1,
+                                                text: "Welcome"),
+                                            Consumer<UserDetail>(
+                                              builder: (context, value, child) =>
+                                                  Text1(
+                                                      fontColor: whiteColor,
+                                                      fontSize: header1 ,
+                                                      text:
+                                                          value.name.toString()),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.notifications,
+                                        size: header1 *1.5,
+                                        color: whiteColor,
+                                      ),
+                                      SizedBox(
+                                        width: header1/1.25,
+                                      ),
+                                      // PopupMenuButton(
+                                      //   icon: Icon(
+                                      //     Icons.more_vert_outlined,
+                                      //     size: header1*1.5 ,
+                                      //     color: whiteColor,
+                                      //   ),
+                                      //   elevation: 6,
+                                      //   offset: Offset(header1 * 2,
+                                      //       header1 * 4),
+                                      //   color: Colors.white,
+                                      //   itemBuilder: (context) => [
+                                      //     PopupMenuItem(
+                                      //         value: 1,
+                                      //         child: ListTile(
+                                      //             title: Text1(
+                                      //                 fontColor: blackColor,
+                                      //                 fontSize: header1,
+                                      //                 text: "Option1"))),
+                                      //     PopupMenuItem(
+                                      //         value: 2,
+                                      //         child: ListTile(
+                                      //           title: Text1(
+                                      //               fontColor: blackColor,
+                                      //               fontSize: header1,
+                                      //               text: "Option2"),
+                                      //         )),
+                                      //     PopupMenuItem(
+                                      //         value: 3,
+                                      //         child: ListTile(
+                                      //           title: Text1(
+                                      //               fontColor: blackColor,
+                                      //               fontSize: header1,
+                                      //               text: "Option3"),
+                                      //         )),
+                                      //     PopupMenuItem(
+                                      //         value: 4,
+                                      //         child: ListTile(
+                                      //           title: Text1(
+                                      //               fontColor: blackColor,
+                                      //               fontSize: header1,
+                                      //               text: "Option2"),
+                                      //         )),
+                                      //   ],
+                                      // )
+                                    
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        pageBodyContainer(),
-                        SizedBox(
-                          height: header1/8,
-                        ),
-                        pageHeaderContainer(),
-                      ],
+                          pageBodyContainer(),
+                          SizedBox(
+                            height: header1/8,
+                          ),
+                          pageHeaderContainer(),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            )
-          : iconIndex == 1
-              ? const DairyFormDetail()
-              : const WorkerTask(),
-      bottomNavigationBar: CurvedNavigationBar(
-        items: _navigationItems,
-        backgroundColor: Colors.grey.shade100,
-        color: darkGreenColor,
-        animationDuration: const Duration(milliseconds: 300),
-        onTap: (value) {
-          iconIndex = value;
-          setState(() {});
-        },
+                  );
+                },
+              )
+            : iconIndex == 1
+                ? const DairyFormDetail()
+                : const WorkerTask(),
+        bottomNavigationBar: CurvedNavigationBar(
+          items: _navigationItems,
+          backgroundColor: Colors.grey.shade100,
+          color: darkGreenColor,
+          animationDuration: const Duration(milliseconds: 300),
+          onTap: (value) {
+            iconIndex = value;
+            setState(() {});
+          },
+        ),
       ),
     );
   }

@@ -68,108 +68,111 @@ void dispose() {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: const MyDrawer(),
-      resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.grey.shade100,
-      body: iconIndex == 0
-          ? LayoutBuilder(
-              builder: (context, constraints) {
-                return SingleChildScrollView(
-                  child: ConstrainedBox(
-                    constraints:
-                        BoxConstraints(maxHeight: constraints.maxHeight),
-                    child: Column(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              color: darkGreenColor,
-                              borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(20),
-                                  bottomRight: Radius.circular(20))),
-                          height: screenHeight / 3.5,
-                          width: double.infinity,
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                left: screenWidth * .045,
-                                right: screenWidth * .045,
-                                top: screenHeight * .025),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        Scaffold.of(context).openDrawer();
-                                      },
-                                      child: const CircleAvatar(
-                                        backgroundImage: AssetImage(
-                                            "lib/assets/farmWorker.png"),
-                                        radius: 30,
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        drawer: const MyDrawer(),
+        resizeToAvoidBottomInset: true,
+        backgroundColor: Colors.grey.shade100,
+        body: iconIndex == 0
+            ? LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints:
+                          BoxConstraints(maxHeight: constraints.maxHeight),
+                      child: Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                                color: darkGreenColor,
+                                borderRadius: const BorderRadius.only(
+                                    bottomLeft: Radius.circular(20),
+                                    bottomRight: Radius.circular(20))),
+                            height: screenHeight / 3.5,
+                            width: double.infinity,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: screenWidth * .045,
+                                  right: screenWidth * .045,
+                                  top: screenHeight * .025),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          Scaffold.of(context).openDrawer();
+                                        },
+                                        child: const CircleAvatar(
+                                          backgroundImage: AssetImage(
+                                              "lib/assets/farmWorker.png"),
+                                          radius: 30,
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      width: screenWidth * .02,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          left: screenWidth * .02,
-                                          right: screenWidth * .02,
-                                          top: screenHeight * .035),
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text1(
-                                              fontColor: whiteColor,
-                                              fontSize: 25,
-                                              text: "Welcome"),
-                                          Consumer<UserDetail>(
-                                            builder: (context, value, child) =>
-                                                Text1(
-                                                    fontColor: whiteColor,
-                                                    fontSize: screenWidth * .05,
-                                                    text: "${value.name}"),
-                                          ),
-                                        ],
+                                      SizedBox(
+                                        width: screenWidth * .02,
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: screenWidth * .02,
+                                            right: screenWidth * .02,
+                                            top: screenHeight * .035),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text1(
+                                                fontColor: whiteColor,
+                                                fontSize: 25,
+                                                text: "Welcome"),
+                                            Consumer<UserDetail>(
+                                              builder: (context, value, child) =>
+                                                  Text1(
+                                                      fontColor: whiteColor,
+                                                      fontSize: screenWidth * .05,
+                                                      text: "${value.name}"),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        pageBodyContainer(),
-                        SizedBox(
-                          height: screenHeight * .01,
-                        ),
-
-                        // Padding(
-                        //   padding: const EdgeInsets.only(left: 8, right: 8),
-                        //   child: wrapContainer(),
-                        // ),
-
-                        //  pageHeaderContainer(),
-                      ],
+                          pageBodyContainer(),
+                          SizedBox(
+                            height: screenHeight * .01,
+                          ),
+      
+                          // Padding(
+                          //   padding: const EdgeInsets.only(left: 8, right: 8),
+                          //   child: wrapContainer(),
+                          // ),
+      
+                          //  pageHeaderContainer(),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            )
-          : iconIndex == 1
-              ? const NotificationScreen()
-              : const ProfileView(),
-      bottomNavigationBar: CurvedNavigationBar(
-        items: _navigationItems,
-        backgroundColor: Colors.grey.shade100,
-        color: darkGreenColor,
-        animationDuration: const Duration(milliseconds: 300),
-        onTap: (value) {
-          iconIndex = value;
-          setState(() {});
-        },
+                  );
+                },
+              )
+            : iconIndex == 1
+                ? const NotificationScreen()
+                : const ProfileView(),
+        bottomNavigationBar: CurvedNavigationBar(
+          items: _navigationItems,
+          backgroundColor: Colors.grey.shade100,
+          color: darkGreenColor,
+          animationDuration: const Duration(milliseconds: 300),
+          onTap: (value) {
+            iconIndex = value;
+            setState(() {});
+          },
+        ),
       ),
     );
   }
