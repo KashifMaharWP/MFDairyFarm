@@ -47,7 +47,9 @@ class _VacinationRecordState extends State<VacinationRecord> {
               builder: (context, medicalProvider, child) {
                 if (medicalProvider.isLoading) {
                   return const Center(child: CircularProgressIndicator());
-                } else {
+                }
+               
+                 else {
                   final records =
                       medicalProvider.medicalData?.monthlyMedicalRecords ?? [];
 

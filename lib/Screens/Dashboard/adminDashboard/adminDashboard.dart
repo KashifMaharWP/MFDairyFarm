@@ -19,39 +19,37 @@ class AdminDashboardButtons extends StatefulWidget {
 class _AdminDashboardButtons extends State<AdminDashboardButtons> {
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: GridView(
-        padding: EdgeInsets.only(left: 20,top: 20,),
-        physics: NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            mainAxisSpacing: 0,
-            crossAxisSpacing: 15,
-            mainAxisExtent: 100),
-        children: [
-          viewContainer("Animal", "lib/assets/cowEntry.png", () async {
-            // Navigate to animalRegistrationPage and get the save function
-            final Function? saveFunction = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const AnimalRegistrationPage(),
-              ),
-            );
-            if (saveFunction != null) {
-              // Trigger customPopUp and pass the save function
-              customPopUp(context, screenHeight / 3, saveFunction);
-            }
-          }),
-          viewContainer("Wanda", "lib/assets/wanda.png", () async {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => feedEntryPage()));
-          }),
-          viewContainer("Worker", "lib/assets/farmWorker.png", () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const SignUpScreen()));
-          }),
-        ],
-      ),
+    return GridView(
+      padding: EdgeInsets.only(left: 20,top: 20,),
+      physics: NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          mainAxisSpacing: 0,
+          crossAxisSpacing: 15,
+          mainAxisExtent: 100),
+      children: [
+        viewContainer("Animal", "lib/assets/cowEntry.png", () async {
+          // Navigate to animalRegistrationPage and get the save function
+          final Function? saveFunction = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AnimalRegistrationPage(),
+            ),
+          );
+          if (saveFunction != null) {
+            // Trigger customPopUp and pass the save function
+            customPopUp(context, screenHeight / 3, saveFunction);
+          }
+        }),
+        viewContainer("Wanda", "lib/assets/wanda.png", () async {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => feedEntryPage()));
+        }),
+        viewContainer("Worker", "lib/assets/farmWorker.png", () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const SignUpScreen()));
+        }),
+      ],
     );
   }
 

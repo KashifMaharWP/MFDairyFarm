@@ -62,9 +62,9 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
+                } else if (snapshot.data!.monthlyMilkRecord!.isEmpty) {
                   return Center(
-                      child: Text('An error occurred: ${snapshot.error}'));
+                      child: Text('No Data Available'));
                 } else if (snapshot.hasData && snapshot.data != null) {
                   final soldMilkData = snapshot.data!.monthlyMilkRecord ?? [];
                   return ListView.builder(
@@ -265,8 +265,11 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
                       );
                     },
                   );
-                } else {
-                  return const Center(child: Text('No data available'));
+                } 
+                else{
+                  return const Center(child: Text('No data available',style: TextStyle(
+                    fontSize: 16,
+                  ),));
                 }
               },
             ),

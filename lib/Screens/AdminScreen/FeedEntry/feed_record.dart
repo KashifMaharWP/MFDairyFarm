@@ -214,7 +214,9 @@ class _FeedRecordState extends State<FeedRecord> {
           Consumer<FeedProvider>(builder: (context, feedProvider, child) {
             if (feedProvider.isLoading) {
               return const Center(child: CircularProgressIndicator());
-            } else {
+            } 
+            
+            else {
               final feedConsumed = feedProvider
                       .feedConsumeRecord?.feedConsumptionRecordMonthly ??
                   [];

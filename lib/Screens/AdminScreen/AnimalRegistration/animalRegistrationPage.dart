@@ -140,11 +140,12 @@ class _AnimalRegistrationPageState extends State<AnimalRegistrationPage> {
                 loading: false,
                 title: "Save Animal",
                 on_Tap: () async {
-                  FocusScope.of(context).unfocus();
+                //  FocusScope.of(context).unfocus();
                   await Provider.of<AnimalRegistratinProvider>(context,
                           listen: false)
                       .uploadAnimalData(context, animalId.text, breedType.text,
                           purchasedPrice.text, _image!);
+                          Navigator.pop(context);
                 },
               ),
             ],

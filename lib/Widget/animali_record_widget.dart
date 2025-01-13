@@ -45,7 +45,9 @@ class _AnimalRecordWidgetState extends State<AnimalRecordWidget> {
             return const Center(
               child: CircularProgressIndicator(),
             );
-          }  else {
+          }  
+          
+          else {
             final cows = cowsProvider.cowList?.cows??[];
             return Flexible(
               child: GridView.builder(
