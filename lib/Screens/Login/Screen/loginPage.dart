@@ -22,47 +22,24 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage>{
+  
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   bool isLoading = false;
   String role = '';
 
-  checkUserData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final chk = prefs.getString('userId');
-    final role = prefs.getString('role');
-
-    print("User Id = $chk");
-    //checking if the user detail is available then
-    if (chk != '' && chk != null) {
-      //get user data from the preference and store it in userdetail class
-      Provider.of<UserDetail>(context, listen: false)
-          .setUserDetailByPreferences();
-      if (role == 'Admin') {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (_) => const Dashboard()));
-      } else {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (_) => const UserDashboard()));
-      }
-
-      //after initializing the user detail class move the user to homepage
-    } else {
-      if (kDebugMode) {
-        print("User not found!");
-      }
-    }
-  }
 
   @override
-  void initState() {
-    super.initState();
-    checkUserData();
-  }
+void dispose() {
+  email.dispose();
+  password.dispose();
+  super.dispose();
+}
 
   @override
   Widget build(BuildContext context) {
+     
     isLoading = Provider.of<AuthProvider>(context).isLoading;
     return Scaffold(
         body: Container(
