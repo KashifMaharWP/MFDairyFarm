@@ -4,6 +4,7 @@ import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Providers/animal_registratin_provider.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/AnimalRecord/animal_detail.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:dairyfarmflow/Widget/customRoundButton.dart';
 import 'package:dairyfarmflow/Widget/textFieldWidget1.dart';
@@ -140,12 +141,22 @@ class _AnimalRegistrationPageState extends State<AnimalRegistrationPage> {
                 loading: false,
                 title: "Save Animal",
                 on_Tap: () async {
-                //  FocusScope.of(context).unfocus();
+                  //  FocusScope.of(context).unfocus();
                   await Provider.of<AnimalRegistratinProvider>(context,
                           listen: false)
                       .uploadAnimalData(context, animalId.text, breedType.text,
                           purchasedPrice.text, _image!);
-                          Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AnimalDetail(
+                        tag: "someTag", // pass your tag
+                        url: "someUrl", // pass your URL
+                        id: animalId.text, // pass the animal ID (as cowId here)
+                      ),
+                    ),
+                  );
+                  Navigator.pop(context);
                 },
               ),
             ],

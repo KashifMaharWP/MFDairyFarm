@@ -1,14 +1,18 @@
+import 'dart:convert';
 import 'dart:developer';
-
+import 'package:dairyfarmflow/API/global_api.dart';
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Model/AnimalDetails/animal_detail_model.dart';
+import 'package:dairyfarmflow/Model/feed_consume.dart';
 import 'package:dairyfarmflow/Providers/animal_registratin_provider.dart';
+import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class AnimalDetail extends StatefulWidget {
   String tag, url, id;
@@ -22,6 +26,46 @@ class AnimalDetail extends StatefulWidget {
 class _AnimalDetailState extends State<AnimalDetail> {
   late DateTime _currentMonth;
   late DateTime _selectedMonth;
+
+  Future<void> deleteCow(BuildContext context, String cowId) async {
+    print('Function called');
+    try {
+      final headers = {
+        'Authorization':
+            'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
+      };
+      final url =
+          Uri.parse('${GlobalApi.baseApi}${GlobalApi.deleteAnimal}/$cowId');
+      final response = await http.delete(url, headers: headers);
+      print(response.statusCode);
+      // debugger();
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Cow deleted successfully'),
+          ),
+        );
+        Navigator.pop(context); // Call Navigator.pop after showing the SnackBar
+      } else if (response.statusCode == 404) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Cow not found'),
+          ),
+        );
+        Navigator.pop(context); // Call Navigator.pop after showing the SnackBar
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error deleting cow'),
+          ),
+        );
+        Navigator.pop(context); // Call Navigator.pop after showing the SnackBar
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   void _goToPreviousMonth() {
     setState(() {
       _selectedMonth =
@@ -29,7 +73,6 @@ class _AnimalDetailState extends State<AnimalDetail> {
     });
   }
 
-  // Navigate to the next month
   void _goToNextMonth() {
     setState(() {
       _selectedMonth =
@@ -40,24 +83,19 @@ class _AnimalDetailState extends State<AnimalDetail> {
   @override
   void initState() {
     super.initState();
-    _currentMonth = DateTime.now(); // Initialize with the current month
+    _currentMonth = DateTime.now();
     _selectedMonth = _currentMonth;
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // Initially fetch data for the selected month (you can adjust this if needed)
       Provider.of<AnimalRegistratinProvider>(context, listen: false)
           .getAnimalDetailById(
               context, widget.id, DateFormat('MMM').format(_selectedMonth));
     });
   }
 
-  // Navigate to the previous month
-
   @override
   Widget build(BuildContext context) {
-    // Format the selected month to display only the month name
     String monthName = DateFormat('MMMM yyyy').format(_selectedMonth);
-
     final provider =
         Provider.of<AnimalRegistratinProvider>(context, listen: false);
 
@@ -67,8 +105,6 @@ class _AnimalDetailState extends State<AnimalDetail> {
         elevation: 1,
         backgroundColor: darkGreenColor,
         foregroundColor: Colors.white,
-        // centerTitle: true,
-        shadowColor: Colors.black,
         title: Padding(
           padding: const EdgeInsets.only(
             right: 40,
@@ -76,21 +112,10 @@ class _AnimalDetailState extends State<AnimalDetail> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Show the '<' button to go to the previous month, if it's  the current year
               IconButton(
                   icon: Icon(Icons.keyboard_arrow_left_sharp),
                   color: Colors.white,
                   onPressed: () {
-                    // if (DateTime(_selectedMonth.year, _selectedMonth.month - 1, 1)
-                    //         .year !=
-                    //     _currentMonth.year) {
-                    //   // Show Snackbar if the year is not the current year
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //     SnackBar(
-                    //         content: Text(
-                    //             'You can only see the records of the current year.')),
-                    //   );
-                    // } else {
                     _goToPreviousMonth();
                     WidgetsBinding.instance.addPostFrameCallback((_) async {
                       Provider.of<AnimalRegistratinProvider>(context,
@@ -98,15 +123,11 @@ class _AnimalDetailState extends State<AnimalDetail> {
                           .getAnimalDetailById(context, widget.id,
                               DateFormat('MMM').format(_selectedMonth));
                     });
-                    //   }
-                  } //_goToPreviousMonth,
-                  ),
-              // Display the current selected month in the middle
+                  }),
               Text(
                 monthName,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              // Show the '>' button to go to the next month, if it's not the current month
               IconButton(
                 icon: Icon(Icons.keyboard_arrow_right_sharp),
                 color: Colors.white,
@@ -114,7 +135,6 @@ class _AnimalDetailState extends State<AnimalDetail> {
                   if (_selectedMonth.month != _currentMonth.month) {
                     _goToNextMonth();
                     WidgetsBinding.instance.addPostFrameCallback((_) async {
-                      // Initially fetch data for the selected month (you can adjust this if needed)
                       Provider.of<AnimalRegistratinProvider>(context,
                               listen: false)
                           .getAnimalDetailById(context, widget.id,
@@ -129,10 +149,13 @@ class _AnimalDetailState extends State<AnimalDetail> {
       ),
       body: Column(
         children: [
-          Center(
-            child: Image(
-              image: NetworkImage(widget.url),
-              fit: BoxFit.contain,
+          GestureDetector(
+            onLongPress: () => _showPopupMenu(context),
+            child: Center(
+              child: Image(
+                image: NetworkImage(widget.url),
+                fit: BoxFit.contain,
+              ),
             ),
           ),
           SizedBox(
@@ -180,7 +203,6 @@ class _AnimalDetailState extends State<AnimalDetail> {
             },
           ),
           Flexible(
-            // Move Expanded here
             child: Consumer<AnimalRegistratinProvider>(
               builder: (context, animalProvider, child) {
                 if (animalProvider.isDataFetched) {
@@ -190,7 +212,7 @@ class _AnimalDetailState extends State<AnimalDetail> {
                           .animalDetail?.milkProductionMonthlyRecord ??
                       [];
                   return ListView.builder(
-                    itemCount: animal!.length,
+                    itemCount: animal.length,
                     itemBuilder: (context, index) {
                       final animalList = animal[index];
                       return Padding(
@@ -290,6 +312,47 @@ class _AnimalDetailState extends State<AnimalDetail> {
           ),
         ],
       ),
+    );
+  }
+
+  void _showPopupMenu(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Choose an action'),
+          actions: <Widget>[
+            // Update action
+            TextButton(
+              onPressed: () {
+                // Handle Update action
+                Navigator.of(context).pop();
+              },
+              child: Row(
+                children: [
+                  Icon(Icons.edit, color: Colors.blue), // Edit icon
+                  SizedBox(width: 8),
+                  Text('Update', style: TextStyle(color: Colors.blue)),
+                ],
+              ),
+            ),
+            // Delete action
+            TextButton(
+              onPressed: () {
+                deleteCow(context, widget.id);
+                Navigator.of(context).pop();
+              },
+              child: Row(
+                children: [
+                  Icon(Icons.delete, color: Colors.red), // Delete icon
+                  SizedBox(width: 8),
+                  Text('Delete', style: TextStyle(color: Colors.red)),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
