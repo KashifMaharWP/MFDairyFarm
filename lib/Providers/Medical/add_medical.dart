@@ -134,4 +134,30 @@ class AddMedical extends ChangeNotifier {
       setIsLoading(false);
     }
   }
+
+DeleteMedicalRecord(BuildContext context, String id) async {
+    final url = Uri.parse(
+        '${GlobalApi.baseApi}${GlobalApi.deleteVacine}/${id}');
+    setIsLoading(true);
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization':
+          "Bearer ${Provider.of<UserDetail>(context, listen: false).token}"
+    };
+    try {
+      final response = await http.delete(url, headers: headers);
+      final jsonResponse = jsonDecode(response.body);
+       debugger();
+      if (response.statusCode == 200) {
+       SimpleToast.showInfoToast(context,"Vacine","Vacination Deleted");
+        setIsLoading(false);
+      }
+    } catch (err) {
+      SimpleToast.showErrorToast(context, "Error", err.toString());
+      setIsLoading(false);
+    }
+}
+
+
+
 }

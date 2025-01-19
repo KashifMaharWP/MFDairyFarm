@@ -2,8 +2,9 @@ class MedicalDetailModel {
   bool? success;
   String? message;
   List<CowMedicalRecord>? cowMedicalRecord;
+  
 
-  MedicalDetailModel({this.success, this.message, this.cowMedicalRecord});
+  MedicalDetailModel({this.success, this.message, this.cowMedicalRecord, });
 
   MedicalDetailModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
@@ -13,6 +14,7 @@ class MedicalDetailModel {
       json['cowMedicalRecord'].forEach((v) {
         cowMedicalRecord!.add(CowMedicalRecord.fromJson(v));
       });
+     
     }
   }
 

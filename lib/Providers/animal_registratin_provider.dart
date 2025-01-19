@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:dairyfarmflow/API/global_api.dart';
+import 'package:dairyfarmflow/Model/Medical/details_model.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/VacinationScreen/medical_detail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -22,6 +24,9 @@ class AnimalRegistratinProvider extends ChangeNotifier {
  String get milkCount =>_milkCount;
  bool _isDataFetched=false;
  AnimalDetailModel? animalDetail;
+ String _vacineCount='';
+
+ String get vacineCount=>_vacineCount;
 
  bool get isDataFetched=> _isDataFetched;
 
@@ -125,6 +130,33 @@ class AnimalRegistratinProvider extends ChangeNotifier {
       if(response.statusCode==200){
         _milkCount =detailModel.milkCount.toString();
         animalDetail=detailModel;
+        
+        setIsDataFetched(false);
+      }
+    }catch(error){
+      
+    }
+  }
+
+  getVacineDetail(BuildContext context,String month, id,)async{
+    setIsDataFetched(true);
+    final url = Uri.parse("${GlobalApi.baseApi}${GlobalApi.getVacineDetail}$id/Sun Jan 19 2025");
+    print(url);
+
+    var headers = {
+    'Authorization':
+        'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
+  };
+
+    try{
+      final response = await http.get(url,headers: headers);
+     // MedicalDetailModel detailModel = MedicalDetailModel.fromJson(json.decode(response.body));
+    
+      //debugger();
+      if(response.statusCode==200){
+        final data=jsonDecode(response.body);
+        _vacineCount =data['vaccinationCount'].toString();
+        //animalDetail=detailModel;
         setIsDataFetched(false);
       }
     }catch(error){

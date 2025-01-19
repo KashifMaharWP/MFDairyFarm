@@ -4,6 +4,7 @@ import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Model/Medical/details_model.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -157,84 +158,101 @@ class _MedicalDetailState extends State<MedicalDetail> {
                   itemCount: medical.length,
                   itemBuilder: (context, index) {
                     final record = medical[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Container(
-                        width: screenWidth * 0.95,
-                        height: screenHeight / 6,
-                        padding: EdgeInsets.all(paragraph),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(paragraph),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: greyGreenColor,
-                                  blurRadius: 6,
-                                  spreadRadius: 3,
-                                  offset: const Offset(2, 0)),
-                            ]),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.calendar_month_sharp,
-                                  color: darkGreenColor,
-                                ),
-                                SizedBox(
-                                  width: screenWidth * .005,
-                                ),
-                                Text1(
-                                    fontColor: lightBlackColor,
-                                    fontSize: paragraph,
-                                    text: record.date.toString()),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    return GestureDetector(
+                      onLongPress: (){
+
+                      },
+                      child: Dismissible(
+                        key: Key(record.sId.toString()),
+                        direction: DismissDirection.endToStart,
+background:  _buildDismissBackground(),
+confirmDismiss: (_) => _confirmDismiss(context, "Are you sure you want to delete this item?"),
+onDismissed: (_) async {
+      await Provider.of<AddMedical>(context,listen: false).DeleteMedicalRecord(context, record.sId.toString());
+      setState(() {
+        
+      });
+      },
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Container(
+                            width: screenWidth * 0.95,
+                            height: screenHeight / 6,
+                            padding: EdgeInsets.all(paragraph),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(paragraph),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: greyGreenColor,
+                                      blurRadius: 6,
+                                      spreadRadius: 3,
+                                      offset: const Offset(2, 0)),
+                                ]),
+                            child: Column(
                               children: [
                                 Row(
                                   children: [
-                                    const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: Image(
-                                          image: AssetImage(
-                                              "lib/assets/medical.png")),
+                                    Icon(
+                                      Icons.calendar_month_sharp,
+                                      color: darkGreenColor,
                                     ),
                                     SizedBox(
                                       width: screenWidth * .005,
                                     ),
                                     Text1(
                                         fontColor: lightBlackColor,
-                                        fontSize: screenWidth * .05,
-                                        text: record.vaccineType.toString())
+                                        fontSize: paragraph,
+                                        text: record.date.toString()),
                                   ],
                                 ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: Image(
-                                          image: AssetImage(
-                                              "lib/assets/Check.png")),
+                                    Row(
+                                      children: [
+                                        const SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: Image(
+                                              image: AssetImage(
+                                                  "lib/assets/medical.png")),
+                                        ),
+                                        SizedBox(
+                                          width: screenWidth * .005,
+                                        ),
+                                        Text1(
+                                            fontColor: lightBlackColor,
+                                            fontSize: screenWidth * .05,
+                                            text: record.vaccineType.toString())
+                                      ],
                                     ),
-                                    SizedBox(
-                                      width: screenWidth * .005,
-                                    ),
-                                    Text1(
-                                        fontColor: lightBlackColor,
-                                        fontSize: screenWidth * .05,
-                                        text: "Yes")
+                                    Row(
+                                      children: [
+                                        const SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: Image(
+                                              image: AssetImage(
+                                                  "lib/assets/Check.png")),
+                                        ),
+                                        SizedBox(
+                                          width: screenWidth * .005,
+                                        ),
+                                        Text1(
+                                            fontColor: lightBlackColor,
+                                            fontSize: screenWidth * .05,
+                                            text: "Yes")
+                                      ],
+                                    )
                                   ],
                                 )
                               ],
-                            )
-                          ],
+                            ),
+                          ),
                         ),
                       ),
                     );
@@ -245,6 +263,50 @@ class _MedicalDetailState extends State<MedicalDetail> {
       ),
     );
   }
+
+  Future<bool?> _confirmDismiss(BuildContext context, String message) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Confirm Delete',
+            style: GoogleFonts.montserrat(fontWeight: FontWeight.w600),
+          ),
+          content: Text(
+            message,
+            style: GoogleFonts.montserrat(),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(
+                'Cancel',
+                style: GoogleFonts.montserrat(color: Colors.red),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(
+                'Delete',
+                style: GoogleFonts.montserrat(color: Colors.red),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildDismissBackground() {
+    return Container(
+      color: Colors.red,
+      alignment: Alignment.centerRight,
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      child: Icon(Icons.delete, color: Colors.white, size: 20),
+    );
+  }
+  
 }
 
 class ReuseableWidget extends StatelessWidget {
