@@ -48,6 +48,7 @@ class _AnimalDetailState extends State<AnimalDetail> {
       Provider.of<AnimalRegistratinProvider>(context, listen: false)
           .getAnimalDetailById(
               context, widget.id, DateFormat('MMM').format(_selectedMonth));
+              Provider.of<AnimalRegistratinProvider>(context,listen: false).getVacineDetail(context,  DateFormat('MMM').format(_selectedMonth), widget.id);
     });
   }
 
@@ -168,7 +169,7 @@ class _AnimalDetailState extends State<AnimalDetail> {
                     ReuseableWidget(
                       imgUrl: "lib/assets/medical.png",
                       text1: "Vaccination",
-                      text2: "2",
+                      text2: "${animalRegProvider.vacineCount}",
                     ),
                     SizedBox(
                       width: screenWidth * .85,
