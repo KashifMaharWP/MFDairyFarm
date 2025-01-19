@@ -47,7 +47,7 @@ class Cow {
       animalNumber: json['animalNumber'],
       image: json['image'],
       age: json['age'],
-      pregnancyStatus: json['pregnancyStatus'].toLowerCase() == 'true',
+      pregnancyStatus: json['pregnancyStatus'] == 'true',
       breed: json['breed'],
       createdBy: json['createdBy'],
     );
