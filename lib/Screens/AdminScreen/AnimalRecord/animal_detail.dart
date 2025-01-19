@@ -27,45 +27,6 @@ class _AnimalDetailState extends State<AnimalDetail> {
   late DateTime _currentMonth;
   late DateTime _selectedMonth;
 
-  Future<void> deleteCow(BuildContext context, String cowId) async {
-    print('Function called');
-    try {
-      final headers = {
-        'Authorization':
-            'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
-      };
-      final url =
-          Uri.parse('${GlobalApi.baseApi}${GlobalApi.deleteAnimal}/$cowId');
-      final response = await http.delete(url, headers: headers);
-      print(response.statusCode);
-      // debugger();
-      if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Cow deleted successfully'),
-          ),
-        );
-        Navigator.pop(context); // Call Navigator.pop after showing the SnackBar
-      } else if (response.statusCode == 404) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Cow not found'),
-          ),
-        );
-        Navigator.pop(context); // Call Navigator.pop after showing the SnackBar
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error deleting cow'),
-          ),
-        );
-        Navigator.pop(context); // Call Navigator.pop after showing the SnackBar
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   void _goToPreviousMonth() {
     setState(() {
       _selectedMonth =
@@ -90,7 +51,9 @@ class _AnimalDetailState extends State<AnimalDetail> {
       Provider.of<AnimalRegistratinProvider>(context, listen: false)
           .getAnimalDetailById(
               context, widget.id, DateFormat('MMM').format(_selectedMonth));
-              Provider.of<AnimalRegistratinProvider>(context,listen: false).getVacineDetail(context,  DateFormat('MMM').format(_selectedMonth), widget.id);
+      Provider.of<AnimalRegistratinProvider>(context, listen: false)
+          .getVacineDetail(
+              context, DateFormat('MMM').format(_selectedMonth), widget.id);
     });
   }
 
@@ -150,13 +113,10 @@ class _AnimalDetailState extends State<AnimalDetail> {
       ),
       body: Column(
         children: [
-          GestureDetector(
-            onLongPress: () => _showPopupMenu(context),
-            child: Center(
-              child: Image(
-                image: NetworkImage(widget.url),
-                fit: BoxFit.contain,
-              ),
+          Center(
+            child: Image(
+              image: NetworkImage(widget.url),
+              fit: BoxFit.contain,
             ),
           ),
           SizedBox(
@@ -313,47 +273,6 @@ class _AnimalDetailState extends State<AnimalDetail> {
           ),
         ],
       ),
-    );
-  }
-
-  void _showPopupMenu(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Choose an action'),
-          actions: <Widget>[
-            // Update action
-            TextButton(
-              onPressed: () {
-                // Handle Update action
-                Navigator.of(context).pop();
-              },
-              child: Row(
-                children: [
-                  Icon(Icons.edit, color: Colors.blue), // Edit icon
-                  SizedBox(width: 8),
-                  Text('Update', style: TextStyle(color: Colors.blue)),
-                ],
-              ),
-            ),
-            // Delete action
-            TextButton(
-              onPressed: () {
-                deleteCow(context, widget.id);
-                Navigator.of(context).pop();
-              },
-              child: Row(
-                children: [
-                  Icon(Icons.delete, color: Colors.red), // Delete icon
-                  SizedBox(width: 8),
-                  Text('Delete', style: TextStyle(color: Colors.red)),
-                ],
-              ),
-            ),
-          ],
-        );
-      },
     );
   }
 }
