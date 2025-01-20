@@ -158,21 +158,19 @@ class _MedicalDetailState extends State<MedicalDetail> {
                   itemCount: medical.length,
                   itemBuilder: (context, index) {
                     final record = medical[index];
-                    return GestureDetector(
-                      onLongPress: (){
-
-                      },
-                      child: Dismissible(
+                    return Consumer<AddMedical>(
+                        builder: (context, addMedical, child) {
+                      return Dismissible(
                         key: Key(record.sId.toString()),
                         direction: DismissDirection.endToStart,
-background:  _buildDismissBackground(),
-confirmDismiss: (_) => _confirmDismiss(context, "Are you sure you want to delete this item?"),
-onDismissed: (_) async {
-      await Provider.of<AddMedical>(context,listen: false).DeleteMedicalRecord(context, record.sId.toString());
-      setState(() {
-        
-      });
-      },
+                        background: _buildDismissBackground(),
+                        confirmDismiss: (_) => _confirmDismiss(context,
+                            "Are you sure you want to delete this item?"),
+                        onDismissed: (_) async {
+                          await addMedical.DeleteMedicalRecord(
+                              context, record.sId.toString());
+                          setState(() {});
+                        },
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
                           child: Container(
@@ -210,7 +208,8 @@ onDismissed: (_) async {
                                   height: 5,
                                 ),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Row(
                                       children: [
@@ -254,8 +253,8 @@ onDismissed: (_) async {
                             ),
                           ),
                         ),
-                      ),
-                    );
+                      );
+                    });
                   });
             }
           }))
@@ -306,7 +305,6 @@ onDismissed: (_) async {
       child: Icon(Icons.delete, color: Colors.white, size: 20),
     );
   }
-  
 }
 
 class ReuseableWidget extends StatelessWidget {
