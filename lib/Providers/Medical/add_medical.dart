@@ -135,29 +135,40 @@ class AddMedical extends ChangeNotifier {
     }
   }
 
-DeleteMedicalRecord(BuildContext context, String id) async {
-    final url = Uri.parse(
-        '${GlobalApi.baseApi}${GlobalApi.deleteVacine}/${id}');
-    setIsLoading(true);
+  Future<void> DeleteMedicalRecord(BuildContext context, String id) async {
+    final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.deleteVacine}$id');
+    print('DELETE URL: $url'); // Debugging: Print the full URL
+
+    setIsLoading(true); // Set loading to true while the request is in progress
     final headers = {
       'Content-Type': 'application/json',
       'Authorization':
           "Bearer ${Provider.of<UserDetail>(context, listen: false).token}"
     };
+
     try {
-      final response = await http.delete(url, headers: headers);
-      final jsonResponse = jsonDecode(response.body);
-       debugger();
+      final response =
+          await http.delete(url, headers: headers); // Send DELETE request
+      print(
+          'Response: ${response.statusCode} - ${response.body}'); // Debugging: Print the response
+
       if (response.statusCode == 200) {
-       SimpleToast.showInfoToast(context,"Vacine","Vacination Deleted");
-        setIsLoading(false);
+        final jsonResponse = jsonDecode(response.body); // Parse response body
+        notifyListeners();
+        SimpleToast.showInfoToast(
+            context, "Vaccine", "Vaccine Deleted"); // Show success message
+      } else {
+        final jsonResponse =
+            jsonDecode(response.body); // Handle failure response
+        SimpleToast.showErrorToast(context, "Error",
+            jsonResponse['message'] ?? 'Failed to delete vaccine.');
       }
     } catch (err) {
+      print('Error: $err'); // Debugging: Print the error
       SimpleToast.showErrorToast(context, "Error", err.toString());
-      setIsLoading(false);
+    } finally {
+      setIsLoading(
+          false); // Stop loading, whether the request succeeds or fails
     }
-}
-
-
-
+  }
 }
