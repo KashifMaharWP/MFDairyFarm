@@ -14,8 +14,6 @@ class MilkProvider extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-
-  
   Future<void> sendMorningMilkData(
       {required String cowId,
       required String date,
@@ -223,9 +221,7 @@ class MilkProvider extends ChangeNotifier {
     }
   }
 
-
-
-   Future<void> saleMilk(
+  Future<void> saleMilk(
       {required String venderId,
       required String date,
       required String milkAmount,
@@ -248,7 +244,7 @@ class MilkProvider extends ChangeNotifier {
       'amount_sold': int.parse(milkAmount),
       'total_payment': int.parse(totalAmount),
     });
-    debugger();
+    // debugger();
 
     try {
       final response = await http.post(
@@ -267,8 +263,7 @@ class MilkProvider extends ChangeNotifier {
         //showSuccessSnackbar(userJson['message'], context);
       } else {
         final message = jsonDecode(response.body);
-        SimpleToast.showInfoToast(
-            context, "Error", "${message['message']}");
+        SimpleToast.showInfoToast(context, "Error", "${message['message']}");
         _isLoading = false;
         notifyListeners();
         //showErrorSnackbar(message['message'], context);
@@ -281,7 +276,7 @@ class MilkProvider extends ChangeNotifier {
     }
   }
 
-  AddVender(BuildContext context, String vendorName)async{
+  AddVender(BuildContext context, String vendorName) async {
     final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.addVendor}');
 
     final headers = {
@@ -293,7 +288,7 @@ class MilkProvider extends ChangeNotifier {
     final body = jsonEncode({
       'name': vendorName,
     });
-   // debugger();
+    // debugger();
 
     try {
       final response = await http.post(
@@ -320,23 +315,23 @@ class MilkProvider extends ChangeNotifier {
   }
 
   List<Vendor> _vendors = [];
-  
+
   List<Vendor> get vendors => _vendors;
-  
+
   Future<void> fetchVendors(BuildContext context) async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      final url=Uri.parse('${GlobalApi.baseApi}${GlobalApi.fetchVendorList}');
+      final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.fetchVendorList}');
 
       final headers = {
-      'Content-Type': 'application/json',
-      'Authorization':
-          "Bearer ${Provider.of<UserDetail>(context, listen: false).token}"
-    };
-      final response = await http.get(url,headers: headers);
-     // debugger();
+        'Content-Type': 'application/json',
+        'Authorization':
+            "Bearer ${Provider.of<UserDetail>(context, listen: false).token}"
+      };
+      final response = await http.get(url, headers: headers);
+      // debugger();
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final vendorResponse = VendorResponse.fromJson(data);
@@ -351,5 +346,4 @@ class MilkProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
 }
