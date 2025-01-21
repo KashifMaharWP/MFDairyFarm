@@ -39,14 +39,19 @@ class _FeedRecordState extends State<FeedRecord> {
       _selectedMonth =
           DateTime(_selectedMonth.year, _selectedMonth.month - 1, 1);
     });
+    final feedProvider = Provider.of<FeedProvider>(context, listen: false);
+    feedProvider.fetchFeedConsumption(
+        context, DateFormat('MMM').format(_selectedMonth).toLowerCase());
   }
 
-  // Navigate to the next month
   void _goToNextMonth() {
     setState(() {
       _selectedMonth =
           DateTime(_selectedMonth.year, _selectedMonth.month + 1, 1);
     });
+    final feedProvider = Provider.of<FeedProvider>(context, listen: false);
+    feedProvider.fetchFeedConsumption(
+        context, DateFormat('MMM').format(_selectedMonth).toLowerCase());
   }
 
   @override
@@ -54,8 +59,11 @@ class _FeedRecordState extends State<FeedRecord> {
     super.initState();
     _currentMonth = DateTime.now(); // Initialize with the current month
     _selectedMonth = _currentMonth;
+
+    // Fetch feed consumption for the current month
     final feedProvider = Provider.of<FeedProvider>(context, listen: false);
-    feedProvider.fetchFeedConsumption(context, 'jan');
+    feedProvider.fetchFeedConsumption(
+        context, DateFormat('MMM').format(_selectedMonth).toLowerCase());
   }
 
   @override
@@ -70,53 +78,30 @@ class _FeedRecordState extends State<FeedRecord> {
         backgroundColor: darkGreenColor,
         foregroundColor: Colors.white,
         centerTitle: true,
-        shadowColor: Colors.black,
         title: Padding(
-          padding: const EdgeInsets.only(
-            right: 40,
-          ),
+          padding: const EdgeInsets.only(right: 40),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Show the '<' button to go to the previous month, if it's  the current year
               IconButton(
-                  icon: Icon(Icons.keyboard_arrow_left_sharp),
-                  color: Colors.white,
-                  onPressed: () {
-                    // if (DateTime(_selectedMonth.year, _selectedMonth.month - 1, 1)
-                    //         .year !=
-                    //     _currentMonth.year) {
-                    //   // Show Snackbar if the year is not the current year
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //     SnackBar(
-                    //         content: Text(
-                    //             'You can only see the records of the current year.')),
-                    //   );
-                    // } else {
-                    _goToPreviousMonth();
-                    final feedProvider =
-                        Provider.of<FeedProvider>(context, listen: false);
-                    feedProvider.fetchFeedConsumption(context, 'jan');
-
-                    //   }
-                  } //_goToPreviousMonth,
-                  ),
-              // Display the current selected month in the middle
+                icon: Icon(Icons.keyboard_arrow_left_sharp),
+                color: Colors.white,
+                onPressed: () {
+                  _goToPreviousMonth(); // Go to the previous month and fetch data
+                },
+              ),
               Text(
-                monthName,
+                DateFormat('MMM yyyy').format(_selectedMonth),
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              // Show the '>' button to go to the next month, if it's not the current month
               IconButton(
                 icon: Icon(Icons.keyboard_arrow_right_sharp),
                 color: Colors.white,
                 onPressed: () {
                   if (_selectedMonth.month != _currentMonth.month) {
                     _goToNextMonth();
-                    final feedProvider =
-                        Provider.of<FeedProvider>(context, listen: false);
-                    feedProvider.fetchFeedConsumption(context, 'jan');
                   }
+                  // Go to the next month and fetch data
                 },
               ),
             ],
@@ -214,9 +199,7 @@ class _FeedRecordState extends State<FeedRecord> {
           Consumer<FeedProvider>(builder: (context, feedProvider, child) {
             if (feedProvider.isLoading) {
               return const Center(child: CircularProgressIndicator());
-            } 
-            
-            else {
+            } else {
               final feedConsumed = feedProvider
                       .feedConsumeRecord?.feedConsumptionRecordMonthly ??
                   [];
@@ -225,43 +208,94 @@ class _FeedRecordState extends State<FeedRecord> {
                   itemCount: feedConsumed.length,
                   itemBuilder: (context, index) {
                     final feed = feedConsumed[index];
-                    return Card(
-                      color: Colors.white,
-                      elevation: 2.0,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: screenHeight * .025,
-                          horizontal: screenWidth * .025,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                SizedBox(
-                                  height: screenHeight * .035,
-                                  width: screenHeight * .035,
-                                  child: const Image(
-                                    image: AssetImage("lib/assets/wanda.png"),
-                                    fit: BoxFit.fill,
+                    return GestureDetector(
+                      onLongPress: () => showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Choose an action'),
+                            actions: <Widget>[
+                              // Update action
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog first
+                                  //_showUpdateFeedSheet(feed.id); // Call the function with parentheses
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.edit,
+                                        color: Colors.blue), // Edit icon
+                                    SizedBox(width: 8),
+                                    Text('Update',
+                                        style: TextStyle(color: Colors.blue)),
+                                  ],
+                                ),
+                              ),
+                              // Delete action
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                // onPressed: () async {
+                                //   // Call the deleteFeed method from FeedProvider
+                                //   await Provider.of<FeedProvider>(context,
+                                //           listen: false)
+                                //       .deleteFeed(context, feed);
+
+                                //   // Close the dialog after deletion
+                                //   Navigator.of(context).pop();
+                                // },
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.delete,
+                                        color: Colors.red), // Delete icon
+                                    SizedBox(width: 8),
+                                    Text('Delete',
+                                        style: TextStyle(color: Colors.red)),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      child: Card(
+                        color: Colors.white,
+                        elevation: 2.0,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: screenHeight * .025,
+                            horizontal: screenWidth * .025,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    height: screenHeight * .035,
+                                    width: screenHeight * .035,
+                                    child: const Image(
+                                      image: AssetImage("lib/assets/wanda.png"),
+                                      fit: BoxFit.fill,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: screenWidth * .015,
-                                ),
-                                Text1(
-                                  fontColor: lightBlackColor,
-                                  fontSize: screenWidth * .05,
-                                  text: "${feed.date}",
-                                ),
-                              ],
-                            ),
-                            Text1(
-                              fontColor: lightBlackColor,
-                              fontSize: screenWidth * .05,
-                              text: "${feed.total} Kg",
-                            ),
-                          ],
+                                  SizedBox(width: screenWidth * .015),
+                                  Text1(
+                                    fontColor: lightBlackColor,
+                                    fontSize: screenWidth * .05,
+                                    text: "${feed.date}",
+                                  ),
+                                ],
+                              ),
+                              Text1(
+                                fontColor: lightBlackColor,
+                                fontSize: screenWidth * .05,
+                                text: "${feed.total} Kg",
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );
