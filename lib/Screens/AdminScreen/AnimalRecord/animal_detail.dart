@@ -6,6 +6,7 @@ import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Model/AnimalDetails/animal_detail_model.dart';
 import 'package:dairyfarmflow/Model/feed_consume.dart';
+import 'package:dairyfarmflow/Providers/CowProvider/cows_provider.dart';
 import 'package:dairyfarmflow/Providers/animal_registratin_provider.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
@@ -53,7 +54,7 @@ class _AnimalDetailState extends State<AnimalDetail> {
               context, widget.id, DateFormat('MMM').format(_selectedMonth));
       Provider.of<AnimalRegistratinProvider>(context, listen: false)
           .getVacineDetail(
-              context, DateFormat('MMM').format(_selectedMonth), widget.id);
+              context, DateFormat('MMM yyyy').format(_selectedMonth),_selectedMonth.year, widget.id);
     });
   }
 
@@ -166,6 +167,7 @@ class _AnimalDetailState extends State<AnimalDetail> {
           Flexible(
             child: Consumer<AnimalRegistratinProvider>(
               builder: (context, animalProvider, child) {
+                
                 if (animalProvider.isDataFetched) {
                   return const Center(child: CircularProgressIndicator());
                 } else {
@@ -176,92 +178,149 @@ class _AnimalDetailState extends State<AnimalDetail> {
                     itemCount: animal.length,
                     itemBuilder: (context, index) {
                       final animalList = animal[index];
-                      return Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Container(
-                          width: screenWidth * 0.95,
-                          height: screenHeight / 7,
-                          padding: EdgeInsets.all(paragraph),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(paragraph),
-                            boxShadow: [
-                              BoxShadow(
-                                color: greyGreenColor,
-                                blurRadius: 6,
-                                spreadRadius: 3,
-                                offset: const Offset(2, 0),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.calendar_month_sharp,
-                                    color: darkGreenColor,
-                                  ),
-                                  SizedBox(
-                                    width: screenWidth * .005,
-                                  ),
-                                  Text1(
-                                    fontColor: lightBlackColor,
-                                    fontSize: paragraph,
-                                    text: animalList.date.toString(),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      const SizedBox(
-                                        height: 20,
-                                        width: 20,
-                                        child: Image(
-                                          image:
-                                              AssetImage("lib/assets/sun.png"),
+                      return GestureDetector(
+                        onTap: () {
+                           showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Choose an action'),
+                                  actions: <Widget>[
+                                    // Update action
+                                    TextButton(
+                                      onPressed: () {
+    Navigator.of(context).pop(); // Close the dialog first
+    _showUpdateCowSheet(animalList.sId.toString(),
+    animalList.morning.toString(),
+    animalList.evening.toString(),
+    animalProvider
+    ); // Call the function with parentheses
+  },
+                                      child: Row(
+                                        children: [
+                                          Icon(Icons.edit,
+                                              color: Colors.blue), // Edit icon
+                                          SizedBox(width: 8),
+                                          Text('Update',
+                                              style: TextStyle(
+                                                  color: Colors.blue)),
+                                        ],
+                                      ),
+                                    ),
+                                    // Delete action
+                                    TextButton(
+                                      onPressed: () async {
+                                        // Call the deleteCow method from CowsProvider
+                                     await provider.deleteMilk(animalList.sId.toString(), context);
+                                      
+                                      await provider.getAnimalDetailById(context, widget.id, DateFormat('MMM').format(_selectedMonth));
+                                        // Close the dialog after deletion
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Icon(Icons.delete,
+                                              color: Colors.red), // Delete icon
+                                          SizedBox(width: 8),
+                                          Text('Delete',
+                                              style:
+                                                  TextStyle(color: Colors.red)),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Container(
+                            width: screenWidth * 0.95,
+                            height: screenHeight / 7,
+                            padding: EdgeInsets.all(paragraph),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(paragraph),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: greyGreenColor,
+                                  blurRadius: 6,
+                                  spreadRadius: 3,
+                                  offset: const Offset(2, 0),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.calendar_month_sharp,
+                                      color: darkGreenColor,
+                                    ),
+                                    SizedBox(
+                                      width: screenWidth * .005,
+                                    ),
+                                    Text1(
+                                      fontColor: lightBlackColor,
+                                      fontSize: paragraph,
+                                      text: animalList.date.toString(),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: Image(
+                                            image:
+                                                AssetImage("lib/assets/sun.png"),
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        width: screenWidth * .005,
-                                      ),
-                                      Text1(
-                                        fontColor: lightBlackColor,
-                                        fontSize: screenWidth * .05,
-                                        text: animalList.morning.toString(),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      const SizedBox(
-                                        height: 20,
-                                        width: 20,
-                                        child: Image(
-                                          image:
-                                              AssetImage("lib/assets/moon.png"),
+                                        SizedBox(
+                                          width: screenWidth * .005,
                                         ),
-                                      ),
-                                      SizedBox(
-                                        width: screenWidth * .005,
-                                      ),
-                                      Text1(
-                                        fontColor: lightBlackColor,
-                                        fontSize: screenWidth * .05,
-                                        text: animalList.evening.toString(),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
+                                        Text1(
+                                          fontColor: lightBlackColor,
+                                          fontSize: screenWidth * .05,
+                                          text: animalList.morning.toString(),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        const SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: Image(
+                                            image:
+                                                AssetImage("lib/assets/moon.png"),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: screenWidth * .005,
+                                        ),
+                                        Text1(
+                                          fontColor: lightBlackColor,
+                                          fontSize: screenWidth * .05,
+                                          text: animalList.evening.toString(),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
@@ -275,6 +334,98 @@ class _AnimalDetailState extends State<AnimalDetail> {
       ),
     );
   }
+
+
+  void _showUpdateCowSheet(String cowId, morning,evening, provider) {
+  // Controllers to manage input fields
+  final TextEditingController morningController = TextEditingController(text: morning);
+  final TextEditingController eveningTypeController = TextEditingController(text: evening);
+  //final TextEditingController priceController = TextEditingController(text: price.toString());
+
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (BuildContext context) {
+      return Padding(
+        padding:  EdgeInsets.only(top: 16,left: 16,right: 10, bottom:MediaQuery.of(context).viewInsets.bottom),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Update Milk Details',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 16),
+            // Cow ID Field
+            TextField(
+              controller: morningController,
+              decoration: InputDecoration(
+                labelText: 'Morning Milk',
+                border: OutlineInputBorder(),
+                filled: true,
+                fillColor: Colors.grey[200],
+              ),
+            ),
+            SizedBox(height: 16),
+            // Breed Type Field
+            TextField(
+              controller: eveningTypeController,
+              decoration: InputDecoration(
+                labelText: 'Evening Milk',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 16),
+            // Price Field
+           
+            SizedBox(height: 16),
+            // Save Button
+            SizedBox(
+              width: double.infinity,
+              child: GestureDetector(
+                onTap: () async{
+                  // Perform update logic
+                  final updatedMorningMilk = morningController.text;
+                  final updatedEveningMilk = eveningTypeController.text;
+                  final updatedTotal = int.parse(updatedMorningMilk)+int.parse(updatedEveningMilk);
+        
+                  // Call provider or API to update cow details
+                await provider.UpdateMilkRecord(
+                    cowId,
+                    updatedMorningMilk,
+                    updatedEveningMilk,
+                    updatedTotal.toString(),
+                    context,
+              
+                  );
+
+                  await provider.getAnimalDetailById(context, widget.id, DateFormat('MMM').format(_selectedMonth));
+            
+                  // Close the bottom sheet after saving
+                  Navigator.pop(context);
+                 
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 14,horizontal: 30),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(4)
+                  ),
+                  child: Center(child: Text('Save Changes'))),
+              ),
+            ),
+            SizedBox(height: 20,)
+          ],
+        ),
+      );
+    },
+  );
+}
+
 }
 
 class ReuseableWidget extends StatelessWidget {

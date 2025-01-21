@@ -130,6 +130,7 @@ class _AnimalRecordWidgetState extends State<AnimalRecordWidget> {
                                 );
                               },
                             );
+                          
                           }
                         : null,
                     onTap: widget.role == "Admin"
@@ -191,6 +192,8 @@ class _AnimalRecordWidgetState extends State<AnimalRecordWidget> {
                                 );
                               },
                             );
+                         
+                         
                           },
                     child: Container(
                       width: screenWidth + 10,

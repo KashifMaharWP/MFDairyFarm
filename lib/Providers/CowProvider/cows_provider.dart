@@ -150,4 +150,6 @@ class CowsProvider extends ChangeNotifier {
       SimpleToast.showErrorToast(context, "Error", e.toString());
     }
   }
+
+ 
 }

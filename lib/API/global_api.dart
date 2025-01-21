@@ -39,6 +39,9 @@ class GlobalApi {
 
   static String addVendor="milkSaleVendor/";
   static String fetchVendorList="milkSaleVendor/";
+
+  static String updateCowMilk="milk/updateMilkRecordById/";
+  static String deleteCowMilk="milk/deleteMilkRecordById/";
   
   
 }

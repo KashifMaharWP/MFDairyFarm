@@ -112,6 +112,36 @@ class AnimalRegistratinProvider extends ChangeNotifier {
   }
 }
 
+ UpdateMilkRecord(String id, morningMilk,eveningMilk,totalMilk,BuildContext context,)async{
+    try {
+     // setIsDataFetched(true);
+      var headers = {
+        'Authorization':
+            'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
+      };
+      final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.updateCowMilk}$id');
+      final body={
+        "morning":morningMilk,
+        "evening":eveningMilk,
+        "total":totalMilk
+      };
+      final response = await http.patch(url,body: body, headers: headers);
+      //debugger();
+      if (response.statusCode == 200) {
+       // cowList = cowsModelList;
+       
+       // setIsDataFetched(false);
+      } else {
+        SimpleToast.showErrorToast(context, "Error", "Failed to load cows.");
+      //  setIsDataFetched(false);
+      }
+    } catch (e) {
+      SimpleToast.showErrorToast(context, "Error", e.toString());
+    //  setIsDataFetched(false);
+    }
+  }
+
+
 
    getAnimalDetailById(BuildContext context, String id,month)async{
     setIsDataFetched(true);
@@ -138,9 +168,9 @@ class AnimalRegistratinProvider extends ChangeNotifier {
     }
   }
 
-  getVacineDetail(BuildContext context,String month, id,)async{
+  getVacineDetail(BuildContext context,String month,year, id,)async{
     setIsDataFetched(true);
-    final url = Uri.parse("${GlobalApi.baseApi}${GlobalApi.getVacineDetail}$id/Sun Jan 19 2025");
+    final url = Uri.parse("${GlobalApi.baseApi}${GlobalApi.getVacineDetail}$id/$month");
     print(url);
 
     var headers = {
@@ -158,6 +188,30 @@ class AnimalRegistratinProvider extends ChangeNotifier {
         _vacineCount =data['vaccinationCount'].toString();
         //animalDetail=detailModel;
         setIsDataFetched(false);
+      }
+    }catch(error){
+      
+    }
+  }
+
+
+  deleteMilk(String id, BuildContext context)async{
+   // setIsDataFetched(true);
+    final url = Uri.parse("${GlobalApi.baseApi}${GlobalApi.deleteCowMilk}$id");
+    print(url);
+
+    var headers = {
+    'Authorization':
+        'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
+  };
+
+    try{
+      final response = await http.delete(url,headers: headers);
+     // MedicalDetailModel detailModel = MedicalDetailModel.fromJson(json.decode(response.body));
+    
+      //debugger();
+      if(response.statusCode==200){
+      //  setIsDataFetched(false);
       }
     }catch(error){
       

@@ -97,7 +97,7 @@ class _AddWorkerTaskState extends State<AddWorkerTask> {
     return Wrap(
       alignment: WrapAlignment.start,
       runAlignment: WrapAlignment.center,
-      crossAxisAlignment: WrapCrossAlignment.start,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         Icon(customIcon, color: darkGreenColor),
         Text1(fontColor: blackColor, fontSize: paragraph, text: text),
@@ -116,13 +116,13 @@ class _AddWorkerTaskState extends State<AddWorkerTask> {
         }
       },
       child: Container(
-        padding: EdgeInsets.all(paragraph - 7),
-        width: screenWidth,
-        height: screenHeight / 14,
+        padding: EdgeInsets.all(paragraph ),
+        width: double.infinity,
+        height: 60,
         decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.92),
             border: Border.all(color: CupertinoColors.systemGrey, width: 1),
-            borderRadius: BorderRadius.circular(paragraph - 10),
+            borderRadius: BorderRadius.circular(8),
             boxShadow: const [
               BoxShadow(
                   color: CupertinoColors.systemGrey3,
@@ -131,10 +131,11 @@ class _AddWorkerTaskState extends State<AddWorkerTask> {
             ]),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text1(
                 fontColor: blackColor,
-                fontSize: paragraph - 3,
+                fontSize: paragraph+2,
                 text: DateFormat("EEE MMM dd yyyy").format(selectedDate)),
             Icon(
               CupertinoIcons.calendar,

@@ -68,10 +68,16 @@ class _WorkersRecordState extends State<WorkersRecord> {
                             return Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: GestureDetector(
-                                onTap: (){
-                                 Navigator.push(context, MaterialPageRoute(builder: (context)=> AddWorkerTask(id: worker.id, name: worker.name,)));
-                                  
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => AddWorkerTask(
+                                                id: worker.id,
+                                                name: worker.name,
+                                              )));
                                 },
+                                
                                 child: Container(
                                     width: screenWidth * 0.95,
                                     height: screenHeight / 5,
@@ -110,7 +116,12 @@ class _WorkersRecordState extends State<WorkersRecord> {
                                             Text1(
                                                 fontColor: lightBlackColor,
                                                 fontSize: screenWidth * .05,
-                                                text: worker.registrationDate),
+                                                text: worker.email),
+                                                Text1(
+                                                fontColor: lightBlackColor,
+                                                fontSize: screenWidth * .05,
+                                                text: worker.password),
+                                                
                                           ],
                                         )
                                       ],
@@ -125,38 +136,93 @@ class _WorkersRecordState extends State<WorkersRecord> {
         ),
       ),
     );
+    
+    
   }
 
-  Future<void> _showMyDialog() async {
-  return showDialog<void>(
+  
+void _showUpdateCowSheet(String UserName, Password) {
+
+  showModalBottomSheet(
     context: context,
-    barrierDismissible: false, // user must tap button!
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
     builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Assign Task'),
-        content:  SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              customForm(),
-             
-            ],
-          ),
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Worker Detail',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 16),
+            // Cow ID Field
+
+             Row(
+               children: [
+                 Text(
+                  'User Name:',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                             ),
+                 Text(
+                  UserName,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                             ),
+               ],
+             ),
+
+             Row(
+               children: [
+                 Text(
+                  'Password:',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                             ),
+                 Text(
+                  Password,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                             ),
+               ],
+             ),
+           
+          ],
         ),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('Add Task'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
       );
     },
   );
 }
 
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Assign Task'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                customForm(),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Add Task'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
-Widget customForm() {
+  Widget customForm() {
     return Padding(
       padding: EdgeInsets.all(paragraph / 6),
       child: Form(
@@ -240,7 +306,6 @@ Widget customForm() {
       ),
     );
   }
-
 }
 
 Future<List<Worker>> fetchWorkers(BuildContext context) async {
