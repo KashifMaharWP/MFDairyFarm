@@ -37,4 +37,8 @@ class GlobalApi {
   static String getVacineDetail="medicalRecord/getCowMedicalRecord/";
   static String deleteVacine="medicalRecord/deleteMedicalRecord/";
 
+  static String addVendor="milkSaleVendor/";
+  static String fetchVendorList="milkSaleVendor/";
+  
+  
 }

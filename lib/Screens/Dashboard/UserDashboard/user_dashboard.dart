@@ -7,6 +7,7 @@ import 'package:dairyfarmflow/Providers/MilkProviders/worker_provider.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/ReuseableWidgets/row_withtext_andimage.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/AnimalRecord/animalRecord.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/FeedEntry/feedEntryPage.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/SaleMilk/add_salemilk.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/milk_record.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/VacinationScreen/animal_list.dart';
@@ -279,7 +280,7 @@ void dispose() {
                 //         const DailyRecordScreen()),
                 //   ],
                 // ),
-                viewContainer("Medical Record", "lib/assets/medical.png",
+                viewContainer("Medical", "lib/assets/medical.png",
                     const AnimalList()),
                 SizedBox(
                   height: paragraph,
@@ -292,6 +293,9 @@ void dispose() {
 
                 viewContainer("Milk Sale", "lib/assets/milkSale.png",
                     const AddMilkSale()),
+
+                viewContainer("Feed", "lib/assets/feed.png",
+                 feedEntryPage()),
 
               ],
             ),
@@ -456,8 +460,8 @@ void dispose() {
         children: [
           Container(
             padding: EdgeInsets.all(paragraph),
-            width: screenWidth / 2.8,
-            height: screenWidth / 2.8,
+            width: screenWidth / 4.5,
+            height: screenWidth / 4.5,
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(paragraph),

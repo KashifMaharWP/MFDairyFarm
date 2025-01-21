@@ -8,6 +8,7 @@ import 'package:dairyfarmflow/Screens/AdminScreen/AnimalRecord/animalRecord.dart
 import 'package:dairyfarmflow/Screens/AdminScreen/FeedEntry/feed_record.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/milk_record.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/VacinationScreen/vacination_record.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/VendorList/createVendor.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/WorkerRegistration/worker_task.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/WorkerRegistration/workers_record.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/adminDashboard/adminDashboard.dart';
@@ -290,8 +291,8 @@ class _DashboardState extends State<Dashboard> {
                 ),
                 Column(
                   children: [
-                    viewContainer("Milk(ltr)", "lib/assets/milk.png",
-                        const MilkRecordScreen()),
+                    viewContainer("Vendor List", "lib/assets/vendorShop.png",
+                        const VendorList()),
                     SizedBox(
                       height: paragraph,
                     ),

@@ -129,133 +129,131 @@ class _CowsListState extends State<CowsList> {
                         ),
                       );
                     },
-                    child: Expanded(
-                      child: Container(
-                        width: screenWidth + 10,
-                        height: screenHeight + 10,
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(paragraph),
-                          boxShadow: [
-                            BoxShadow(
-                              color: greyGreenColor,
-                              blurRadius: 6,
-                              spreadRadius: 3,
-                              offset: const Offset(2, 0),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    height: screenHeight * .20,
-                                    width: screenWidth * .58,
-                                    child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image.network(
-                                          cow.image,
-                                          fit: BoxFit.fill,
-                                        )),
+                    child: Container(
+                      width: screenWidth + 10,
+                      height: screenHeight + 10,
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(paragraph),
+                        boxShadow: [
+                          BoxShadow(
+                            color: greyGreenColor,
+                            blurRadius: 6,
+                            spreadRadius: 3,
+                            offset: const Offset(2, 0),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
+                                  height: screenHeight * .20,
+                                  width: screenWidth * .58,
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.network(
+                                        cow.image,
+                                        fit: BoxFit.fill,
+                                      )),
                                 ),
-                                // role == "Admin"
-                                //     ? InkWell(
-                                //         onTap: () {
-                                //           Navigator.push(
-                                //               context,
-                                //               MaterialPageRoute(
-                                //                   builder: (context) =>
-                                //                       feedEntryPage(
-                                //                         id: cow.id,
-                                //                       )));
-                                //         },
-                                //         child: Icon(
-                                //           Icons.more_vert,
-                                //           color: darkGreenColor,
-                                //           size: screenWidth * .070,
-                                //         ),
-                                //       )
-                                //     : const Center(),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Icon(
-                                      CupertinoIcons.tag_fill,
-                                      color: darkGreenColor,
-                                      size: 18,
-                                    ),
-                                    SizedBox(
-                                      width: screenWidth * .007,
-                                    ),
-                                    Text1(
-                                      fontColor: lightBlackColor,
-                                      fontSize: screenWidth * .04,
-                                      text: "Animal ${cow.animalNumber}",
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      "lib/assets/cowbreed.png",
-                                      width: screenWidth * .060,
-                                      height: screenWidth * .060,
-                                    ),
-                                    SizedBox(
-                                      width: screenWidth * .007,
-                                    ),
-                                    Text1(
-                                      fontColor: lightBlackColor,
-                                      fontSize: screenWidth * .04,
-                                      text: cow.breed,
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      CupertinoIcons.money_dollar_circle_fill,
-                                      color: darkGreenColor,
-                                      size: 18,
-                                    ),
-                                    SizedBox(
-                                      width: screenWidth * .007,
-                                    ),
-                                    Text1(
-                                      fontColor: lightBlackColor,
-                                      fontSize: screenWidth * .04,
-                                      text: cow.age
-                                          .toString(), // Update as needed
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                              ),
+                              // role == "Admin"
+                              //     ? InkWell(
+                              //         onTap: () {
+                              //           Navigator.push(
+                              //               context,
+                              //               MaterialPageRoute(
+                              //                   builder: (context) =>
+                              //                       feedEntryPage(
+                              //                         id: cow.id,
+                              //                       )));
+                              //         },
+                              //         child: Icon(
+                              //           Icons.more_vert,
+                              //           color: darkGreenColor,
+                              //           size: screenWidth * .070,
+                              //         ),
+                              //       )
+                              //     : const Center(),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.tag_fill,
+                                    color: darkGreenColor,
+                                    size: 18,
+                                  ),
+                                  SizedBox(
+                                    width: screenWidth * .007,
+                                  ),
+                                  Text1(
+                                    fontColor: lightBlackColor,
+                                    fontSize: screenWidth * .04,
+                                    text: "Animal ${cow.animalNumber}",
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Row(
+                                children: [
+                                  Image.asset(
+                                    "lib/assets/cowbreed.png",
+                                    width: screenWidth * .060,
+                                    height: screenWidth * .060,
+                                  ),
+                                  SizedBox(
+                                    width: screenWidth * .007,
+                                  ),
+                                  Text1(
+                                    fontColor: lightBlackColor,
+                                    fontSize: screenWidth * .04,
+                                    text: cow.breed,
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.money_dollar_circle_fill,
+                                    color: darkGreenColor,
+                                    size: 18,
+                                  ),
+                                  SizedBox(
+                                    width: screenWidth * .007,
+                                  ),
+                                  Text1(
+                                    fontColor: lightBlackColor,
+                                    fontSize: screenWidth * .04,
+                                    text: cow.age
+                                        .toString(), // Update as needed
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   );

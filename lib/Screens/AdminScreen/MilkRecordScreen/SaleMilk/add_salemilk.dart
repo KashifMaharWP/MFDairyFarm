@@ -3,9 +3,11 @@ import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Functions/customDatePicker.dart';
+import 'package:dairyfarmflow/Model/vendorResponse.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/milk_provider.dart';
 
 import 'package:dairyfarmflow/Providers/user_detail.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/milk_record.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:dairyfarmflow/Widget/customRoundButton.dart';
 import 'package:dairyfarmflow/Widget/textFieldWidget1.dart';
@@ -26,19 +28,22 @@ class AddMilkSale extends StatefulWidget {
 
 class _AddMilkSaleState extends State<AddMilkSale> {
   DateTime? pickedDate;
-  TextEditingController venderName = TextEditingController();
   TextEditingController milkAmount = TextEditingController();
   TextEditingController datepiker = TextEditingController();
   TextEditingController totalAmount = TextEditingController();
   DateTime selectedDate = DateTime.now();
 
+  String? selectedVendorId; // Store the selected vendor's ID
   @override
   Widget build(BuildContext context) {
     final isLoading = Provider.of<MilkProvider>(context).isLoading;
-   
+    final vendors = Provider.of<MilkProvider>(context).vendors; // Fetch vendors list
+    final isVendorLoading = Provider.of<MilkProvider>(context).isLoading;
+
     String token =
         Provider.of<UserDetail>(context, listen: false).token.toString();
     print("Token $token");
+
     return Scaffold(
       appBar: AppBar(
         title: Text1(
@@ -56,13 +61,8 @@ class _AddMilkSaleState extends State<AddMilkSale> {
           padding: const EdgeInsets.only(top: 20, right: 8, left: 8),
           child: Column(
             children: [
-              // Text1(
-              //   fontColor: darkGreenColor,
-              //   fontSize: paragraph,
-              //   text: "Add Morning Milk",
-              // ),
               SizedBox(height: paragraph / 6),
-              customForm(),
+              customForm(vendors, isVendorLoading), // Pass vendors and loading state
               SizedBox(height: paragraph / 2),
               customRoundedButton(
                 loading: isLoading,
@@ -70,7 +70,14 @@ class _AddMilkSaleState extends State<AddMilkSale> {
                 on_Tap: () async {
                   datepiker.text =
                       DateFormat("EEE MMM dd yyyy").format(selectedDate);
-                 await Provider.of<MilkProvider>(context,listen: false).saleMilk(venderName: venderName.text, date: datepiker.text, milkAmount: milkAmount.text, totalAmount: totalAmount.text, context: context);
+                  await Provider.of<MilkProvider>(context, listen: false)
+                      .saleMilk(
+                    venderId: selectedVendorId ?? "", // Pass the vendor ID
+                    date: datepiker.text,
+                    milkAmount: milkAmount.text,
+                    totalAmount: totalAmount.text,
+                    context: context,
+                  );
                   Navigator.pop(context);
                 },
               ),
@@ -81,7 +88,7 @@ class _AddMilkSaleState extends State<AddMilkSale> {
     );
   }
 
-  Widget customForm() {
+  Widget customForm(List<Vendor> vendors, bool isVendorLoading) {
     return Padding(
       padding: EdgeInsets.all(paragraph / 6),
       child: Form(
@@ -89,30 +96,64 @@ class _AddMilkSaleState extends State<AddMilkSale> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            customTextFormField("Vender Name", CupertinoIcons.person),
-            TextFieldWidget1(
-             
-              widgetcontroller: venderName,
-              fieldName: "Vender Name",
-              isPasswordField: false,
-            ),
+            customTextFormField("Vendor Name", CupertinoIcons.person),
+            isVendorLoading
+                ? const Center(child: CircularProgressIndicator())
+                :DropdownButtonFormField<String>(
+  value: selectedVendorId,
+  hint: const Text("Select Vendor"),
+  decoration: InputDecoration(
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12.0), // Rounded corners
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Colors.grey, // Border color
+        width: 1.0, // Border width
+      ),
+      borderRadius: BorderRadius.circular(12.0),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Colors.black26, // Focused border color
+        width: 1.0, // Focused border width
+      ),
+      borderRadius: BorderRadius.circular(12.0),
+    ),
+    filled: true,
+    fillColor: Colors.white, // Background color
+    contentPadding: EdgeInsets.symmetric(
+      vertical: 15.0,
+      horizontal: 10.0,
+    ), // Padding inside the form field
+  ),
+  onChanged: (value) {
+    setState(() {
+      selectedVendorId = value; // Store selected vendor ID
+    });
+  },
+  items: vendors.map((vendor) {
+    return DropdownMenuItem<String>(
+      value: vendor.id, // Use vendor ID as the value
+      child: Text(vendor.name), // Show vendor name
+    );
+  }).toList(),
+),
             SizedBox(height: paragraph),
             customTextFormField("Date", CupertinoIcons.calendar),
             dateContainer(),
             SizedBox(height: paragraph),
-            customTextFormField("Milk Amount",Icons.view_list),
+            customTextFormField("Milk Amount", Icons.view_list),
             TextFieldWidget1(
-              // keyboardtype: TextInputType.number,
               widgetcontroller: milkAmount,
               fieldName: "Milk Amount",
               isPasswordField: false,
             ),
-             SizedBox(height: paragraph),
+            SizedBox(height: paragraph),
             customTextFormField("Payment", CupertinoIcons.money_dollar),
             TextFieldWidget1(
-              // keyboardtype: TextInputType.number,
               widgetcontroller: totalAmount,
-              fieldName: "Milk price",
+              fieldName: "Milk Price",
               isPasswordField: false,
             ),
           ],
@@ -125,7 +166,7 @@ class _AddMilkSaleState extends State<AddMilkSale> {
     return Wrap(
       alignment: WrapAlignment.start,
       runAlignment: WrapAlignment.center,
-      crossAxisAlignment: WrapCrossAlignment.start,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         Icon(customIcon, color: darkGreenColor),
         Text1(fontColor: blackColor, fontSize: paragraph, text: text),
@@ -162,7 +203,7 @@ class _AddMilkSaleState extends State<AddMilkSale> {
           children: [
             Text1(
                 fontColor: Colors.black,
-                fontSize: paragraph ,
+                fontSize: paragraph,
                 text: DateFormat("EEE MMM dd yyyy").format(selectedDate)),
             Icon(
               CupertinoIcons.calendar,
@@ -173,5 +214,4 @@ class _AddMilkSaleState extends State<AddMilkSale> {
       ),
     );
   }
-//custom Text Form for Input entry
 }

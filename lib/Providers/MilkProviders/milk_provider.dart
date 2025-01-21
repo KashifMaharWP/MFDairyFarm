@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dairyfarmflow/API/global_api.dart';
 import 'package:dairyfarmflow/Functions/showPopsScreen.dart';
+import 'package:dairyfarmflow/Model/vendorResponse.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -224,7 +226,7 @@ class MilkProvider extends ChangeNotifier {
 
 
    Future<void> saleMilk(
-      {required String venderName,
+      {required String venderId,
       required String date,
       required String milkAmount,
       required String totalAmount,
@@ -241,11 +243,12 @@ class MilkProvider extends ChangeNotifier {
     };
 
     final body = jsonEncode({
-      'vendorName': venderName,
+      'vendorId': venderId,
       'date': date,
       'amount_sold': int.parse(milkAmount),
       'total_payment': int.parse(totalAmount),
     });
+    debugger();
 
     try {
       final response = await http.post(
@@ -278,7 +281,75 @@ class MilkProvider extends ChangeNotifier {
     }
   }
 
+  AddVender(BuildContext context, String vendorName)async{
+    final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.addVendor}');
 
-   
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization':
+          "Bearer ${Provider.of<UserDetail>(context, listen: false).token}"
+    };
+
+    final body = jsonEncode({
+      'name': vendorName,
+    });
+   // debugger();
+
+    try {
+      final response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        // final userJson = jsonDecode(response.body);
+        // print(userJson['message']);
+        SimpleToast.showSuccessToast(
+            context, "Vendor Created", "Vender Created Successfully}");
+        _isLoading = false;
+        notifyListeners();
+        //showSuccessSnackbar(userJson['message'], context);
+      }
+    } catch (e) {
+      SimpleToast.showErrorToast(context, "Error occured", "$e");
+      _isLoading = false;
+      notifyListeners();
+      //showErrorSnackbar("An Error occured: $e", context);
+    }
+  }
+
+  List<Vendor> _vendors = [];
+  
+  List<Vendor> get vendors => _vendors;
+  
+  Future<void> fetchVendors(BuildContext context) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final url=Uri.parse('${GlobalApi.baseApi}${GlobalApi.fetchVendorList}');
+
+      final headers = {
+      'Content-Type': 'application/json',
+      'Authorization':
+          "Bearer ${Provider.of<UserDetail>(context, listen: false).token}"
+    };
+      final response = await http.get(url,headers: headers);
+     // debugger();
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final vendorResponse = VendorResponse.fromJson(data);
+        _vendors = vendorResponse.vendors;
+      } else {
+        throw Exception('Failed to load vendors');
+      }
+    } catch (error) {
+      print('Error fetching vendors: $error');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 
 }

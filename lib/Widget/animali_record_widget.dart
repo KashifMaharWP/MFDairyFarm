@@ -90,9 +90,9 @@ class _AnimalRecordWidgetState extends State<AnimalRecordWidget> {
                                     // Update action
                                     TextButton(
                                       onPressed: () {
-                                        // Handle Update action
-                                        Navigator.of(context).pop();
-                                      },
+    Navigator.of(context).pop(); // Close the dialog first
+    //_showUpdateCowSheet(cow.id,cow.breed); // Call the function with parentheses
+  },
                                       child: Row(
                                         children: [
                                           Icon(Icons.edit,
@@ -325,5 +325,98 @@ class _AnimalRecordWidgetState extends State<AnimalRecordWidget> {
         }
       },
     );
+  }
+
+  void _showUpdateCowSheet(String cowId, String breedType) {
+  // Controllers to manage input fields
+  final TextEditingController cowIdController = TextEditingController(text: cowId);
+  final TextEditingController breedTypeController = TextEditingController(text: breedType);
+  //final TextEditingController priceController = TextEditingController(text: price.toString());
+
+  showModalBottomSheet(
+    context: context,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (BuildContext context) {
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Update Cow Details',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 16),
+            // Cow ID Field
+            TextField(
+              controller: cowIdController,
+              readOnly: true, // Prevent editing Cow ID
+              decoration: InputDecoration(
+                labelText: 'Cow ID',
+                border: OutlineInputBorder(),
+                filled: true,
+                fillColor: Colors.grey[200],
+              ),
+            ),
+            SizedBox(height: 16),
+            // Breed Type Field
+            TextField(
+              controller: breedTypeController,
+              decoration: InputDecoration(
+                labelText: 'Breed Type',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 16),
+            // Price Field
+           
+            SizedBox(height: 16),
+            // Save Button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Perform update logic
+                  final updatedCowId = cowIdController.text;
+                  final updatedBreedType = breedTypeController.text;
+                 // final updatedPrice = double.tryParse(priceController.text) ?? price;
+
+                  // Call provider or API to update cow details
+                  // Provider.of<CowsProvider>(context, listen: false).updateCow(
+                  //   context: context,
+                  //   cowId: updatedCowId,
+                  //   breedType: updatedBreedType,
+                  //   price: updatedPrice,
+                  // );
+
+                  // Close the bottom sheet after saving
+                  Navigator.pop(context);
+                },
+                child: Text('Save Changes'),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+}
+
+class upDateCow extends StatefulWidget {
+  const upDateCow({super.key});
+
+  @override
+  State<upDateCow> createState() => _upDateCowState();
+}
+
+class _upDateCowState extends State<upDateCow> {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }
