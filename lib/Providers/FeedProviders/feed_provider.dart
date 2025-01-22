@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:dairyfarmflow/API/global_api.dart';
+import 'package:dairyfarmflow/Model/feedInventory.dart';
 import 'package:dairyfarmflow/Model/feed_count.dart';
+import 'package:dairyfarmflow/Model/feed_inventory.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -18,6 +20,11 @@ class FeedProvider extends ChangeNotifier {
   String? errorMessage;
   int totalFeedFromItem = 0;
   int totalFeedStored = 0;
+  int feedTotal=0;
+  int feedAvailable=0;
+  int feedUsed=0;
+  InventoryFeedResponse? feedInventory;
+  
 
   // Fetch feed consumption data
   Future<void> fetchFeedConsumption(BuildContext context, String month) async {
@@ -36,6 +43,7 @@ class FeedProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
         feedConsumeRecord = FeedConsumptionResponse.fromJson(jsonData);
+        ;
         _isloading = false;
         notifyListeners(); // Notify listeners with updated data
       } else {
@@ -50,8 +58,36 @@ class FeedProvider extends ChangeNotifier {
     }
   }
 
+  fetchFeed(BuildContext context, String month) async {
+    _isloading = true;
+  var headers = {
+    'Authorization':
+        'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
+  };
+  var request = http.Request(
+    'GET',
+    Uri.parse('${GlobalApi.baseApi}${GlobalApi.feedInventory}$month'),
+  );
+
+  request.headers.addAll(headers);
+  //debugger();
+  http.StreamedResponse response = await request.send();
+  if (response.statusCode == 200) {
+    final jsonString = await response.stream.bytesToString();
+    final jsonData = json.decode(jsonString);
+    InventoryFeedResponse feedInventoryResponse= InventoryFeedResponse.fromJson(jsonData);
+    feedInventory=feedInventoryResponse;
+   feedTotal=feedInventory!.feedInventory.totalAmount;
+   feedAvailable=feedInventory!.feedInventory.availableAmount;
+    feedUsed=feedTotal-feedAvailable;
+    
+   // totalFeedStored=feedInventory.feedInventory!.feedAmount;
+    _isloading = false;
+  } 
+}
+
   // Fetch feed count
-  Future<FeedCount?> fetchFeedCount(BuildContext context) async {
+  Future<FeedCount?> fetchFeedCount(BuildContext context, String month) async {
     _isloading = true;
     notifyListeners();
 
@@ -60,7 +96,7 @@ class FeedProvider extends ChangeNotifier {
           'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
     };
     final url =
-        Uri.parse('${GlobalApi.baseApi}${GlobalApi.getFeedConsumptionCount}');
+        Uri.parse('${GlobalApi.baseApi}${GlobalApi.getFeedConsumptionCount}$month');
 
     try {
       final response = await http.get(url, headers: headers);
@@ -85,31 +121,6 @@ class FeedProvider extends ChangeNotifier {
     }
 
     return null;
-  }
-
-  // Fetch feed inventory amount
-  Future<int?> fetchFeed(BuildContext context) async {
-    _isloading = true;
-    notifyListeners();
-
-    final headers = {
-      'Authorization':
-          'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
-    };
-    final url = Uri.parse('${GlobalApi.baseApi}feedInventory/feedAmount');
-    final response = await http.get(url, headers: headers);
-
-    if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
-      _isloading = false;
-      notifyListeners();
-      return int.tryParse(jsonData['feedInventory']['feedAmount'].toString());
-    } else {
-      _isloading = false;
-      errorMessage = response.reasonPhrase;
-      notifyListeners(); // Notify listeners on failure
-      return null;
-    }
   }
 
   // Send morning feed data

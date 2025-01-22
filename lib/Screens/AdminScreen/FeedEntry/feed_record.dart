@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dairyfarmflow/Class/textSizing.dart';
+import 'package:dairyfarmflow/Model/feed_inventory.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -61,9 +63,12 @@ class _FeedRecordState extends State<FeedRecord> {
     _selectedMonth = _currentMonth;
 
     // Fetch feed consumption for the current month
-    final feedProvider = Provider.of<FeedProvider>(context, listen: false);
-    feedProvider.fetchFeedConsumption(
-        context, DateFormat('MMM').format(_selectedMonth).toLowerCase());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final feedProvider = Provider.of<FeedProvider>(context, listen: false);
+      feedProvider.fetchFeedConsumption(
+          context, DateFormat('MMM').format(_selectedMonth).toLowerCase());
+          feedProvider.fetchFeed(context, DateFormat('MMM yyyy').format(_selectedMonth).toLowerCase());
+    });
   }
 
   @override
@@ -181,7 +186,8 @@ class _FeedRecordState extends State<FeedRecord> {
                           ),
                         )),
                   ))
-              : pageHeaderContainer(context, feedProvider.totalFeedFromItem, 0),
+              : pageHeaderContainer(
+                  context,),
           SizedBox(height: screenHeight * .015),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -310,7 +316,8 @@ class _FeedRecordState extends State<FeedRecord> {
   }
 }
 
-Widget pageHeaderContainer(BuildContext context, int consumedFeed, feeds) {
+Widget pageHeaderContainer(
+    BuildContext context,) {
   return Material(
       elevation: 6,
       borderRadius: const BorderRadius.only(
@@ -336,63 +343,84 @@ Widget pageHeaderContainer(BuildContext context, int consumedFeed, feeds) {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    FutureBuilder<dynamic>(
-                      future: fetchFeed(context),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return wrapCircleContainer("0", "Total");
-                        } else if (snapshot.hasError) {
-                          return wrapCircleContainer("0", "Total");
-                        } else if (snapshot.hasData && snapshot.data != null) {
-                          final feedAvailable = int.tryParse(snapshot
-                                  .data['feedInventory']['feedAmount']
-                                  .toString()) ??
-                              0;
-                          final totalFeedStored = feedAvailable + consumedFeed;
+                    Consumer<FeedProvider>(builder: (context, provider, child) {
+                      if (provider.isLoading) {
+                        return CircularProgressIndicator();
+                      } else {
+                        return Row(
+                          children: [
+                            wrapCircleContainer(
+                                "${provider.feedTotal}", "Total"),
+                            SizedBox(
+                              width: paragraph / 4,
+                            ),
+                            Container(
+                              width: 1,
+                              height: screenWidth / 3.8,
+                              color: CupertinoColors.systemGrey6,
+                            ),
+                            wrapCircleContainer("${provider.feedUsed}", "Used"),
+                            SizedBox(
+                              width: paragraph / 4,
+                            ),
+                            Container(
+                              width: 1,
+                              height: screenWidth / 3.8,
+                              color: CupertinoColors.systemGrey6,
+                            ),
+                            wrapCircleContainer(
+                                "${provider.feedAvailable}", "Available"),
+                          ],
+                        );
+                      }
+                    }),
+                    // FutureBuilder<dynamic>(
+                    //   future: fetchFeed(context, month),
+                    //   builder: (context, snapshot) {
+                    //     if (snapshot.connectionState ==
+                    //         ConnectionState.waiting) {
+                    //       return wrapCircleContainer("0", "Total");
+                    //     } else if (snapshot.hasError) {
+                    //       return wrapCircleContainer("0", "Total");
+                    //     } else if (snapshot.hasData && snapshot.data != null) {
+                    //       final totalFeed = int.tryParse(snapshot
+                    //               .data['feedInventory']['totalAmount']
+                    //               .toString()) ??
+                    //           0;
+                    //       final availableFeed = int.parse(snapshot
+                    //           .data['feedInventory']['availableAmount']
+                    //           .toString());
+                    //       final usedFeed = totalFeed - availableFeed;
+                    //       // Display total feed stored
+                    //       return Row(
+                    //         //crossAxisAlignment: CrossAxisAlignment.center,
+                    //         //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //         children: [
 
-                          // Display total feed stored
-                          return wrapCircleContainer(
-                              "$totalFeedStored", "Total");
-                        } else {
-                          return wrapCircleContainer("0", "Total");
-                        }
-                      },
-                    ),
-                    SizedBox(
-                      height: paragraph / 4,
-                    ),
-                    Container(
-                      width: 1,
-                      height: screenWidth / 3.8,
-                      color: CupertinoColors.systemGrey6,
-                    ),
-                    wrapCircleContainer(consumedFeed.toString(), "Used"),
-                    SizedBox(
-                      height: paragraph / 4,
-                    ),
-                    Container(
-                      width: 1,
-                      height: screenWidth / 3.8,
-                      color: CupertinoColors.systemGrey6,
-                    ),
-                    FutureBuilder<dynamic>(
-                      future: fetchFeed(context),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return wrapCircleContainer("0", "Available");
-                        } else if (snapshot.hasError) {
-                          return wrapCircleContainer("0", "Available");
-                        } else if (snapshot.hasData && snapshot.data != null) {
-                          return wrapCircleContainer(
-                              "${snapshot.data['feedInventory']['feedAmount']}",
-                              "Available");
-                        } else {
-                          return const Text('No data available');
-                        }
-                      },
-                    ),
+                    //         ],
+                    //       );
+                    //     }
+                    //   },
+                    // ),
+
+                    // FutureBuilder<dynamic>(
+                    //   future: fetchFeed(context,month),
+                    //   builder: (context, snapshot) {
+                    //     if (snapshot.connectionState ==
+                    //         ConnectionState.waiting) {
+                    //       return wrapCircleContainer("0", "Available");
+                    //     } else if (snapshot.hasError) {
+                    //       return wrapCircleContainer("0", "Available");
+                    //     } else if (snapshot.hasData && snapshot.data != null) {
+                    //       return wrapCircleContainer(
+                    //           "${snapshot.data['feedInventory']['availableAmount']}",
+                    //           "Available");
+                    //     } else {
+                    //       return const Text('No data available');
+                    //     }
+                    //   },
+                    // ),
+
                     SizedBox(
                       height: paragraph / 4,
                     ),
@@ -445,32 +473,6 @@ Widget circleContainer(String text) {
   );
 }
 
-Future<dynamic> fetchFeed(BuildContext context) async {
-  var headers = {
-    'Authorization':
-        'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
-  };
-  var request = http.Request(
-    'GET',
-    Uri.parse('${GlobalApi.baseApi}feedInventory/feedAmount'),
-  );
-
-  request.headers.addAll(headers);
-  http.StreamedResponse response = await request.send();
-  if (response.statusCode == 200) {
-    final jsonString = await response.stream.bytesToString();
-    final jsonData = json.decode(jsonString);
-    print(jsonData['feedInventory']['feedAmount']);
-
-    return jsonData;
-  } else {
-    if (kDebugMode) {
-      print("Error: ${response.reasonPhrase}");
-    }
-    return null;
-  }
-}
-
 // Future<List<FeedConsumption>?> fetchFeedConsumption(
 //     BuildContext context) async {
 //   final headers = {
@@ -496,6 +498,5 @@ Future<dynamic> fetchFeed(BuildContext context) async {
 //     print('Failed to fetch data. Error: ${response.reasonPhrase}');
 //     return null;
 //   }
-
 
 //https://www.behance.net/gallery/187496733/Dairy-Farm-Management-Mobile-App-UI-Design?tracking_source=search_projects|Dairy+Management&l=0

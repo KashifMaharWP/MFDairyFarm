@@ -34,7 +34,7 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
     Future.microtask(() =>
         Provider.of<MilkRecordProvider>(context, listen: false)
             .fetchMilkCount(context));
-    Provider.of<FeedProvider>(context, listen: false).fetchFeedCount(context);
+    Provider.of<FeedProvider>(context, listen: false).fetchFeedCount(context,"Jan 2025");
   }
 
   @override

@@ -17,7 +17,7 @@ class GlobalApi {
   static String updateMilkRecord = 'milk/updateMilkRecordById';
   static String getFeedConsumption = 'feed/getFeedConsumtionRecordByMonth/';
   static String getFeedConsumptionCount =
-      'feed/getTodayFeedConsumtionCount/${DateFormat("EEE MMM dd yyyy").format(DateTime.now())}';
+      'feed/getTodayFeedConsumtionCount/';
   static String addMorningMilk = "milk/morningMilkProduction";
   static String addEveningMilk = "milk/eveningMilkProduction";
   static String addFeedAmount = "feedInventory/addFeed";
@@ -42,6 +42,7 @@ class GlobalApi {
 
   static String updateCowMilk="milk/updateMilkRecordById/";
   static String deleteCowMilk="milk/deleteMilkRecordById/";
+   static String feedInventory="feedInventory/";
   
   
 }
