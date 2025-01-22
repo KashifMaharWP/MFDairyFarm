@@ -87,7 +87,7 @@ class FeedProvider extends ChangeNotifier {
 }
 
   // Fetch feed count
-  Future<FeedCount?> fetchFeedCount(BuildContext context, String month) async {
+  fetchFeedCount(BuildContext context, String month) async {
     _isloading = true;
     notifyListeners();
 
@@ -103,9 +103,9 @@ class FeedProvider extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
-        FeedCount feedCount = FeedCount.fromJson(jsonData);
-        morningFeed = feedCount.todayFeedConsumtionCount![0].morning;
-        eveningFeed = feedCount.todayFeedConsumtionCount![0].evening;
+        FeedCountResponse feedCount =  FeedCountResponse.fromJson(jsonData);
+        morningFeed = feedCount.todayFeedConsumptionCount[0].morning;
+        eveningFeed = feedCount.todayFeedConsumptionCount[0].evening;
         usedFeed = morningFeed! + eveningFeed!;
         _isloading = false;
         notifyListeners(); // Notify listeners after fetching feed count

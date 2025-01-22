@@ -1,51 +1,58 @@
-class FeedCount {
-  bool? success;
-  String? message;
-  List<TodayFeedConsumtionCount>? todayFeedConsumtionCount;
+class FeedCountResponse {
+  final bool success;
+  final String message;
+  final List<FeedConsumptionCount> todayFeedConsumptionCount;
 
-  FeedCount({this.success, this.message, this.todayFeedConsumtionCount});
+  FeedCountResponse({
+    required this.success,
+    required this.message,
+    required this.todayFeedConsumptionCount,
+  });
 
-  FeedCount.fromJson(Map<String, dynamic> json) {
-    success = json['success'];
-    message = json['message'];
-    if (json['todayFeedConsumtionCount'] != null) {
-      todayFeedConsumtionCount = <TodayFeedConsumtionCount>[];
-      json['todayFeedConsumtionCount'].forEach((v) {
-        todayFeedConsumtionCount!.add(TodayFeedConsumtionCount.fromJson(v));
-      });
-    }
+  factory FeedCountResponse.fromJson(Map<String, dynamic> json) {
+    return FeedCountResponse(
+      success: json['success'],
+      message: json['message'],
+      todayFeedConsumptionCount: (json['todayFeedConsumtionCount'] as List)
+          .map((item) => FeedConsumptionCount.fromJson(item))
+          .toList(),
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['success'] = success;
-    data['message'] = message;
-    if (todayFeedConsumtionCount != null) {
-      data['todayFeedConsumtionCount'] =
-          todayFeedConsumtionCount!.map((v) => v.toJson()).toList();
-    }
-    return data;
+    return {
+      'success': success,
+      'message': message,
+      'todayFeedConsumtionCount':
+          todayFeedConsumptionCount.map((item) => item.toJson()).toList(),
+    };
   }
 }
 
-class TodayFeedConsumtionCount {
-  Null nId;
-  int? morning;
-  int? evening;
+class FeedConsumptionCount {
+  final String? id;
+  final int morning;
+  final int evening;
 
-  TodayFeedConsumtionCount({this.nId, this.morning, this.evening});
+  FeedConsumptionCount({
+    this.id,
+    required this.morning,
+    required this.evening,
+  });
 
-  TodayFeedConsumtionCount.fromJson(Map<String, dynamic> json) {
-    nId = json['_id'];
-    morning = json['morning'];
-    evening = json['evening'];
+  factory FeedConsumptionCount.fromJson(Map<String, dynamic> json) {
+    return FeedConsumptionCount(
+      id: json['_id'],
+      morning: json['morning'],
+      evening: json['evening'],
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = nId;
-    data['morning'] = morning;
-    data['evening'] = evening;
-    return data;
+    return {
+      '_id': id,
+      'morning': morning,
+      'evening': evening,
+    };
   }
 }

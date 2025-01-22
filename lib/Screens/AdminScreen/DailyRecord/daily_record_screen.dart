@@ -9,6 +9,7 @@ import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../../Providers/MilkProviders/milk_record.dart';
 import '../../../Widget/customRoundButton.dart';
@@ -31,10 +32,13 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() =>
+    WidgetsBinding.instance.addPostFrameCallback((_){
+
         Provider.of<MilkRecordProvider>(context, listen: false)
-            .fetchMilkCount(context));
-    Provider.of<FeedProvider>(context, listen: false).fetchFeedCount(context,"Jan 2025");
+            .fetchMilkCount(context);
+    Provider.of<FeedProvider>(context, listen: false).fetchFeedCount(context,"Wed Jan 22 2025");
+    //Provider.of<FeedProvider>(context, listen: false).fetchFeed(context, "Jan 2025");
+    });
   }
 
   @override
@@ -58,7 +62,7 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
           ),
           Expanded(
             child: FutureBuilder<SoldMilkModel?>(
-              future: milkProvider.fetchMilkSold(context),
+              future: milkProvider.fetchMilkSold(context,DateFormat('MMM yyyy').format(DateTime.now())),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
