@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
@@ -12,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_toast_message/simple_toast.dart';
 
 class AddEveningMilk extends StatefulWidget {
   String id = '';
@@ -70,14 +73,20 @@ class _AddEveningMilkState extends State<AddEveningMilk> {
                 on_Tap: () async {
                   datepiker.text =
                       DateFormat("EEE MMM dd yyyy").format(selectedDate);
-                  await Provider.of<MilkProvider>(context, listen: false)
+                      if(evening.text.isNotEmpty && eveningfeed.text.isNotEmpty){
+await Provider.of<MilkProvider>(context, listen: false)
                       .sendEveningMilkData(
                           cowId: cowId.text,
                           date: datepiker.text,
                           evening: evening.text,
                           context: context);
                        await Provider.of<FeedProvider>(context, listen: false).sendEveningFeedData(cowId: cowId.text, date: datepiker.text, evening: eveningfeed.text, context: context);
-                  Navigator.pop(context);
+                 Navigator.pop(context);
+                      }
+                        else{
+SimpleToast.showErrorToast(context, "Field Entry Error", "Please Enter all field");
+                      }
+                   
                 },
               ),
             ],

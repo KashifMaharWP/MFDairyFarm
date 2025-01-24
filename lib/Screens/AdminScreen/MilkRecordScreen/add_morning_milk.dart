@@ -14,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_toast_message/simple_toast.dart';
 
 class AddMorningMilk extends StatefulWidget {
   String id = '';
@@ -70,7 +71,8 @@ class _AddMorningMilkState extends State<AddMorningMilk> {
                 on_Tap: () async {
                   datepiker.text =
                       DateFormat("EEE MMM dd yyyy").format(selectedDate);
-                  await Provider.of<MilkProvider>(context, listen: false)
+                      if(morningfeed.text.isNotEmpty&& morning.text.isNotEmpty){
+await Provider.of<MilkProvider>(context, listen: false)
                       .sendMorningMilkData(
                           cowId: cowId.text,
                           date: datepiker.text,
@@ -78,6 +80,12 @@ class _AddMorningMilkState extends State<AddMorningMilk> {
                           context: context);
                       await  Provider.of<FeedProvider>(context, listen: false).sendMorningFeedData(cowId: cowId.text,date: datepiker.text, morning: morningfeed.text, context: context);
                   Navigator.pop(context);
+                      }
+                      else{
+                        
+SimpleToast.showErrorToast(context, "Field Entry Error", "Please Enter all field");
+                      }
+                  
                 },
               ),
             ],

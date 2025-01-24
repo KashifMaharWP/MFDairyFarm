@@ -60,7 +60,7 @@ class _AnimalDetailState extends State<AnimalDetail> {
 
   @override
   Widget build(BuildContext context) {
-    String monthName = DateFormat('MMMM yyyy').format(_selectedMonth);
+    String monthName = DateFormat('MMM yyyy').format(_selectedMonth);
     final provider =
         Provider.of<AnimalRegistratinProvider>(context, listen: false);
 

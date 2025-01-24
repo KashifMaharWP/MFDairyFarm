@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dairyfarmflow/Model/soldmilk.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/milk_provider.dart';
@@ -83,7 +84,7 @@ class MilkRecordProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchMilkCount(BuildContext context) async {
+  Future<void> fetchMilkCount(BuildContext context,String month) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
@@ -92,7 +93,7 @@ class MilkRecordProvider extends ChangeNotifier {
       'Authorization':
           'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
     };
-    final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getMilkCount}');
+    final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getMilkCount}$month');
 
     try {
       final response = await http.get(url, headers: headers);
@@ -139,7 +140,7 @@ class MilkRecordProvider extends ChangeNotifier {
     final response = await http.get(url, headers: headers);
 
     if (response.statusCode == 200) {
-     
+    //  debugger();
       return SoldMilkModel.fromJson(json.decode(response.body));
     } else {
      
@@ -237,28 +238,9 @@ Future<void> upadetMilkSold(
         _isLoading = false;
         notifyListeners();
         //showSuccessSnackbar(jsonResponse['message'], context);
-      } else {
-        try {
-          final message = jsonDecode(response.body);
-          SimpleToast.showErrorToast(
-              context, "Milk Added", "${message['message']}");
-          _isLoading = false;
-          notifyListeners();
-          //showErrorSnackbar(message['message'], context);
-        } catch (_) {
-          _isLoading = false;
-          notifyListeners();
-          showErrorSnackbar(
-              'Failed to delete milk record: ${response.body}', context);
-        }
+      }}catch(e){
+        print(e);
       }
-    } catch (e) {
-      _isLoading = false;
-      notifyListeners();
-      SimpleToast.showErrorToast(context, "Error occured", "$e");
-      // showErrorSnackbar("An error occurred: $e", context);
-      print('Error: $e');
-    }
   }
 
    void deleteRecord(BuildContext context, String id) async {

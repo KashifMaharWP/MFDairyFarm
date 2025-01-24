@@ -304,7 +304,12 @@ void dispose() {
             ),
             // viewContainer(
             //     "Add Milk", "lib/assets/addMilk.jpg", const AnimalRecord()),
-
+          Text("Task",style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold
+          ),),SizedBox(
+              height: 10,
+            ),
             Container(
                 height: screenHeight / 1.5,
                 width: double.infinity,
@@ -342,30 +347,10 @@ void dispose() {
             )]
            ),
             child: ListTile(
-              leading: ValueListenableBuilder<bool>(
-                valueListenable: checkboxValueNotifier,
-                builder: (context, value, child) {
-                  return Checkbox(
-                    value: value,
-                    onChanged: (bool? newValue) async {
-                      if (newValue != null) {
-                        // Update the UI immediately
-                        checkboxValueNotifier.value = newValue;
-            
-                        // Call the updateTask function
-                        workerProvider.updateTask(
-                          context, 
-                          usertask.sId.toString(),
-                        );
-            
-                        // Optionally, refetch the updated task or manage the state accordingly
-                        checkboxValueNotifier.value = workerProvider
-                                .TaskList?.tasks?[index].taskStatus ??
-                            false;
-                      }
-                    },
-                  );
-                },
+              leading: CircleAvatar(
+                radius: 20,
+                backgroundColor: Colors.greenAccent,
+                child: Icon(Icons.task,color: Colors.white,),
               ),
               title: Text1(
                 fontColor: blackColor,

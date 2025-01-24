@@ -30,40 +30,52 @@ class SoldMilkModel {
 
 class MonthlyMilkRecord {
   String? sId;
-  String? vendorName;
   int? amountSold;
   String? date;
   int? totalPayment;
-  String? dairyFarmId;
-  int? iV;
+  Vendor? vendor;
 
   MonthlyMilkRecord(
-      {this.sId,
-      this.vendorName,
-      this.amountSold,
-      this.date,
-      this.totalPayment,
-      this.dairyFarmId,
-      this.iV});
+      {this.sId, this.amountSold, this.date, this.totalPayment, this.vendor});
 
   MonthlyMilkRecord.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
-    vendorName = json['vendorName'];
     amountSold = json['amount_sold'];
     date = json['date'];
     totalPayment = json['total_payment'];
-    dairyFarmId = json['dairyFarmId'];
+    vendor = json['vendor'] != null ? Vendor.fromJson(json['vendor']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['amount_sold'] = amountSold;
+    data['date'] = date;
+    data['total_payment'] = totalPayment;
+    if (vendor != null) {
+      data['vendor'] = vendor!.toJson();
+    }
+    return data;
+  }
+}
+
+class Vendor {
+  String? sId;
+  String? name;
+  int? iV;
+
+  Vendor({this.sId, this.name, this.iV});
+
+  Vendor.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    name = json['name'];
     iV = json['__v'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['_id'] = sId;
-    data['vendorName'] = vendorName;
-    data['amount_sold'] = amountSold;
-    data['date'] = date;
-    data['total_payment'] = totalPayment;
-    data['dairyFarmId'] = dairyFarmId;
+    data['name'] = name;
     data['__v'] = iV;
     return data;
   }

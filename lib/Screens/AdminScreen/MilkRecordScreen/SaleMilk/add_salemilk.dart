@@ -30,7 +30,7 @@ class _AddMilkSaleState extends State<AddMilkSale> {
   DateTime? pickedDate;
   TextEditingController milkAmount = TextEditingController();
   TextEditingController datepiker = TextEditingController();
-  TextEditingController totalAmount = TextEditingController();
+  //TextEditingController totalAmount = TextEditingController();
   DateTime selectedDate = DateTime.now();
 
   String? selectedVendorId; // Store the selected vendor's ID
@@ -75,7 +75,7 @@ class _AddMilkSaleState extends State<AddMilkSale> {
                     venderId: selectedVendorId ?? "", // Pass the vendor ID
                     date: datepiker.text,
                     milkAmount: milkAmount.text,
-                    totalAmount: totalAmount.text,
+                    totalAmount: "0",
                     context: context,
                   );
                   Navigator.pop(context);
@@ -143,19 +143,14 @@ class _AddMilkSaleState extends State<AddMilkSale> {
             customTextFormField("Date", CupertinoIcons.calendar),
             dateContainer(),
             SizedBox(height: paragraph),
-            customTextFormField("Milk Amount", Icons.view_list),
+            customTextFormField("Milk ltr", Icons.view_list),
             TextFieldWidget1(
               widgetcontroller: milkAmount,
-              fieldName: "Milk Amount",
+              fieldName: "Milk ltr",
               isPasswordField: false,
             ),
             SizedBox(height: paragraph),
-            customTextFormField("Payment", CupertinoIcons.money_dollar),
-            TextFieldWidget1(
-              widgetcontroller: totalAmount,
-              fieldName: "Milk Price",
-              isPasswordField: false,
-            ),
+            
           ],
         ),
       ),

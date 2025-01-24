@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:dairyfarmflow/Functions/customDatePicker.dart';
 import 'package:dairyfarmflow/Model/soldmilk.dart';
 import 'package:dairyfarmflow/Providers/FeedProviders/feed_provider.dart';
 import 'package:dairyfarmflow/ReuseableWidgets/reuse_row.dart';
 import 'package:dairyfarmflow/ReuseableWidgets/row_withtext_andimage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
@@ -28,17 +30,58 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
   final TextEditingController amountSold = TextEditingController();
   final TextEditingController datePicker = TextEditingController();
   final TextEditingController totalPayment = TextEditingController();
-  String Date = 'Dec';
+
+  late DateTime _currentDate;
+  late DateTime _selectedDate;
+  DateTime selectedDate = DateTime.now();
+   DateTime? pickedDate;
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_){
 
-        Provider.of<MilkRecordProvider>(context, listen: false)
-            .fetchMilkCount(context);
-    Provider.of<FeedProvider>(context, listen: false).fetchFeedCount(context,"Wed Jan 22 2025");
-    //Provider.of<FeedProvider>(context, listen: false).fetchFeed(context, "Jan 2025");
+    // Initialize _currentDate with the current date
+    _currentDate = DateTime.now();
+
+    // Initialize _selectedDate with the current date
+    _selectedDate = _currentDate;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchDataForSelectedDate();
     });
+  }
+
+  // Navigate to the previous day
+  void _goToPreviousDay() {
+    setState(() {
+      _selectedDate = _selectedDate.subtract(Duration(days: 1));
+    });
+    _fetchDataForSelectedDate();
+  }
+
+  // Navigate to the next day
+  void _goToNextDay() {
+    if (_selectedDate.isAtSameMomentAs(_currentDate)) {
+      // If the selected date is in the future, prevent navigation
+      print('Cannot navigate to a future date.');
+    } else {
+      setState(() {
+        _selectedDate = _selectedDate.add(Duration(days: 1));
+      });
+      _fetchDataForSelectedDate();
+    }
+  }
+
+  // Fetch data for the selected date
+  void _fetchDataForSelectedDate() {
+    final feedProvider = Provider.of<FeedProvider>(context, listen: false);
+    final milkProvider =
+        Provider.of<MilkRecordProvider>(context, listen: false);
+
+    String formattedDate = DateFormat('EEE MMM dd yyyy').format(_selectedDate);
+
+    feedProvider.fetchFeedCount(context, formattedDate);
+    milkProvider.fetchMilkCount(context, formattedDate);
   }
 
   @override
@@ -51,8 +94,28 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
         backgroundColor: darkGreenColor,
         foregroundColor: Colors.white,
         centerTitle: true,
-        shadowColor: Colors.black,
-        title: const Text("Daily Record"),
+        title: Padding(
+          padding: const EdgeInsets.only(right: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: Icon(Icons.keyboard_arrow_left_sharp),
+                color: Colors.white,
+                onPressed: _goToPreviousDay, // Go to the previous day
+              ),
+              Text(
+                DateFormat('dd MMM yyyy').format(_selectedDate),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              IconButton(
+                icon: Icon(Icons.keyboard_arrow_right_sharp),
+                color: Colors.white,
+                onPressed: _goToNextDay, // Go to the next day
+              ),
+            ],
+          ),
+        ),
       ),
       body: Column(
         children: [
@@ -62,13 +125,13 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
           ),
           Expanded(
             child: FutureBuilder<SoldMilkModel?>(
-              future: milkProvider.fetchMilkSold(context,DateFormat('MMM yyyy').format(DateTime.now())),
+              future: milkProvider.fetchMilkSold(
+                  context, DateFormat('EEE MMM dd yyyy').format(_selectedDate)),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.data!.monthlyMilkRecord!.isEmpty) {
-                  return Center(
-                      child: Text('No Data Available'));
+                  return Center(child: Text('No Data Available'));
                 } else if (snapshot.hasData && snapshot.data != null) {
                   final soldMilkData = snapshot.data!.monthlyMilkRecord ?? [];
                   return ListView.builder(
@@ -84,7 +147,7 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
                                 SlidableAction(
                                   onPressed: (context) {
                                     vendorName.text =
-                                        record.vendorName.toString();
+                                        record.vendor!.name.toString();
                                     amountSold.text =
                                         record.amountSold.toString();
                                     totalPayment.text =
@@ -133,25 +196,16 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
                                                 SizedBox(
                                                   height: screenHeight * .025,
                                                 ),
-                                                customTextFormField(
-                                                  "Total Payment",
-                                                ),
-                                                TextFieldWidget1(
-                                                    widgetcontroller:
-                                                        totalPayment,
-                                                    fieldName: "Total Payment",
-                                                    isPasswordField: false),
-                                                SizedBox(
-                                                  height: screenHeight * .025,
-                                                ),
-                                                customTextFormField(
-                                                  "Date",
-                                                ),
-                                                TextFieldWidget1(
-                                                    widgetcontroller:
-                                                        datePicker,
-                                                    fieldName: "Date",
-                                                    isPasswordField: false),
+                                               
+                                                 dateContainer(),
+                                                // customTextFormField(
+                                                //   "Date",
+                                                // ),
+                                                // TextFieldWidget1(
+                                                //     widgetcontroller:
+                                                //         datePicker,
+                                                //     fieldName: "Date",
+                                                //     isPasswordField: false),
                                                 SizedBox(
                                                   height: screenHeight * .025,
                                                 ),
@@ -161,6 +215,7 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
                                                       title: "Update",
                                                       on_Tap: () async {
                                                         print(record.sId);
+                                                        datePicker.text= DateFormat("EEE MMM dd yyyy").format(selectedDate);
                                                         await Provider.of<MilkRecordProvider>(
                                                                 context,
                                                                 listen: false)
@@ -178,9 +233,7 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
                                                                         amountSold
                                                                             .text),
                                                                 totalPayment:
-                                                                    int.parse(
-                                                                        totalPayment
-                                                                            .text),
+                                                                    0,
                                                                 context:
                                                                     context);
                                                         Navigator.pop(context);
@@ -203,12 +256,14 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
                             children: [
                               SlidableAction(
                                 onPressed: (context) async {
-                                  // await Provider.of<MilkRecordProvider>(context,
-                                  //         listen: false)
-                                  //     .deleteMilkSold(
-                                  //         id: record.sId.toString(),
-                                  //         context: context);
-                                  //deleteRecord(cow.id);
+                                  await Provider.of<MilkRecordProvider>(context,
+                                          listen: false)
+                                      .deleteMilkSold(
+                                          id: record.sId.toString(),
+                                          context: context);
+                                 setState(() {
+                                   
+                                 });
                                 },
                                 backgroundColor: Colors.red,
                                 icon: Icons.delete,
@@ -219,7 +274,7 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
                           child: Container(
                             width: double.infinity,
                             height: screenHeight / 7,
-                            padding: EdgeInsets.all(paragraph),
+                            padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(paragraph),
@@ -232,36 +287,34 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
                                 ]),
                             child: Column(
                               children: [
+                                Text("Date: ${record.date.toString()}",style: TextStyle(color: Colors.teal.shade400),),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text1(
-                                        fontColor: blackColor,
-                                        fontSize: screenWidth * .055,
-                                        text: "${record.vendorName}"),
-                                    Text1(
-                                        fontColor: blackColor,
-                                        fontSize: screenWidth * .055,
-                                        text: "${record.amountSold}ltr")
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: screenHeight * .023,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    RowWithTextAndImage(
-                                        text1: "Morning",
-                                        imgUrl: "lib/assets/sun.png"),
-                                    RowWithTextAndImage(
-                                      imgUrl: "lib/assets/moon.png",
-                                      text1: "Evening",
+                                    Row(
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 20,
+                                          backgroundImage: AssetImage("lib/assets/vendorMan.png")),
+                                    
+                                        Text1(
+                                            fontColor: blackColor,
+                                            fontSize: screenWidth * .055,
+                                            text: "${record.vendor!.name}"),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text1(
+                                            fontColor: blackColor,
+                                            fontSize: screenWidth * .055,
+                                            text: "${record.amountSold}ltr"),
+                                        Image(image: AssetImage("lib/assets/milkSale.png"),width: 30,),
+                                      ],
                                     )
                                   ],
-                                )
+                                ),
                               ],
                             ),
                           ),
@@ -269,11 +322,14 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
                       );
                     },
                   );
-                } 
-                else{
-                  return const Center(child: Text('No data available',style: TextStyle(
-                    fontSize: 16,
-                  ),));
+                } else {
+                  return const Center(
+                      child: Text(
+                    'No data available',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ));
                 }
               },
             ),
@@ -282,7 +338,51 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
       ),
     );
   }
+
+  Widget dateContainer() {
+    return InkWell(
+      onTap: () async {
+        pickedDate = await customDatePicker(context, selectedDate);
+        if (pickedDate != null) {
+          setState(() {
+            selectedDate = pickedDate as DateTime;
+          });
+        }
+      },
+      child: Container(
+        padding: EdgeInsets.all(paragraph - 7),
+        width: double.infinity,
+        height: screenHeight / 10,
+        decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.92),
+            border: Border.all(color: CupertinoColors.systemGrey, width: 1),
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: const [
+              BoxShadow(
+                  color: CupertinoColors.systemGrey3,
+                  offset: Offset(0, 2),
+                  blurRadius: 8)
+            ]),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text1(
+                fontColor: Colors.black,
+                fontSize: paragraph,
+                text: DateFormat("EEE MMM dd yyyy").format(selectedDate)),
+            Icon(
+              CupertinoIcons.calendar,
+              color: darkGreenColor,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+  
 }
+
+
 
 Widget pageHeaderContainer() {
   return Material(

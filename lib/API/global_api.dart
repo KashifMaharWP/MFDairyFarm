@@ -10,7 +10,7 @@ class GlobalApi {
   static String deleteAnimal = 'cow/';
   static String updateAnimal = 'cow/updateCow';
   static String getMilkCount =
-      'milk/getMilkCountRecordByDate/${DateFormat("EEE MMM dd yyyy").format(DateTime.now())}';
+      'milk/getMilkCountRecordByDate/';
   static String addMorningFeed = "feed/morningFeed";
   static String getMilkRecord = 'milk/getMilkRecordByDate/';
   static String addEveningFeed = "feed/eveningFeed";
@@ -43,6 +43,9 @@ class GlobalApi {
   static String updateCowMilk="milk/updateMilkRecordById/";
   static String deleteCowMilk="milk/deleteMilkRecordById/";
    static String feedInventory="feedInventory/";
+
+   static String deleteFeedConsumption="feed/deleteFeedConsumtionRecordById/";
+   static String UpdateFeedInventory="feedInventory/plusAmount/";
   
   
 }

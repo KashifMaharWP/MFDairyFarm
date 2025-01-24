@@ -26,10 +26,13 @@ class _feedEntryPageState extends State<feedEntryPage> {
   TextEditingController wanda = TextEditingController();
   TextEditingController purchasedPrice = TextEditingController();
   TextEditingController breadType = TextEditingController();
+  
   // List<String> tagIDList = ["1", "2", "3", "4"];
   String? dropDownItem;
   String animalIdDropDownValue = "1";
   DateTime selectedDate = DateTime.now();
+  
+  TextEditingController datepiker = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -67,10 +70,14 @@ class _feedEntryPageState extends State<feedEntryPage> {
                         SimpleToast.showErrorToast(
                             context, "Alert", "Please Enter Feed Amount");
                       } else {
+                        datepiker.text =
+                      DateFormat("EEE MMM dd yyyy").format(selectedDate);
                         await Provider.of<FeedProvider>(context, listen: false)
                             .addFeedInventory(
                                 feedAmount: int.parse(wanda.text),
-                                context: context);
+                                context: context,
+                                Date: datepiker.text.toString()
+                                );
                         Navigator.pop(context);
                       }
                     })
@@ -89,6 +96,16 @@ class _feedEntryPageState extends State<feedEntryPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Wrap(
+              alignment: WrapAlignment.start,
+              runAlignment: WrapAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.start,
+              children: [
+                Icon(Icons.calendar_month),
+                Text1(fontColor: blackColor, fontSize: header6, text: "Date"),
+              ],
+            ),
+            dateContainer(),
           customTextFormField("Wanda", Icons.grass),
           TextFieldWidget1(
               keyboardtype: TextInputType.number,
@@ -120,13 +137,13 @@ class _feedEntryPageState extends State<feedEntryPage> {
         }
       },
       child: Container(
-        padding: EdgeInsets.all(paragraph - 7),
-        width: screenWidth,
-        height: screenHeight / 14,
+        padding: EdgeInsets.all(10),
+        width: double.infinity,
+        height: screenHeight / 10,
         decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.92),
             border: Border.all(color: CupertinoColors.systemGrey, width: 1),
-            borderRadius: BorderRadius.circular(paragraph - 10),
+            borderRadius: BorderRadius.circular(5),
             boxShadow: const [
               BoxShadow(
                   color: CupertinoColors.systemGrey3,
@@ -138,7 +155,7 @@ class _feedEntryPageState extends State<feedEntryPage> {
           children: [
             Text1(
                 fontColor: blackColor,
-                fontSize: paragraph - 3,
+                fontSize: 14,
                 text: DateFormat("dd / MM / yyyy").format(selectedDate)),
             Icon(
               CupertinoIcons.calendar,

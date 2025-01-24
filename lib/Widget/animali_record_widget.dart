@@ -409,17 +409,3 @@ class _AnimalRecordWidgetState extends State<AnimalRecordWidget> {
 }
 
 }
-
-class upDateCow extends StatefulWidget {
-  const upDateCow({super.key});
-
-  @override
-  State<upDateCow> createState() => _upDateCowState();
-}
-
-class _upDateCowState extends State<upDateCow> {
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}

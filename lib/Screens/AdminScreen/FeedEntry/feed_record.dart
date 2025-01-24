@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
+import 'package:simple_toast_message/simple_toast.dart';
 import '../../../API/global_api.dart';
 import '../../../Providers/FeedProviders/feed_provider.dart';
 import '../../../Class/colorPallete.dart';
@@ -44,6 +45,8 @@ class _FeedRecordState extends State<FeedRecord> {
     final feedProvider = Provider.of<FeedProvider>(context, listen: false);
     feedProvider.fetchFeedConsumption(
         context, DateFormat('MMM').format(_selectedMonth).toLowerCase());
+
+        feedProvider.fetchFeed(context, DateFormat('EEE MMM dd yyyy').format(_selectedMonth).toLowerCase());
   }
 
   void _goToNextMonth() {
@@ -54,6 +57,7 @@ class _FeedRecordState extends State<FeedRecord> {
     final feedProvider = Provider.of<FeedProvider>(context, listen: false);
     feedProvider.fetchFeedConsumption(
         context, DateFormat('MMM').format(_selectedMonth).toLowerCase());
+        feedProvider.fetchFeed(context, DateFormat('EEE MMM dd yyyy').format(_selectedMonth).toLowerCase());
   }
 
   @override
@@ -67,7 +71,7 @@ class _FeedRecordState extends State<FeedRecord> {
       final feedProvider = Provider.of<FeedProvider>(context, listen: false);
       feedProvider.fetchFeedConsumption(
           context, DateFormat('MMM').format(_selectedMonth).toLowerCase());
-          feedProvider.fetchFeed(context, DateFormat('MMM yyyy').format(_selectedMonth).toLowerCase());
+          feedProvider.fetchFeed(context, DateFormat('EEE MMM dd yyyy').format(_selectedMonth).toLowerCase());
     });
   }
 
@@ -86,8 +90,9 @@ class _FeedRecordState extends State<FeedRecord> {
         title: Padding(
           padding: const EdgeInsets.only(right: 40),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              
               IconButton(
                 icon: Icon(Icons.keyboard_arrow_left_sharp),
                 color: Colors.white,
@@ -109,9 +114,24 @@ class _FeedRecordState extends State<FeedRecord> {
                   // Go to the next month and fetch data
                 },
               ),
+
+             
             ],
           ),
         ),
+
+        actions: [
+Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 8),
+  child: GestureDetector(
+                onTap: (){
+
+                  _updateFeedSheet(Provider.of<FeedProvider>(context,listen: false).feedTotal.toString());
+                },
+                child: Icon(Icons.add_circle,size: 30,)
+               ),
+)
+        ],
       ),
       body: Column(
         children: [
@@ -197,7 +217,7 @@ class _FeedRecordState extends State<FeedRecord> {
               Text1(
                 fontColor: lightBlackColor,
                 fontSize: screenWidth * .05,
-                text: DateFormat("MMMM yyyy").format(DateTime.now()),
+                text: DateFormat("MMMM yyyy").format(_selectedMonth),
               ),
             ],
           ),
@@ -210,47 +230,58 @@ class _FeedRecordState extends State<FeedRecord> {
                       .feedConsumeRecord?.feedConsumptionRecordMonthly ??
                   [];
               return Flexible(
-                child: ListView.builder(
+                child: GridView.builder(
+                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10, // Spacing between columns
+                mainAxisSpacing: 2, // Spacing between rows
+                childAspectRatio:
+                    screenWidth / (screenHeight / 1.8), ),
                   itemCount: feedConsumed.length,
                   itemBuilder: (context, index) {
                     final feed = feedConsumed[index];
                     return GestureDetector(
-                      onLongPress: () => showDialog(
+                      onTap: () => showDialog(
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: Text('Choose an action'),
                             actions: <Widget>[
                               // Update action
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pop(); // Close the dialog first
-                                  //_showUpdateFeedSheet(feed.id); // Call the function with parentheses
-                                },
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.edit,
-                                        color: Colors.blue), // Edit icon
-                                    SizedBox(width: 8),
-                                    Text('Update',
-                                        style: TextStyle(color: Colors.blue)),
-                                  ],
-                                ),
-                              ),
+                              // TextButton(
+                              //   onPressed: () {
+                              //     Navigator.of(context)
+                              //         .pop(); // Close the dialog first
+                              //     _updateFeedSheet(feed!.id.toString()); // Call the function with parentheses
+                              //   },
+                              //   child: Row(
+                              //     children: [
+                              //       Icon(Icons.edit,
+                              //           color: Colors.blue), // Edit icon
+                              //       SizedBox(width: 8),
+                              //       Text('Update',
+                              //           style: TextStyle(color: Colors.blue)),
+                              //     ],
+                              //   ),
+                              // ),
                               // Delete action
                               TextButton(
-                                onPressed: () {
+                                onPressed: ()async {
+                                  await Provider.of<FeedProvider>(context,
+                                          listen: false)
+                                      .DeleteFeed( feed.id.toString(),context);
+                                      final feedProvider = Provider.of<FeedProvider>(context, listen: false);
+    await  feedProvider.fetchFeedConsumption(
+          context, DateFormat('MMM').format(_selectedMonth).toLowerCase());
+      await    feedProvider.fetchFeed(context, DateFormat('MMM yyyy').format(_selectedMonth).toLowerCase());
                                   Navigator.of(context).pop();
                                 },
                                 // onPressed: () async {
                                 //   // Call the deleteFeed method from FeedProvider
-                                //   await Provider.of<FeedProvider>(context,
-                                //           listen: false)
-                                //       .deleteFeed(context, feed);
+                                  
 
-                                //   // Close the dialog after deletion
-                                //   Navigator.of(context).pop();
+                                  // Close the dialog after deletion
+                                  //Navigator.of(context).pop();
                                 // },
                                 child: Row(
                                   children: [
@@ -267,16 +298,27 @@ class _FeedRecordState extends State<FeedRecord> {
                         },
                       ),
                       child: Card(
+                        elevation: 2,
                         color: Colors.white,
-                        elevation: 2.0,
                         child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: screenHeight * .025,
-                            horizontal: screenWidth * .025,
-                          ),
-                          child: Row(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                             Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                height: screenHeight * .20,
+                                width: screenWidth * .58,
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.network(
+                                      feed.cow!.image.toString(),
+                                      fit: BoxFit.fill,
+                                    )),
+                              ),
                               Row(
                                 children: [
                                   SizedBox(
@@ -295,11 +337,39 @@ class _FeedRecordState extends State<FeedRecord> {
                                   ),
                                 ],
                               ),
-                              Text1(
-                                fontColor: lightBlackColor,
-                                fontSize: screenWidth * .05,
-                                text: "${feed.total} Kg",
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      
+                                      Text1(
+                                        fontColor: lightBlackColor,
+                                        fontSize: 12,
+                                        text: "${feed.morning} Kg",
+                                      ),
+                                      Image.asset("lib/assets/sun.png",width: 16,),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      
+                                      Text1(
+                                        fontColor: lightBlackColor,
+                                        fontSize: screenWidth * .05,
+                                        text: "${feed.evening} Kg",
+                                      ),
+                                      Image.asset("lib/assets/moon.png",width: 16),
+                                    ],
+                                  ),
+                                  
+                                ],
                               ),
+                              Text1(
+                                    fontColor: blackColor,
+                                    fontSize: screenWidth * .05,
+                                    text: "Total : ${feed.total} Kg",
+                                  ),
                             ],
                           ),
                         ),
@@ -314,7 +384,93 @@ class _FeedRecordState extends State<FeedRecord> {
       ),
     );
   }
+
+  void _updateFeedSheet(String feed) {
+  // Controllers to manage input fields
+  final TextEditingController feedController = TextEditingController();
+ feedController.text=feed;
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (BuildContext context) {
+      return Padding(
+      padding: EdgeInsets.only(
+        left: 16.0,
+        right: 16.0,
+        top: 16.0,
+        bottom: MediaQuery.of(context).viewInsets.bottom, // Adjust for keyboard
+      ),
+        child: Container(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Update Total Feed',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+              
+                  GestureDetector(
+                    onTap: (){
+
+                      Navigator.pop(context);
+                    },
+                    child: Icon(Icons.cancel_sharp,size: 30,))
+                ],
+              ),
+              SizedBox(height: 40),
+              // Cow ID Field
+              TextField(
+                controller: feedController,
+                //readOnly: true, // Prevent editing Cow ID
+                decoration: InputDecoration(
+                  labelText: 'Feed',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10)
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                ),
+              ),
+              SizedBox(height: 16),
+              // Breed Type Field
+             GestureDetector(
+              onTap: ()async{
+                final provider=Provider.of<FeedProvider>(context,listen: false);
+                final subtractedAmout=int.parse(feed)-int.parse(feedController.text);
+                
+              await provider.UpdateInventory(feedAmount: -subtractedAmout,context: context,id: provider.feedId.toString());
+              await provider.fetchFeed(context, DateFormat('EEE MMM dd yyyy').format(_selectedMonth).toLowerCase());
+               Navigator.pop(context);
+                
+               
+              },
+              child: Container(
+               height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(10)
+                ),
+                child: Center(child: Text("Update Feed"))),
+             )
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }
+}
+
+
+
 
 Widget pageHeaderContainer(
     BuildContext context,) {
@@ -338,101 +494,39 @@ Widget pageHeaderContainer(
               ]),
           child: Padding(
             padding: const EdgeInsets.all(8),
-            child: Column(
-              children: [
-                Row(
+            child: Consumer<FeedProvider>(builder: (context, provider, child) {
+              if (provider.isLoading) {
+                return CircularProgressIndicator();
+              } else {
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Consumer<FeedProvider>(builder: (context, provider, child) {
-                      if (provider.isLoading) {
-                        return CircularProgressIndicator();
-                      } else {
-                        return Row(
-                          children: [
-                            wrapCircleContainer(
-                                "${provider.feedTotal}", "Total"),
-                            SizedBox(
-                              width: paragraph / 4,
-                            ),
-                            Container(
-                              width: 1,
-                              height: screenWidth / 3.8,
-                              color: CupertinoColors.systemGrey6,
-                            ),
-                            wrapCircleContainer("${provider.feedUsed}", "Used"),
-                            SizedBox(
-                              width: paragraph / 4,
-                            ),
-                            Container(
-                              width: 1,
-                              height: screenWidth / 3.8,
-                              color: CupertinoColors.systemGrey6,
-                            ),
-                            wrapCircleContainer(
-                                "${provider.feedAvailable}", "Available"),
-                          ],
-                        );
-                      }
-                    }),
-                    // FutureBuilder<dynamic>(
-                    //   future: fetchFeed(context, month),
-                    //   builder: (context, snapshot) {
-                    //     if (snapshot.connectionState ==
-                    //         ConnectionState.waiting) {
-                    //       return wrapCircleContainer("0", "Total");
-                    //     } else if (snapshot.hasError) {
-                    //       return wrapCircleContainer("0", "Total");
-                    //     } else if (snapshot.hasData && snapshot.data != null) {
-                    //       final totalFeed = int.tryParse(snapshot
-                    //               .data['feedInventory']['totalAmount']
-                    //               .toString()) ??
-                    //           0;
-                    //       final availableFeed = int.parse(snapshot
-                    //           .data['feedInventory']['availableAmount']
-                    //           .toString());
-                    //       final usedFeed = totalFeed - availableFeed;
-                    //       // Display total feed stored
-                    //       return Row(
-                    //         //crossAxisAlignment: CrossAxisAlignment.center,
-                    //         //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //         children: [
-
-                    //         ],
-                    //       );
-                    //     }
-                    //   },
-                    // ),
-
-                    // FutureBuilder<dynamic>(
-                    //   future: fetchFeed(context,month),
-                    //   builder: (context, snapshot) {
-                    //     if (snapshot.connectionState ==
-                    //         ConnectionState.waiting) {
-                    //       return wrapCircleContainer("0", "Available");
-                    //     } else if (snapshot.hasError) {
-                    //       return wrapCircleContainer("0", "Available");
-                    //     } else if (snapshot.hasData && snapshot.data != null) {
-                    //       return wrapCircleContainer(
-                    //           "${snapshot.data['feedInventory']['availableAmount']}",
-                    //           "Available");
-                    //     } else {
-                    //       return const Text('No data available');
-                    //     }
-                    //   },
-                    // ),
-
+                    wrapCircleContainer(
+                        "${provider.feedTotal}", "Total"),
                     SizedBox(
-                      height: paragraph / 4,
+                      width: paragraph / 4,
                     ),
                     Container(
-                      width: 0,
+                      width: 1,
                       height: screenWidth / 3.8,
                       color: CupertinoColors.systemGrey6,
                     ),
+                    wrapCircleContainer("${provider.feedUsed}", "Used"),
+                    SizedBox(
+                      width: paragraph / 4,
+                    ),
+                    Container(
+                      width: 1,
+                      height: screenWidth / 3.8,
+                      color: CupertinoColors.systemGrey6,
+                    ),
+                    wrapCircleContainer(
+                        "${provider.feedAvailable}", "Available"),
                   ],
-                )
-              ],
-            ),
+                );
+              }
+            }),
           )));
 }
 

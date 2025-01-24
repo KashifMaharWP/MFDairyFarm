@@ -160,16 +160,45 @@ class _MedicalDetailState extends State<MedicalDetail> {
                     final record = medical[index];
                     return Consumer<AddMedical>(
                         builder: (context, addMedical, child) {
-                      return Dismissible(
-                        key: Key(record.sId.toString()),
-                        direction: DismissDirection.endToStart,
-                        background: _buildDismissBackground(),
-                        confirmDismiss: (_) => _confirmDismiss(context,
-                            "Are you sure you want to delete this item?"),
-                        onDismissed: (_) async {
-                          await addMedical.DeleteMedicalRecord(
+                      return GestureDetector(
+                        onTap: ()async{
+                             showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Choose an action'),
+                                  actions: <Widget>[
+                                    
+                                    // Delete action
+                                    TextButton(
+                                      onPressed: () async {
+                                        // Call the deleteCow method from CowsProvider
+                                       await addMedical.DeleteMedicalRecord(
                               context, record.sId.toString());
-                          setState(() {});
+                                        // Close the dialog after deletion
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Icon(Icons.delete,
+                                              color: Colors.red), // Delete icon
+                                          SizedBox(width: 8),
+                                          Text('Delete',
+                                              style:
+                                                  TextStyle(color: Colors.red)),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+
+                         await Provider.of<AddMedical>(context, listen: false)
+                          .fetchMedicalDetails(context, widget.id,
+                              DateFormat('MMM yyyy').format(_selectedMonth));
+                                  
+                          
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),

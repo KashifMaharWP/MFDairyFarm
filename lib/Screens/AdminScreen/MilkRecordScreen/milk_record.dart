@@ -73,7 +73,7 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
       final milkProvider =
           Provider.of<MilkRecordProvider>(context, listen: false);
       milkProvider.fetchMilkRecords(context);
-      milkProvider.fetchMilkCount(context);
+      milkProvider.fetchMilkCount(context,DateFormat('EEE MMM dd yyyy').format(DateTime.now()));
     });
   }
 
@@ -427,7 +427,7 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
                             ),
                             child: Container(
                               width: screenWidth * 0.95,
-                              height: screenHeight / 3.9,
+                              height: screenHeight / 2.5,
                               padding: const EdgeInsets.all(5),
                               decoration: BoxDecoration(
                                   color: Colors.white,
@@ -441,90 +441,83 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
                                         offset: const Offset(2, 0)),
                                   ]),
                               child: Column(
-                                // crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Row(
+                                  Column(
                                     children: [
-                                      Column(
+                                      Center(
+                                        child: ClipRRect(
+                                          borderRadius:  BorderRadius.circular(10),
+                                          child: Image(
+                                            image: NetworkImage(
+                                                cow.cow.image),
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  Column(
+                          
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                color: const Color.fromARGB(
-                                                    255, 210, 203, 203),
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        20)),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              child: Image(
-                                                image: NetworkImage(
-                                                    cow.cow.image),
-                                                fit: BoxFit.cover,
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                CupertinoIcons.tag_fill,
+                                                color: darkGreenColor,
+                                                size: 18,
                                               ),
-                                            ),
-                                            height: screenHeight * .24,
-                                            width: screenWidth * .45,
-                                            //color: Colors.red,
+                                              SizedBox(
+                                                width: screenWidth * .007,
+                                              ),
+                                              Text1(
+                                                  fontColor:
+                                                      lightBlackColor,
+                                                  fontSize: paragraph,
+                                                  text: cow
+                                                      .cow.animalNumber
+                                                      .toString()),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            width: screenWidth * .055,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text1(
+                                                  fontColor:
+                                                      lightBlackColor,
+                                                  fontSize: paragraph,
+                                                  text:
+                                                      "Total:"),
+                                              SizedBox(
+                                                width: screenWidth * .007,
+                                              ),
+                                              Text1(
+                                                  fontColor:
+                                                      lightBlackColor,
+                                                  fontSize: paragraph,
+                                                  text:
+                                                      "${cow.total} Kg"),
+                                            ],
                                           ),
                                         ],
                                       ),
                                       SizedBox(
-                                        width: screenWidth * .05,
+                                        height: screenHeight * .025,
                                       ),
-                                      Column(
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .spaceBetween,
                                         children: [
                                           Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Icon(
-                                                    CupertinoIcons.tag_fill,
-                                                    color: darkGreenColor,
-                                                  ),
-                                                  SizedBox(
-                                                    width: screenWidth * .007,
-                                                  ),
-                                                  Text1(
-                                                      fontColor:
-                                                          lightBlackColor,
-                                                      fontSize: paragraph,
-                                                      text: cow
-                                                          .cow.animalNumber
-                                                          .toString()),
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                width: screenWidth * .055,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Icon(
-                                                    CupertinoIcons.add,
-                                                    color: darkGreenColor,
-                                                  ),
-                                                  SizedBox(
-                                                    width: screenWidth * .007,
-                                                  ),
-                                                  Text1(
-                                                      fontColor:
-                                                          lightBlackColor,
-                                                      fontSize: paragraph,
-                                                      text:
-                                                          "${cow.total} Kg"),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: screenHeight * .025,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
                                             children: [
                                               Image(
                                                 image: const AssetImage(
@@ -539,37 +532,36 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
                                                   fontColor: lightBlackColor,
                                                   fontSize: paragraph,
                                                   text: "${cow.morning} Kg"),
-                                              SizedBox(
-                                                width: screenWidth * .055,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Image(
-                                                    image: const AssetImage(
-                                                        "lib/assets/moon.png"),
-                                                    width: screenWidth * .055,
-                                                    height:
-                                                        screenWidth * .055,
-                                                  ),
-                                                  SizedBox(
-                                                    width: screenWidth * .007,
-                                                  ),
-                                                  Text1(
-                                                      fontColor:
-                                                          lightBlackColor,
-                                                      fontSize: paragraph,
-                                                      text:
-                                                          "${cow.evening} Kg"),
-                                                ],
-                                              ),
                                             ],
-                                          )
+                                          ),
+                                          SizedBox(
+                                            width: screenWidth * .055,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Image(
+                                                image: const AssetImage(
+                                                    "lib/assets/moon.png"),
+                                                width: screenWidth * .055,
+                                                height:
+                                                    screenWidth * .055,
+                                              ),
+                                              SizedBox(
+                                                width: screenWidth * .007,
+                                              ),
+                                              Text1(
+                                                  fontColor:
+                                                      lightBlackColor,
+                                                  fontSize: paragraph,
+                                                  text:
+                                                      "${cow.evening} Kg"),
+                                            ],
+                                          ),
                                         ],
-                                      ),
-                                    
+                                      )
                                     ],
                                   ),
-                               
+                                
                                 ],
                               ),
                             ),

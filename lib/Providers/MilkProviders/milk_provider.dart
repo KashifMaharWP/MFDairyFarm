@@ -230,7 +230,7 @@ class MilkProvider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.addMilkSale}');
-    print(url);
+   // print(url);
 
     final headers = {
       'Content-Type': 'application/json',
@@ -242,9 +242,9 @@ class MilkProvider extends ChangeNotifier {
       'vendorId': venderId,
       'date': date,
       'amount_sold': int.parse(milkAmount),
-      'total_payment': int.parse(totalAmount),
+      'total_payment': 100,
     });
-    // debugger();
+     //debugger();
 
     try {
       final response = await http.post(
@@ -267,9 +267,11 @@ class MilkProvider extends ChangeNotifier {
         _isLoading = false;
         notifyListeners();
         //showErrorSnackbar(message['message'], context);
+        print('Error 400: ${response.body}');
       }
     } catch (e) {
       SimpleToast.showErrorToast(context, "Error occured", "$e");
+      
       _isLoading = false;
       notifyListeners();
       //showErrorSnackbar("An Error occured: $e", context);
