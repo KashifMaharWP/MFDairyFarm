@@ -104,21 +104,21 @@ void dispose() {
               fieldName: "password",
               widgeticon: Icons.lock,
               isPasswordField: true),
-          // SizedBox(
-          //   height: header1,
-          // ),
-          TextButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const RegistrationPage1()));
-              },
-              child: Text(
-                'Register!',
-                style: TextStyle(
-                    color: Colors.lightBlue, fontSize: screenWidth * .05),
-              )),
+           SizedBox(
+             height: header1,
+           ),
+          // TextButton(
+          //     onPressed: () {
+          //       Navigator.push(
+          //           context,
+          //           MaterialPageRoute(
+          //               builder: (context) => const RegistrationPage1()));
+          //     },
+          //     child: Text(
+          //       'Register!',
+          //       style: TextStyle(
+          //           color: Colors.lightBlue, fontSize: screenWidth * .05),
+          //     )),
           customRoundedButton(
               loading: isLoading,
               title: "Sign in",

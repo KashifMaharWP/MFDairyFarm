@@ -1,82 +1,89 @@
 class SoldMilkModel {
-  bool? success;
-  String? message;
-  List<MonthlyMilkRecord>? monthlyMilkRecord;
+  final bool? success;
+  final String? message;
+  final List<SoldMilkRecord>? monthlyMilkRecord;
 
-  SoldMilkModel({this.success, this.message, this.monthlyMilkRecord});
+  SoldMilkModel({
+    this.success,
+    this.message,
+    this.monthlyMilkRecord,
+  });
 
-  SoldMilkModel.fromJson(Map<String, dynamic> json) {
-    success = json['success'];
-    message = json['message'];
-    if (json['monthlyMilkRecord'] != null) {
-      monthlyMilkRecord = <MonthlyMilkRecord>[];
-      json['monthlyMilkRecord'].forEach((v) {
-        monthlyMilkRecord!.add(MonthlyMilkRecord.fromJson(v));
-      });
-    }
+  factory SoldMilkModel.fromJson(Map<String, dynamic> json) {
+    return SoldMilkModel(
+      success: json['success'],
+      message: json['message'],
+      monthlyMilkRecord: (json['monthlyMilkRecord'] as List<dynamic>?)
+          ?.map((record) => SoldMilkRecord.fromJson(record))
+          .toList(),
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['success'] = success;
-    data['message'] = message;
-    if (monthlyMilkRecord != null) {
-      data['monthlyMilkRecord'] =
-          monthlyMilkRecord!.map((v) => v.toJson()).toList();
-    }
-    return data;
+    return {
+      'success': success,
+      'message': message,
+      'monthlyMilkRecord': monthlyMilkRecord?.map((record) => record.toJson()).toList(),
+    };
   }
 }
 
-class MonthlyMilkRecord {
-  String? sId;
-  int? amountSold;
-  String? date;
-  int? totalPayment;
-  Vendor? vendor;
+class SoldMilkRecord {
+  final String? id;
+  final int? amountSold;
+  final String? date;
+  final int? totalPayment;
+  final Vendor? vendor;
 
-  MonthlyMilkRecord(
-      {this.sId, this.amountSold, this.date, this.totalPayment, this.vendor});
+  SoldMilkRecord({
+    this.id,
+    this.amountSold,
+    this.date,
+    this.totalPayment,
+    this.vendor,
+  });
 
-  MonthlyMilkRecord.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    amountSold = json['amount_sold'];
-    date = json['date'];
-    totalPayment = json['total_payment'];
-    vendor = json['vendor'] != null ? Vendor.fromJson(json['vendor']) : null;
+  factory SoldMilkRecord.fromJson(Map<String, dynamic> json) {
+    return SoldMilkRecord(
+      id: json['_id'],
+      amountSold: json['amount_sold'],
+      date: json['date'],
+      totalPayment: json['total_payment'],
+      vendor: json['vendor'] != null ? Vendor.fromJson(json['vendor']) : null,
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = sId;
-    data['amount_sold'] = amountSold;
-    data['date'] = date;
-    data['total_payment'] = totalPayment;
-    if (vendor != null) {
-      data['vendor'] = vendor!.toJson();
-    }
-    return data;
+    return {
+      '_id': id,
+      'amount_sold': amountSold,
+      'date': date,
+      'total_payment': totalPayment,
+      'vendor': vendor?.toJson(),
+    };
   }
 }
 
 class Vendor {
-  String? sId;
-  String? name;
-  int? iV;
+  final String? id;
+  final String? name;
 
-  Vendor({this.sId, this.name, this.iV});
+  Vendor({
+    this.id,
+    this.name,
+  });
 
-  Vendor.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    name = json['name'];
-    iV = json['__v'];
+  factory Vendor.fromJson(Map<String, dynamic> json) {
+    return Vendor(
+      id: json['_id'],
+      name: json['name'],
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = sId;
-    data['name'] = name;
-    data['__v'] = iV;
-    return data;
+    return {
+      '_id': id,
+      'name': name,
+    };
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:collection/collection.dart';
 import 'package:dairyfarmflow/Model/soldmilk.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/milk_provider.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +19,8 @@ class MilkRecordProvider extends ChangeNotifier {
   String evening = "0";
   String morning ="0";
   String total ="0";
-  String get eveningMilk =>evening;
-  String get morningMilk =>morning;
+  String  eveningMilk= "0";
+  String morningMilk ="0";
   //String filtering ='';
 
   List<TodayMilkRecord> _milkRecords = [];
@@ -32,12 +33,60 @@ class MilkRecordProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
+  List<SoldMilkModel> filteredMilkData = [];
+  String totalMilk = "0";
+
   void lister(){
     notifyListeners();
   }
 
+  Future<int> fetchMilkSoldForDate(
+      BuildContext context, String month, String filterDate) async {
+    final headers = {
+      'Authorization':
+          'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
+    };
+    final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getSoldMilk}$month');
 
- 
+    try {
+      final response = await http.get(url, headers: headers);
+      //debugger();
+      if (response.statusCode == 200) {
+        final data = SoldMilkModel.fromJson(json.decode(response.body));
+        final records = data.monthlyMilkRecord;
+
+        // Group records by date
+        final groupedByDate = groupBy(records!, (record) => record?.date);
+
+        // Calculate total amount_sold for all vendors for each date
+        final datewiseTotals = groupedByDate.map((date, records) {
+          final totalSold =
+              records.fold(0, (sum, record) => sum + record.amountSold!.toInt());
+              
+          return MapEntry(date, totalSold);
+        });
+
+        // Return the total for the requested date
+        if (datewiseTotals.containsKey(filterDate)) {
+          totalMilk=datewiseTotals[filterDate].toString();
+          return datewiseTotals[filterDate]!;
+        } else {
+          //print("No data found for the given date: $filterDate");
+          totalMilk="0";
+          return 0; // No data for the date
+        }
+      } else {
+        final errorResponse = json.decode(response.body);
+        print("Error: ${errorResponse['message']}");
+        return 0; // Handle error
+      }
+    } catch (e) {
+      print("An error occurred: $e");
+      return 0; // Handle exception
+    }
+  }
+
+
 
   Future<void> fetchMilkRecords(BuildContext context) async {
     
@@ -87,7 +136,7 @@ class MilkRecordProvider extends ChangeNotifier {
   Future<void> fetchMilkCount(BuildContext context,String month) async {
     _isLoading = true;
     _errorMessage = null;
-    notifyListeners();
+   // notifyListeners();
 
     final headers = {
       'Authorization':
@@ -98,18 +147,23 @@ class MilkRecordProvider extends ChangeNotifier {
     try {
       final response = await http.get(url, headers: headers);
 
+         //debugger();
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body) as Map<String, dynamic>;
         if (jsonData['success'] == true) {
           _milkCountData = jsonData;
-          morning =_milkCountData!['todayMilkCount'][0]['morning'].toString();
-          evening = _milkCountData!['todayMilkCount'][0]['evening'].toString();
-          total =(_milkCountData!['todayMilkCount'][0]['morning']+_milkCountData!['todayMilkCount'][0]['evening']).toString();
-         
-         
+         morningMilk =_milkCountData!['todayMilkCount'][0]['morning'].toString();
+          eveningMilk = _milkCountData!['todayMilkCount'][0]['evening'].toString();
+         // total =(_milkCountData!['todayMilkCount'][0]['morning']+_milkCountData!['todayMilkCount'][0]['evening']).toString();
+         total=(int.parse(morningMilk)+int.parse(eveningMilk)).toString();
+          notifyListeners();
           //print(_milkCountData!['todayMilkCount'][0]['morning']);
         } else {
           _errorMessage = jsonData['message'] ?? 'Failed to fetch milk count';
+           morningMilk="0";
+           eveningMilk='0';
+           total="0";
+           notifyListeners();
         }
       } else {
         _errorMessage =
@@ -127,34 +181,66 @@ class MilkRecordProvider extends ChangeNotifier {
 
   // Sold Milk Record Provider by Month
 
-  Future<SoldMilkModel?> fetchMilkSold(BuildContext context,String month) async {
+//   Future<SoldMilkModel?> fetchMilkSold(BuildContext context,String month) async {
    
-    // final date = DateFormat("EEE MMM dd yyyy").format(DateTime.now());
+//     // final date = DateFormat("EEE MMM dd yyyy").format(DateTime.now());
+//   final headers = {
+//     'Authorization':
+//         'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
+//   };
+//   final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getSoldMilk}$month');
+
+//   try {
+//     final response = await http.get(url, headers: headers);
+
+//     if (response.statusCode == 200) {
+//     //  debugger();
+//       return SoldMilkModel.fromJson(json.decode(response.body));
+//     } else {
+     
+//       final errorResponse = json.decode(response.body);
+//       print("Error: ${errorResponse['message']}");
+     
+//     }
+//   } catch (e) {
+    
+//     print("An error occurred: $e");
+//     return null; 
+//   }
+//   return null;
+// }
+Future<List<SoldMilkRecord>> fetchMilkSoldByDate(
+    BuildContext context, String date) async {
   final headers = {
     'Authorization':
         'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
   };
-  final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getSoldMilk}$month');
+  final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getSoldMilk}$date');
 
   try {
     final response = await http.get(url, headers: headers);
-
     if (response.statusCode == 200) {
-    //  debugger();
-      return SoldMilkModel.fromJson(json.decode(response.body));
+      final soldMilkModel = SoldMilkModel.fromJson(json.decode(response.body));
+
+      // Filter records by the given date
+      final filteredData = soldMilkModel.monthlyMilkRecord
+              ?.where((record) => record.date == date)
+              .toList() ??
+          [];
+
+      return filteredData;
     } else {
-     
       final errorResponse = json.decode(response.body);
       print("Error: ${errorResponse['message']}");
-     
+      return [];
     }
   } catch (e) {
-    
     print("An error occurred: $e");
-    return null; 
+    return [];
   }
-  return null;
 }
+
+
 
 Future<void> upadetMilkSold(
       {required String id,

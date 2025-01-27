@@ -35,6 +35,7 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
   late DateTime _selectedDate;
   DateTime selectedDate = DateTime.now();
    DateTime? pickedDate;
+   
 
   @override
   void initState() {
@@ -45,8 +46,7 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
 
     // Initialize _selectedDate with the current date
     _selectedDate = _currentDate;
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+     WidgetsBinding.instance.addPostFrameCallback((_) {
       _fetchDataForSelectedDate();
     });
   }
@@ -73,7 +73,7 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
   }
 
   // Fetch data for the selected date
-  void _fetchDataForSelectedDate() {
+  void _fetchDataForSelectedDate()async {
     final feedProvider = Provider.of<FeedProvider>(context, listen: false);
     final milkProvider =
         Provider.of<MilkRecordProvider>(context, listen: false);
@@ -82,6 +82,9 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
 
     feedProvider.fetchFeedCount(context, formattedDate);
     milkProvider.fetchMilkCount(context, formattedDate);
+  await milkProvider.fetchMilkSoldForDate(context, _selectedDate.toString(), formattedDate.toString());
+  milkProvider.fetchMilkSoldByDate(context, formattedDate);
+    
   }
 
   @override
@@ -124,27 +127,31 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
             height: screenHeight * .023,
           ),
           Expanded(
-            child: FutureBuilder<SoldMilkModel?>(
-              future: milkProvider.fetchMilkSold(
-                  context, DateFormat('EEE MMM dd yyyy').format(_selectedDate)),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.data!.monthlyMilkRecord!.isEmpty) {
-                  return Center(child: Text('No Data Available'));
-                } else if (snapshot.hasData && snapshot.data != null) {
-                  final soldMilkData = snapshot.data!.monthlyMilkRecord ?? [];
-                  return ListView.builder(
-                    itemCount: soldMilkData.length,
-                    itemBuilder: (context, index) {
-                      final record = soldMilkData[index];
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Slidable(
-                          startActionPane: ActionPane(
-                              motion: const DrawerMotion(),
-                              children: [
-                                SlidableAction(
+  child: FutureBuilder<List<SoldMilkRecord>>(
+    future: milkProvider.fetchMilkSoldByDate(
+      context,
+      DateFormat('EEE MMM dd yyyy').format(_selectedDate),
+    ),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(child: CircularProgressIndicator());
+      } else if (snapshot.data == null || snapshot.data!.isEmpty) {
+        return Center(child: Text('No Data Available for Selected Date'));
+      } else if (snapshot.hasData) {
+        final dailyRecords = snapshot.data!;
+
+        return ListView.builder(
+          itemCount: dailyRecords.length,
+          itemBuilder: (context, index) {
+            final record = dailyRecords[index];
+
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Slidable(
+                startActionPane: ActionPane(
+                  motion: const DrawerMotion(),
+                  children: [
+                    SlidableAction(
                                   onPressed: (context) {
                                     vendorName.text =
                                         record.vendor!.name.toString();
@@ -214,13 +221,13 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
                                                       loading: false,
                                                       title: "Update",
                                                       on_Tap: () async {
-                                                        print(record.sId);
+                                                       // print(record.sId);
                                                         datePicker.text= DateFormat("EEE MMM dd yyyy").format(selectedDate);
                                                         await Provider.of<MilkRecordProvider>(
                                                                 context,
                                                                 listen: false)
                                                             .upadetMilkSold(
-                                                                id: record.sId
+                                                                id: record.id
                                                                     .toString(),
                                                                 vendorName:
                                                                     vendorName
@@ -259,7 +266,7 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
                                   await Provider.of<MilkRecordProvider>(context,
                                           listen: false)
                                       .deleteMilkSold(
-                                          id: record.sId.toString(),
+                                          id: record.id.toString(),
                                           context: context);
                                  setState(() {
                                    
@@ -271,69 +278,73 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
                               )
                             ],
                           ),
-                          child: Container(
-                            width: double.infinity,
-                            height: screenHeight / 7,
-                            padding: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(paragraph),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: greyGreenColor,
-                                      blurRadius: 6,
-                                      spreadRadius: 3,
-                                      offset: const Offset(2, 0)),
-                                ]),
-                            child: Column(
-                              children: [
-                                Text("Date: ${record.date.toString()}",style: TextStyle(color: Colors.teal.shade400),),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        CircleAvatar(
-                                          radius: 20,
-                                          backgroundImage: AssetImage("lib/assets/vendorMan.png")),
-                                    
-                                        Text1(
-                                            fontColor: blackColor,
-                                            fontSize: screenWidth * .055,
-                                            text: "${record.vendor!.name}"),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text1(
-                                            fontColor: blackColor,
-                                            fontSize: screenWidth * .055,
-                                            text: "${record.amountSold}ltr"),
-                                        Image(image: AssetImage("lib/assets/milkSale.png"),width: 30,),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
+                child: Container(
+                  width: double.infinity,
+                  height: 80,
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        blurRadius: 6,
+                        offset: const Offset(2, 2),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Vendor Name
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 20,
+                            backgroundImage:
+                                AssetImage("lib/assets/vendorMan.png"),
                           ),
-                        ),
-                      );
-                    },
-                  );
-                } else {
-                  return const Center(
-                      child: Text(
-                    'No data available',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ));
-                }
-              },
-            ),
-          )
+                          const SizedBox(width: 8),
+                          Text(
+                            "${record.vendor?.name ?? "Unknown"}",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
+
+                      // Amount Sold
+                      Row(
+                        children: [
+                          Text(
+                            "${record.amountSold} ltr",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          const SizedBox(width: 4),
+                          Image.asset(
+                            "lib/assets/milkSale.png",
+                            width: 30,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      } else {
+        return const Center(
+          child: Text(
+            'No data available for selected date',
+            style: TextStyle(fontSize: 16),
+          ),
+        );
+      }
+    },
+  ),
+)
+
         ],
       ),
     );
@@ -442,16 +453,67 @@ Widget pageHeaderContainer() {
                       height: screenHeight * .02,
                     ),
                     Consumer<MilkRecordProvider>(
-                      builder: (context, milk, child) => ReuseRow(
-                        text1: milk.morningMilk,
-                        text2: "Morning",
-                        text3: milk.eveningMilk,
-                        text4: "Evening",
-                        text5: milk.total,
-                        text6: "Total",
-                        img1: "lib/assets/sun.png",
-                        img2: "lib/assets/moon.png",
+                      builder: (context, milk, child) => Row( 
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          // ReuseRow(
+                          //   text1: milk.morningMilk,
+                          //   text2: "Morning",
+                          //   text3: milk.eveningMilk,
+                          //   text4: "Evening",
+                          //   text5: milk.total,
+                          //   text6: "Total Milk",
+                          //   img1: "lib/assets/sun.png",
+                          //   img2: "lib/assets/moon.png",
+                          // ),
+WrapCircleContainer(
+          text: milk.morningMilk,
+          label:"Morning",
+          optional: "lib/assets/sun.png",
+        ),
+        SizedBox(
+          height: paragraph / 4,
+        ),
+        Container(
+          width: 1,
+          height: screenWidth / 3.8,
+          color: CupertinoColors.systemGrey6,
+        ),
+        WrapCircleContainer(
+          text: milk.eveningMilk,
+          label: "Evening",
+          optional: "lib/assets/moon.png",
+        ),
+        SizedBox(
+          height: paragraph / 4,
+        ),
+        Container(
+          width: 1,
+          height: screenWidth / 3.8,
+          color: CupertinoColors.systemGrey6,
+        ),
+        WrapCircleContainer(
+          text: milk.total,
+          label: "Total Milk",
+          
+        ),
+        SizedBox(
+          height: paragraph / 4,
+        ),
+        Container(
+          width: 1,
+          height: screenWidth / 3.8,
+          color: CupertinoColors.systemGrey6,
+        ),
+                          WrapCircleContainer(
+          text: milk.totalMilk,
+          label: 'Total Sold',
+          optional:"lib/assets/vendorMan.png" ,
+        ),
+                        ],
                       ),
+                      
                     ),
                     const SizedBox(
                       height: 15,
