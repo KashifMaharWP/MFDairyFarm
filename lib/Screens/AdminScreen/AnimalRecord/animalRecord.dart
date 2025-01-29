@@ -1,13 +1,7 @@
-import 'dart:convert';
-import 'package:dairyfarmflow/API/global_api.dart';
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
-import 'package:dairyfarmflow/Model/get_cow_model.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
-import 'package:dairyfarmflow/Widget/animal_filter.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 import '../../../Widget/animali_record_widget.dart';

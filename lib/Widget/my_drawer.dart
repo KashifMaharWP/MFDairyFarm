@@ -1,7 +1,6 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
-import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/SaleMilk/add_salemilk.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/adminDashboard/profile_view.dart';
 import 'package:dairyfarmflow/Screens/Login/Screen/loginPage.dart';
 import 'package:flutter/cupertino.dart';

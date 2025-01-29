@@ -1,25 +1,21 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:dairyfarmflow/Class/colorPallete.dart';
-import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/ReuseableWidgets/dairy_form_detail.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/AnimalRecord/animalRecord.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/FeedEntry/feed_record.dart';
-import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/milk_record.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/VacinationScreen/vacination_record.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/VendorList/createVendor.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/WorkerRegistration/worker_task.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/WorkerRegistration/workers_record.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/adminDashboard/adminDashboard.dart';
 import 'package:dairyfarmflow/Screens/Dashboard/workerDashboard/workerDashboard.dart';
-import 'package:dairyfarmflow/Screens/SampleScreen.dart';
 
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:dairyfarmflow/Widget/my_drawer.dart';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../AdminScreen/DailyRecord/daily_record_screen.dart';
@@ -76,7 +72,7 @@ class _DashboardState extends State<Dashboard> {
                                 borderRadius: const BorderRadius.only(
                                     bottomLeft: Radius.circular(20),
                                     bottomRight: Radius.circular(20))),
-                            height: header1*8,
+                            height: header1 * 8,
                             width: MediaQuery.of(context).size.width,
                             child: Padding(
                               padding: EdgeInsets.only(
@@ -84,7 +80,8 @@ class _DashboardState extends State<Dashboard> {
                                   right: header1 * .45,
                                   top: header1 * .25),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
                                     children: [
@@ -105,7 +102,7 @@ class _DashboardState extends State<Dashboard> {
                                         padding: EdgeInsets.only(
                                             left: header1 * 2,
                                             right: header1 * 2,
-                                            top: header1 *2),
+                                            top: header1 * 2),
                                         child: Column(
                                           children: [
                                             Text1(
@@ -113,12 +110,13 @@ class _DashboardState extends State<Dashboard> {
                                                 fontSize: header1,
                                                 text: "Welcome"),
                                             Consumer<UserDetail>(
-                                              builder: (context, value, child) =>
-                                                  Text1(
-                                                      fontColor: whiteColor,
-                                                      fontSize: header1 ,
-                                                      text:
-                                                          value.name.toString()),
+                                              builder:
+                                                  (context, value, child) =>
+                                                      Text1(
+                                                          fontColor: whiteColor,
+                                                          fontSize: header1,
+                                                          text: value.name
+                                                              .toString()),
                                             ),
                                           ],
                                         ),
@@ -129,11 +127,11 @@ class _DashboardState extends State<Dashboard> {
                                     children: [
                                       Icon(
                                         Icons.notifications,
-                                        size: header1 *1.5,
+                                        size: header1 * 1.5,
                                         color: whiteColor,
                                       ),
                                       SizedBox(
-                                        width: header1/1.25,
+                                        width: header1 / 1.25,
                                       ),
                                       // PopupMenuButton(
                                       //   icon: Icon(
@@ -179,7 +177,6 @@ class _DashboardState extends State<Dashboard> {
                                       //         )),
                                       //   ],
                                       // )
-                                    
                                     ],
                                   )
                                 ],
@@ -188,7 +185,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                           pageBodyContainer(),
                           SizedBox(
-                            height: header1/8,
+                            height: header1 / 8,
                           ),
                           pageHeaderContainer(),
                         ],
@@ -216,10 +213,9 @@ class _DashboardState extends State<Dashboard> {
 
   Widget pageHeaderContainer() {
     return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Container(
-          height: header1*8,
+          height: header1 * 8,
           width: double.infinity,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
@@ -246,7 +242,6 @@ class _DashboardState extends State<Dashboard> {
         padding: EdgeInsets.all(paragraph),
         child: Column(
           children: [
-            
             Container(
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -272,10 +267,8 @@ class _DashboardState extends State<Dashboard> {
                     SizedBox(
                       height: paragraph,
                     ),
-                    viewContainer(
-                        "Daily Record",
-                        "lib/assets/dairyfarm.png",
-                        const  DailyRecordScreen()),
+                    viewContainer("Daily Record", "lib/assets/dairyfarm.png",
+                        const DailyRecordScreen()),
                   ],
                 ),
                 Column(
@@ -329,11 +322,11 @@ class _DashboardState extends State<Dashboard> {
   //Circle Container
   Widget circleContainer(String text) {
     return Container(
-      width:  header1*2,
-      height: header1*2,
+      width: header1 * 2,
+      height: header1 * 2,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(header1* 4),
+        borderRadius: BorderRadius.circular(header1 * 4),
         boxShadow: [
           BoxShadow(
               color: greyGreenColor,
@@ -358,8 +351,8 @@ class _DashboardState extends State<Dashboard> {
         children: [
           Container(
             padding: const EdgeInsets.all(8),
-            width: header1* 5,
-            height: header1* 5,
+            width: header1 * 5,
+            height: header1 * 5,
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(paragraph),

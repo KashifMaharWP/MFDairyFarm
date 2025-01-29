@@ -1,6 +1,5 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
-import 'package:dairyfarmflow/Model/Worker/user_task_model.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/worker_provider.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
@@ -37,8 +36,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
         centerTitle: true,
         backgroundColor: darkGreenColor,
         foregroundColor: whiteColor,
-        title: Text1(
-            fontColor: whiteColor, fontSize: header1, text: "Today Task"),
+        title:
+            Text1(fontColor: whiteColor, fontSize: header1, text: "Today Task"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -61,8 +60,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       );
 
                       return Container(
-                        margin:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 10),
                         //padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
                             color: Colors.white,
@@ -72,7 +71,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 color: Colors.grey.withOpacity(0.5),
                                 spreadRadius: 5,
                                 blurRadius: 7,
-                                offset: Offset(0, 3),
+                                offset: const Offset(0, 3),
                               )
                             ]),
                         child: ListTile(
@@ -120,13 +119,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                title: Text('Task Description'),
+                                title: const Text('Task Description'),
                                 content: Text(usertask.description ??
                                     'No Description Available'),
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.pop(context),
-                                    child: Text('Close'),
+                                    child: const Text('Close'),
                                   ),
                                 ],
                               ),

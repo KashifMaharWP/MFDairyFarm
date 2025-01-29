@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:collection/collection.dart';
 import 'package:dairyfarmflow/Model/soldmilk.dart';
@@ -17,10 +16,10 @@ import '../user_detail.dart';
 
 class MilkRecordProvider extends ChangeNotifier {
   String evening = "0";
-  String morning ="0";
-  String total ="0";
-  String  eveningMilk= "0";
-  String morningMilk ="0";
+  String morning = "0";
+  String total = "0";
+  String eveningMilk = "0";
+  String morningMilk = "0";
   //String filtering ='';
 
   List<TodayMilkRecord> _milkRecords = [];
@@ -36,7 +35,7 @@ class MilkRecordProvider extends ChangeNotifier {
   List<SoldMilkModel> filteredMilkData = [];
   String totalMilk = "0";
 
-  void lister(){
+  void lister() {
     notifyListeners();
   }
 
@@ -56,23 +55,23 @@ class MilkRecordProvider extends ChangeNotifier {
         final records = data.monthlyMilkRecord;
 
         // Group records by date
-        final groupedByDate = groupBy(records!, (record) => record?.date);
+        final groupedByDate = groupBy(records!, (record) => record.date);
 
         // Calculate total amount_sold for all vendors for each date
         final datewiseTotals = groupedByDate.map((date, records) {
-          final totalSold =
-              records.fold(0, (sum, record) => sum + record.amountSold!.toInt());
-              
+          final totalSold = records.fold(
+              0, (sum, record) => sum + record.amountSold!.toInt());
+
           return MapEntry(date, totalSold);
         });
 
         // Return the total for the requested date
         if (datewiseTotals.containsKey(filterDate)) {
-          totalMilk=datewiseTotals[filterDate].toString();
+          totalMilk = datewiseTotals[filterDate].toString();
           return datewiseTotals[filterDate]!;
         } else {
           //print("No data found for the given date: $filterDate");
-          totalMilk="0";
+          totalMilk = "0";
           return 0; // No data for the date
         }
       } else {
@@ -86,10 +85,7 @@ class MilkRecordProvider extends ChangeNotifier {
     }
   }
 
-
-
   Future<void> fetchMilkRecords(BuildContext context) async {
-    
     final date = DateFormat("EEE MMM dd yyyy").format(DateTime.now());
     print(date);
 
@@ -105,7 +101,6 @@ class MilkRecordProvider extends ChangeNotifier {
     };
 
     try {
-  
       final response = await http.get(Uri.parse(apiUrl), headers: headers);
 
       if (response.statusCode == 200) {
@@ -116,8 +111,7 @@ class MilkRecordProvider extends ChangeNotifier {
           _milkRecords = records
               .map((record) => TodayMilkRecord.fromJson(record))
               .toList();
-        //  print(_milkRecords);
-          
+          //  print(_milkRecords);
         } else {
           _errorMessage = jsonResponse['message'] ?? 'Failed to fetch records';
         }
@@ -133,16 +127,17 @@ class MilkRecordProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchMilkCount(BuildContext context,String month) async {
+  Future<void> fetchMilkCount(BuildContext context, String month) async {
     _isLoading = true;
     _errorMessage = null;
-   // notifyListeners();
+    // notifyListeners();
 
     final headers = {
       'Authorization':
           'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
     };
-    final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getMilkCount}$month');
+    final url =
+        Uri.parse('${GlobalApi.baseApi}${GlobalApi.getMilkCount}$month');
 
     try {
       final response = await http.get(url, headers: headers);
@@ -160,10 +155,10 @@ class MilkRecordProvider extends ChangeNotifier {
           //print(_milkCountData!['todayMilkCount'][0]['morning']);
         } else {
           _errorMessage = jsonData['message'] ?? 'Failed to fetch milk count';
-           morningMilk="0";
-           eveningMilk='0';
-           total="0";
-           notifyListeners();
+          morningMilk = "0";
+          eveningMilk = '0';
+          total = "0";
+          notifyListeners();
         }
       } else {
         _errorMessage =
@@ -177,12 +172,10 @@ class MilkRecordProvider extends ChangeNotifier {
     }
   }
 
-
-
   // Sold Milk Record Provider by Month
 
 //   Future<SoldMilkModel?> fetchMilkSold(BuildContext context,String month) async {
-   
+
 //     // final date = DateFormat("EEE MMM dd yyyy").format(DateTime.now());
 //   final headers = {
 //     'Authorization':
@@ -197,52 +190,51 @@ class MilkRecordProvider extends ChangeNotifier {
 //     //  debugger();
 //       return SoldMilkModel.fromJson(json.decode(response.body));
 //     } else {
-     
+
 //       final errorResponse = json.decode(response.body);
 //       print("Error: ${errorResponse['message']}");
-     
+
 //     }
 //   } catch (e) {
-    
+
 //     print("An error occurred: $e");
-//     return null; 
+//     return null;
 //   }
 //   return null;
 // }
-Future<List<SoldMilkRecord>> fetchMilkSoldByDate(
-    BuildContext context, String date) async {
-  final headers = {
-    'Authorization':
-        'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
-  };
-  final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getSoldMilk}$date');
+  Future<List<SoldMilkRecord>> fetchMilkSoldByDate(
+      BuildContext context, String date) async {
+    final headers = {
+      'Authorization':
+          'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
+    };
+    final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getSoldMilk}$date');
 
-  try {
-    final response = await http.get(url, headers: headers);
-    if (response.statusCode == 200) {
-      final soldMilkModel = SoldMilkModel.fromJson(json.decode(response.body));
+    try {
+      final response = await http.get(url, headers: headers);
+      if (response.statusCode == 200) {
+        final soldMilkModel =
+            SoldMilkModel.fromJson(json.decode(response.body));
 
-      // Filter records by the given date
-      final filteredData = soldMilkModel.monthlyMilkRecord
-              ?.where((record) => record.date == date)
-              .toList() ??
-          [];
+        // Filter records by the given date
+        final filteredData = soldMilkModel.monthlyMilkRecord
+                ?.where((record) => record.date == date)
+                .toList() ??
+            [];
 
-      return filteredData;
-    } else {
-      final errorResponse = json.decode(response.body);
-      print("Error: ${errorResponse['message']}");
+        return filteredData;
+      } else {
+        final errorResponse = json.decode(response.body);
+        print("Error: ${errorResponse['message']}");
+        return [];
+      }
+    } catch (e) {
+      print("An error occurred: $e");
       return [];
     }
-  } catch (e) {
-    print("An error occurred: $e");
-    return [];
   }
-}
 
-
-
-Future<void> upadetMilkSold(
+  Future<void> upadetMilkSold(
       {required String id,
       required String vendorName,
       required String datePicker,
@@ -251,8 +243,7 @@ Future<void> upadetMilkSold(
       required BuildContext context}) async {
     _isLoading = true;
     notifyListeners();
-    final url =
-        Uri.parse('${GlobalApi.baseApi}${GlobalApi.updateMilkSold}$id');
+    final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.updateMilkSold}$id');
 
     final headers = {
       'Content-Type': 'application/json',
@@ -260,8 +251,12 @@ Future<void> upadetMilkSold(
           "Bearer ${Provider.of<UserDetail>(context, listen: false).token}"
     };
 
-    final body =
-        jsonEncode({'vendorName': vendorName, 'amount_sold': amountSold, 'total_payment': totalPayment, 'date':datePicker});
+    final body = jsonEncode({
+      'vendorName': vendorName,
+      'amount_sold': amountSold,
+      'total_payment': totalPayment,
+      'date': datePicker
+    });
 
     try {
       final response = await http.patch(
@@ -294,15 +289,13 @@ Future<void> upadetMilkSold(
     }
   }
 
-
-   Future<void> deleteMilkSold({
+  Future<void> deleteMilkSold({
     required String id,
     required BuildContext context,
   }) async {
     _isLoading = true;
     notifyListeners();
-    final url =
-        Uri.parse('${GlobalApi.baseApi}${GlobalApi.daleteMilkSold}$id');
+    final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.daleteMilkSold}$id');
 
     final headers = {
       'Content-Type': 'application/json',
@@ -324,18 +317,18 @@ Future<void> upadetMilkSold(
         _isLoading = false;
         notifyListeners();
         //showSuccessSnackbar(jsonResponse['message'], context);
-      }}catch(e){
-        print(e);
       }
+    } catch (e) {
+      print(e);
+    }
   }
 
-   void deleteRecord(BuildContext context, String id) async {
+  void deleteRecord(BuildContext context, String id) async {
     await Provider.of<MilkProvider>(context, listen: false)
         .deleteMilkData(id: id, context: context);
     notifyListeners();
     //Navigator.pop(context);
   }
-
 
   Future<void> sendMorningMilkData(
       {required String cowId,
@@ -543,11 +536,4 @@ Future<void> upadetMilkSold(
       print('Error: $e');
     }
   }
-
-
-  
-
-
-  
-
 }

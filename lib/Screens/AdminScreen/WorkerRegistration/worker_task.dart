@@ -1,9 +1,7 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
-import 'package:dairyfarmflow/Model/Worker/task_model.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/worker_provider.dart';
-import 'package:dairyfarmflow/ReuseableWidgets/row_withtext_andimage.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,18 +16,18 @@ class WorkerTask extends StatefulWidget {
 }
 
 class _WorkerTaskState extends State<WorkerTask> {
-
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_){
-    Provider.of<WorkerProvider>(context, listen: false).fetchAllTasks(context);
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<WorkerProvider>(context, listen: false)
+          .fetchAllTasks(context);
     });
   }
+
   @override
   Widget build(BuildContext context) {
-     final workerProvider = Provider.of<WorkerProvider>(context);
+    final workerProvider = Provider.of<WorkerProvider>(context);
     return Scaffold(
         backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
@@ -68,36 +66,39 @@ class _WorkerTaskState extends State<WorkerTask> {
               SizedBox(
                 height: screenHeight * .010,
               ),
-              Container(
-                child: Expanded(
-  child: Consumer<WorkerProvider>(
-    builder: (context, workerProvider, child) {
-      if (workerProvider.isLoading) {
-        return const Center(child: CircularProgressIndicator());
-      } else {
-        final tasks = workerProvider.TaskList?.tasks ?? [];
-        //final soldMilkData = snapshot.data!.monthlyMilkRecord ?? [];
-        return ListView.builder(
-                      itemCount: tasks.length,
-                      itemBuilder: (context, index) {
-                        final task=tasks[index];
-                        return Card(
-            margin: EdgeInsets.all(8.0),
-            child: ListTile(
-              title: Text(task.description.toString()),
-              subtitle: Text(task.assignedTo!.name.toString()),
-              leading: Icon(
-                task.assignedTo!.name != '' ? Icons.person : Icons.person_outline,
-                color: task.assignedTo!.name != null ? Colors.green : Colors.red,
-              ),
-            ),
-          );
-                      });
-      }
-    },
-  ),
-)
-              )
+              Container(child: Expanded(
+                child: Consumer<WorkerProvider>(
+                  builder: (context, workerProvider, child) {
+                    if (workerProvider.isLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else {
+                      final tasks = workerProvider.TaskList?.tasks ?? [];
+                      //final soldMilkData = snapshot.data!.monthlyMilkRecord ?? [];
+                      return ListView.builder(
+                          itemCount: tasks.length,
+                          itemBuilder: (context, index) {
+                            final task = tasks[index];
+                            return Card(
+                              margin: const EdgeInsets.all(8.0),
+                              child: ListTile(
+                                title: Text(task.description.toString()),
+                                subtitle:
+                                    Text(task.assignedTo!.name.toString()),
+                                leading: Icon(
+                                  task.assignedTo!.name != ''
+                                      ? Icons.person
+                                      : Icons.person_outline,
+                                  color: task.assignedTo!.name != null
+                                      ? Colors.green
+                                      : Colors.red,
+                                ),
+                              ),
+                            );
+                          });
+                    }
+                  },
+                ),
+              ))
             ],
           ),
         ));

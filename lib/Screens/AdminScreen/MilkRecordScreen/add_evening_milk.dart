@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
@@ -73,20 +71,24 @@ class _AddEveningMilkState extends State<AddEveningMilk> {
                 on_Tap: () async {
                   datepiker.text =
                       DateFormat("EEE MMM dd yyyy").format(selectedDate);
-                      if(evening.text.isNotEmpty && eveningfeed.text.isNotEmpty){
-await Provider.of<MilkProvider>(context, listen: false)
-                      .sendEveningMilkData(
-                          cowId: cowId.text,
-                          date: datepiker.text,
-                          evening: evening.text,
-                          context: context);
-                       await Provider.of<FeedProvider>(context, listen: false).sendEveningFeedData(cowId: cowId.text, date: datepiker.text, evening: eveningfeed.text, context: context);
-                 Navigator.pop(context);
-                      }
-                        else{
-SimpleToast.showErrorToast(context, "Field Entry Error", "Please Enter all field");
-                      }
-                   
+                  if (evening.text.isNotEmpty && eveningfeed.text.isNotEmpty) {
+                    await Provider.of<MilkProvider>(context, listen: false)
+                        .sendEveningMilkData(
+                            cowId: cowId.text,
+                            date: datepiker.text,
+                            evening: evening.text,
+                            context: context);
+                    await Provider.of<FeedProvider>(context, listen: false)
+                        .sendEveningFeedData(
+                            cowId: cowId.text,
+                            date: datepiker.text,
+                            evening: eveningfeed.text,
+                            context: context);
+                    Navigator.pop(context);
+                  } else {
+                    SimpleToast.showErrorToast(
+                        context, "Field Entry Error", "Please Enter all field");
+                  }
                 },
               ),
             ],
@@ -112,12 +114,12 @@ SimpleToast.showErrorToast(context, "Field Entry Error", "Please Enter all field
             //   isPasswordField: false,
             // ),
             SizedBox(height: paragraph),
-             Wrap(
+            Wrap(
               alignment: WrapAlignment.start,
               runAlignment: WrapAlignment.center,
               crossAxisAlignment: WrapCrossAlignment.start,
               children: [
-                Icon(Icons.calendar_month),
+                const Icon(Icons.calendar_month),
                 Text1(fontColor: blackColor, fontSize: header6, text: "Date"),
               ],
             ),
@@ -144,19 +146,22 @@ SimpleToast.showErrorToast(context, "Field Entry Error", "Please Enter all field
     );
   }
 
-   Widget customTextFormField(String text, String customIcon) {
+  Widget customTextFormField(String text, String customIcon) {
     return Wrap(
       alignment: WrapAlignment.start,
       runAlignment: WrapAlignment.center,
       crossAxisAlignment: WrapCrossAlignment.start,
       children: [
-        Image.asset(customIcon,width: 20,),
+        Image.asset(
+          customIcon,
+          width: 20,
+        ),
         Text1(fontColor: blackColor, fontSize: header6, text: text),
       ],
     );
   }
 
-   Widget dateContainer() {
+  Widget dateContainer() {
     return InkWell(
       onTap: () async {
         pickedDate = await customDatePicker(context, selectedDate);
@@ -185,7 +190,7 @@ SimpleToast.showErrorToast(context, "Field Entry Error", "Please Enter all field
           children: [
             Text1(
                 fontColor: Colors.black,
-                fontSize: paragraph ,
+                fontSize: paragraph,
                 text: DateFormat("EEE MMM dd yyyy").format(selectedDate)),
             Icon(
               CupertinoIcons.calendar,

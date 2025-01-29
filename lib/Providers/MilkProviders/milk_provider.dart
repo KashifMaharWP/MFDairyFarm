@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:dairyfarmflow/API/global_api.dart';
 import 'package:dairyfarmflow/Functions/showPopsScreen.dart';

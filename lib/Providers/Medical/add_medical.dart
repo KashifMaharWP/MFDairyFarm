@@ -1,10 +1,8 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:dairyfarmflow/Model/Medical/details_model.dart';
 import 'package:dairyfarmflow/Model/medical.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_toast_message/simple_toast.dart';
@@ -38,7 +36,7 @@ class AddMedical extends ChangeNotifier {
     final String token =
         Provider.of<UserDetail>(context, listen: false).token.toString();
     final String apiUrl =
-        '${GlobalApi.baseApi}${GlobalApi.getMedicalRecord}/${date}';
+        '${GlobalApi.baseApi}${GlobalApi.getMedicalRecord}/$date';
     final headers = {
       'Authorization': 'Bearer $token',
     };
@@ -112,7 +110,7 @@ class AddMedical extends ChangeNotifier {
 
   fetchMedicalDetails(BuildContext context, String id, String month) async {
     final url = Uri.parse(
-        '${GlobalApi.baseApi}${GlobalApi.getMedicalRecordById}/${id}/$month');
+        '${GlobalApi.baseApi}${GlobalApi.getMedicalRecordById}/$id/$month');
     setIsLoading(true);
     final headers = {
       'Content-Type': 'application/json',

@@ -1,7 +1,6 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
-import 'package:dairyfarmflow/Model/medical.dart';
 import 'package:dairyfarmflow/Providers/Medical/add_medical.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/VacinationScreen/medical_detail.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
@@ -47,9 +46,7 @@ class _VacinationRecordState extends State<VacinationRecord> {
               builder: (context, medicalProvider, child) {
                 if (medicalProvider.isLoading) {
                   return const Center(child: CircularProgressIndicator());
-                }
-               
-                 else {
+                } else {
                   final records =
                       medicalProvider.medicalData?.monthlyMedicalRecords ?? [];
 
@@ -110,7 +107,7 @@ class _VacinationRecordState extends State<VacinationRecord> {
                                         )),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 8,
                                 ),
                                 Column(
@@ -135,7 +132,7 @@ class _VacinationRecordState extends State<VacinationRecord> {
                                                 .toString()),
                                       ],
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 5,
                                     ),
                                     Row(

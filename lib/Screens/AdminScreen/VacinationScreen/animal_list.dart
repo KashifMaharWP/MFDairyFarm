@@ -34,11 +34,12 @@ class _AnimalListState extends State<AnimalList> {
         title: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(width: 10,),
+            const SizedBox(
+              width: 10,
+            ),
             Image.asset(
               "lib/assets/medical.png",
               width: 30,
-              
             ),
             const Text("Medical Record"),
           ],
@@ -77,29 +78,29 @@ class CowsList extends StatefulWidget {
   @override
   State<CowsList> createState() => _CowsListState();
 }
-class _CowsListState extends State<CowsList> {
 
+class _CowsListState extends State<CowsList> {
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Provider.of<CowsProvider>(context,listen: false).fetchCows(context);
-  });
+      Provider.of<CowsProvider>(context, listen: false).fetchCows(context);
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Consumer<CowsProvider>(
-        
-        builder: (context,cowProvider ,child) {
-         // cowProvider.fetchCows(context);
+        builder: (context, cowProvider, child) {
+          // cowProvider.fetchCows(context);
           if (cowProvider.isCowListLoad) {
             return const Center(
               child: CircularProgressIndicator(),
             );
-          }  else {
-            final cows = cowProvider.cowList?.cows??[];
+          } else {
+            final cows = cowProvider.cowList?.cows ?? [];
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: GridView.builder(
@@ -125,7 +126,7 @@ class _CowsListState extends State<CowsList> {
                     child: Container(
                       width: screenWidth + 10,
                       height: screenHeight + 10,
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(paragraph),
@@ -178,7 +179,7 @@ class _CowsListState extends State<CowsList> {
                               //     : const Center(),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 8,
                           ),
                           Column(
@@ -203,7 +204,7 @@ class _CowsListState extends State<CowsList> {
                                   ),
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 8,
                               ),
                               Row(
@@ -223,7 +224,7 @@ class _CowsListState extends State<CowsList> {
                                   ),
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 8,
                               ),
                               Row(
@@ -239,8 +240,8 @@ class _CowsListState extends State<CowsList> {
                                   Text1(
                                     fontColor: lightBlackColor,
                                     fontSize: screenWidth * .04,
-                                    text: cow.age
-                                        .toString(), // Update as needed
+                                    text:
+                                        cow.age.toString(), // Update as needed
                                   ),
                                 ],
                               ),
@@ -259,5 +260,3 @@ class _CowsListState extends State<CowsList> {
     );
   }
 }
-
-

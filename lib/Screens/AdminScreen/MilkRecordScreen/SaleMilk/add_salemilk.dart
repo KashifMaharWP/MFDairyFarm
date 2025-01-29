@@ -7,7 +7,6 @@ import 'package:dairyfarmflow/Model/vendorResponse.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/milk_provider.dart';
 
 import 'package:dairyfarmflow/Providers/user_detail.dart';
-import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/milk_record.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:dairyfarmflow/Widget/customRoundButton.dart';
 import 'package:dairyfarmflow/Widget/textFieldWidget1.dart';
@@ -16,11 +15,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-
-
 class AddMilkSale extends StatefulWidget {
-  
-  const AddMilkSale({super.key,});
+  const AddMilkSale({
+    super.key,
+  });
 
   @override
   State<AddMilkSale> createState() => _AddMilkSaleState();
@@ -165,7 +163,6 @@ class _AddMilkSaleState extends State<AddMilkSale> {
               isPasswordField: false,
             ),
             SizedBox(height: paragraph),
-            
           ],
         ),
       ),

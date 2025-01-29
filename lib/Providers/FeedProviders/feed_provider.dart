@@ -1,9 +1,7 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:dairyfarmflow/API/global_api.dart';
 import 'package:dairyfarmflow/Model/feedInventory.dart';
 import 'package:dairyfarmflow/Model/feed_count.dart';
-import 'package:dairyfarmflow/Model/feed_inventory.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -21,12 +19,11 @@ class FeedProvider extends ChangeNotifier {
   String? errorMessage;
   int totalFeedFromItem = 0;
   int totalFeedStored = 0;
-  int feedTotal=0;
-  int feedAvailable=0;
-  int feedUsed=0;
+  int feedTotal = 0;
+  int feedAvailable = 0;
+  int feedUsed = 0;
   String? feedId;
   InventoryFeedResponse? feedInventory;
-  
 
   // Fetch feed consumption data
   Future<void> fetchFeedConsumption(BuildContext context, String month) async {
@@ -45,7 +42,6 @@ class FeedProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
         feedConsumeRecord = FeedConsumptionResponse.fromJson(jsonData);
-        ;
         _isloading = false;
         notifyListeners(); // Notify listeners with updated data
       } else {
@@ -62,33 +58,34 @@ class FeedProvider extends ChangeNotifier {
 
   fetchFeed(BuildContext context, String month) async {
     _isloading = true;
-  var headers = {
-    'Authorization':
-        'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
-  };
-  var request = http.Request(
-    'GET',
-    Uri.parse('${GlobalApi.baseApi}${GlobalApi.feedInventory}$month'),
-  );
+    var headers = {
+      'Authorization':
+          'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
+    };
+    var request = http.Request(
+      'GET',
+      Uri.parse('${GlobalApi.baseApi}${GlobalApi.feedInventory}$month'),
+    );
 
-  request.headers.addAll(headers);
-  //debugger();
-  http.StreamedResponse response = await request.send();
-  if (response.statusCode == 200) {
-    final jsonString = await response.stream.bytesToString();
-    final jsonData = json.decode(jsonString);
-    InventoryFeedResponse feedInventoryResponse= InventoryFeedResponse.fromJson(jsonData);
-    feedInventory=feedInventoryResponse;
-   feedTotal=feedInventory!.feedInventory.totalAmount;
-   feedAvailable=feedInventory!.feedInventory.availableAmount;
-    feedUsed=feedTotal-feedAvailable;
-    feedId=feedInventory!.feedInventory.id;
-   // totalFeedStored=feedInventory.feedInventory!.feedAmount;
-    _isloading = false;
-    notifyListeners();
-  } 
-  //debugger();
-}
+    request.headers.addAll(headers);
+    //debugger();
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      final jsonString = await response.stream.bytesToString();
+      final jsonData = json.decode(jsonString);
+      InventoryFeedResponse feedInventoryResponse =
+          InventoryFeedResponse.fromJson(jsonData);
+      feedInventory = feedInventoryResponse;
+      feedTotal = feedInventory!.feedInventory.totalAmount;
+      feedAvailable = feedInventory!.feedInventory.availableAmount;
+      feedUsed = feedTotal - feedAvailable;
+      feedId = feedInventory!.feedInventory.id;
+      // totalFeedStored=feedInventory.feedInventory!.feedAmount;
+      _isloading = false;
+      notifyListeners();
+    }
+    //debugger();
+  }
 
   // Fetch feed count
   // Fetch feed count
@@ -132,7 +129,6 @@ class FeedProvider extends ChangeNotifier {
 
     return null;
   }
-
 
   // Send morning feed data
   Future<void> sendMorningFeedData({
@@ -226,7 +222,7 @@ class FeedProvider extends ChangeNotifier {
   Future<void> addFeedInventory({
     required double feedAmount,
     required BuildContext context,
-   required String Date,
+    required String Date,
   }) async {
     _isloading = true;
     notifyListeners();
@@ -238,11 +234,7 @@ class FeedProvider extends ChangeNotifier {
           'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
     };
 
-    final body = jsonEncode({
-      'totalAmount': feedAmount,
-      "date":Date
-
-    });
+    final body = jsonEncode({'totalAmount': feedAmount, "date": Date});
 
     try {
       final response = await http.put(url, headers: headers, body: body);
@@ -265,17 +257,17 @@ class FeedProvider extends ChangeNotifier {
     }
   }
 
-
   // Add feed inventory amount
   Future<void> UpdateInventory({
     required int feedAmount,
     required String id,
     required BuildContext context,
   }) async {
-   // _isloading = true;
+    // _isloading = true;
     notifyListeners();
 
-    final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.UpdateFeedInventory}$id');
+    final url =
+        Uri.parse('${GlobalApi.baseApi}${GlobalApi.UpdateFeedInventory}$id');
     final headers = {
       'Content-Type': 'application/json',
       'Authorization':
@@ -291,42 +283,41 @@ class FeedProvider extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         final message = jsonDecode(response.body);
-        
+
         SimpleToast.showSuccessToast(
             context, "Feed Added", "${message['message']}");
       }
-     // _isloading = false;
+      // _isloading = false;
       notifyListeners();
     } catch (e) {
       SimpleToast.showErrorToast(context, "Error occurred", "$e");
-    //  _isloading = false;
+      //  _isloading = false;
       notifyListeners();
     }
   }
 
-
-   DeleteFeed(
-     String feedId,
+  DeleteFeed(
+    String feedId,
     BuildContext context,
   ) async {
     _isloading = true;
     notifyListeners();
 
-    final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.deleteFeedConsumption}$feedId');
+    final url = Uri.parse(
+        '${GlobalApi.baseApi}${GlobalApi.deleteFeedConsumption}$feedId');
     final headers = {
       'Content-Type': 'application/json',
       'Authorization':
           'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
     };
 
-    
-
     try {
-      final response = await http.delete(url, headers: headers,);
+      final response = await http.delete(
+        url,
+        headers: headers,
+      );
 
-      if (response.statusCode == 200) {
-       
-      } 
+      if (response.statusCode == 200) {}
       _isloading = false;
       notifyListeners();
     } catch (e) {
@@ -335,8 +326,4 @@ class FeedProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  
-
-
 }

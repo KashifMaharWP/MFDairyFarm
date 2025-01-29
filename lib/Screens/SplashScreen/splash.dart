@@ -10,6 +10,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -29,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final chk = prefs.getString('userId');
     final role = prefs.getString('role');
     
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
     //checking if the user detail is available then
     if (chk != '' && chk != null) {
       //get user data from the preference and store it in userdetail class
@@ -37,14 +39,14 @@ class _SplashScreenState extends State<SplashScreen> {
           .setUserDetailByPreferences();
          
       if (role == 'Admin') {
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>Dashboard()), (route) => false);
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>const Dashboard()), (route) => false);
       } else {
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>UserDashboard()), (route) => false);
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>const UserDashboard()), (route) => false);
       }
           
 
     } else {
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>LoginPage()), (route) => false);
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>const LoginPage()), (route) => false);
       }
     }
   
@@ -60,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SpinKitPouringHourGlass(color: darkGreenColor,size: 80,),
-            SizedBox(height: 150,),
+            const SizedBox(height: 150,),
             Center(
               child: Image.asset(
                 "lib/assets/Logo.png", // Your logo or image
@@ -68,8 +70,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 height: 150,
               ),
             ),
-            SizedBox(height: 10,),
-            Text("Welcome to MF Dairy Farm",style: TextStyle(
+            const SizedBox(height: 10,),
+            const Text("Welcome to MF Dairy Farm",style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold
             ),),

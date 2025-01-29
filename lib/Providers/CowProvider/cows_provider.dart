@@ -52,11 +52,8 @@
 // }
 // }
 import 'dart:convert';
-import 'dart:developer';
 
-import 'package:dairyfarmflow/Screens/AdminScreen/VacinationScreen/animal_list.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:simple_toast_message/simple_toast.dart';
