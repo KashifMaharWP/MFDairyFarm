@@ -23,16 +23,17 @@ class SoldMilkModel {
     return {
       'success': success,
       'message': message,
-      'monthlyMilkRecord': monthlyMilkRecord?.map((record) => record.toJson()).toList(),
+      'monthlyMilkRecord':
+          monthlyMilkRecord?.map((record) => record.toJson()).toList(),
     };
   }
 }
 
 class SoldMilkRecord {
   final String? id;
-  final int? amountSold;
+  final num? amountSold;
   final String? date;
-  final int? totalPayment;
+  final num? totalPayment;
   final Vendor? vendor;
 
   SoldMilkRecord({
