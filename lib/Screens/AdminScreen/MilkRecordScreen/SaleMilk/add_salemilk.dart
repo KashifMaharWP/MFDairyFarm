@@ -27,22 +27,37 @@ class AddMilkSale extends StatefulWidget {
 }
 
 class _AddMilkSaleState extends State<AddMilkSale> {
+  
   DateTime? pickedDate;
   TextEditingController milkAmount = TextEditingController();
   TextEditingController datepiker = TextEditingController();
   //TextEditingController totalAmount = TextEditingController();
+  List<Vendor> vendors = [];
+  
   DateTime selectedDate = DateTime.now();
 
   String? selectedVendorId; // Store the selected vendor's ID
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_){
+     Provider.of<MilkProvider>(context,listen: false).fetchVendors(context);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+   
+    vendors =Provider.of<MilkProvider>(context,listen: false).vendors;
     final isLoading = Provider.of<MilkProvider>(context).isLoading;
-    final vendors = Provider.of<MilkProvider>(context).vendors; // Fetch vendors list
+    
     final isVendorLoading = Provider.of<MilkProvider>(context).isLoading;
 
     String token =
         Provider.of<UserDetail>(context, listen: false).token.toString();
-    print("Token $token");
+   // print("Token $token");
 
     return Scaffold(
       appBar: AppBar(
@@ -62,7 +77,7 @@ class _AddMilkSaleState extends State<AddMilkSale> {
           child: Column(
             children: [
               SizedBox(height: paragraph / 6),
-              customForm(vendors, isVendorLoading), // Pass vendors and loading state
+              customForm( isVendorLoading), // Pass vendors and loading state
               SizedBox(height: paragraph / 2),
               customRoundedButton(
                 loading: isLoading,
@@ -88,7 +103,7 @@ class _AddMilkSaleState extends State<AddMilkSale> {
     );
   }
 
-  Widget customForm(List<Vendor> vendors, bool isVendorLoading) {
+  Widget customForm(bool isVendorLoading) {
     return Padding(
       padding: EdgeInsets.all(paragraph / 6),
       child: Form(
@@ -132,7 +147,7 @@ class _AddMilkSaleState extends State<AddMilkSale> {
       selectedVendorId = value; // Store selected vendor ID
     });
   },
-  items: vendors.map((vendor) {
+  items: vendors?.map((vendor) {
     return DropdownMenuItem<String>(
       value: vendor.id, // Use vendor ID as the value
       child: Text(vendor.name), // Show vendor name

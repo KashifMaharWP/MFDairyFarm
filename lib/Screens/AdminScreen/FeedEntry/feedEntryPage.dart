@@ -74,7 +74,7 @@ class _feedEntryPageState extends State<feedEntryPage> {
                       DateFormat("EEE MMM dd yyyy").format(selectedDate);
                         await Provider.of<FeedProvider>(context, listen: false)
                             .addFeedInventory(
-                                feedAmount: int.parse(wanda.text),
+                                feedAmount: double.parse(wanda.text),
                                 context: context,
                                 Date: datepiker.text.toString()
                                 );

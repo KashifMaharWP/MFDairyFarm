@@ -32,7 +32,7 @@ class MilkProvider extends ChangeNotifier {
     final body = jsonEncode({
       'cowId': cowId,
       'date': date,
-      'morning': int.parse(morning),
+      'morning': double.parse(morning),
     });
 
     try {
@@ -83,7 +83,7 @@ class MilkProvider extends ChangeNotifier {
     final body = jsonEncode({
       'cowId': cowId,
       'date': date,
-      'evening': int.parse(evening),
+      'evening': double.parse(evening),
     });
 
     try {
@@ -119,9 +119,9 @@ class MilkProvider extends ChangeNotifier {
 
   Future<void> upadetMilkData(
       {required String id,
-      required int morning,
-      required int evening,
-      required int total,
+      required double morning,
+      required double evening,
+      required double total,
       required BuildContext context}) async {
     _isLoading = true;
     notifyListeners();

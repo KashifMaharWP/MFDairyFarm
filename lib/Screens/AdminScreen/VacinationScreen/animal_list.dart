@@ -1,18 +1,11 @@
-import 'dart:convert';
-
 import 'package:dairyfarmflow/Providers/CowProvider/cows_provider.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/VacinationScreen/add_madicine.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
-import '../../../API/global_api.dart';
 import '../../../Class/colorPallete.dart';
 import '../../../Class/screenMediaQuery.dart';
 import '../../../Class/textSizing.dart';
-import '../../../Model/get_cow_model.dart';
-import '../../../Providers/user_detail.dart';
 import '../../../Widget/Text1.dart';
 import '../../../Widget/custom_filter_widget.dart';
 

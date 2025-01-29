@@ -154,7 +154,7 @@ class FeedProvider extends ChangeNotifier {
     final body = jsonEncode({
       'cowId': cowId,
       'date': date,
-      'morning': int.parse(morning),
+      'morning': double.parse(morning),
     });
 
     try {
@@ -198,7 +198,7 @@ class FeedProvider extends ChangeNotifier {
     final body = jsonEncode({
       'cowId': cowId,
       'date': date,
-      'evening': int.parse(evening),
+      'evening': double.parse(evening),
     });
 
     try {
@@ -224,7 +224,7 @@ class FeedProvider extends ChangeNotifier {
 
   // Add feed inventory amount
   Future<void> addFeedInventory({
-    required int feedAmount,
+    required double feedAmount,
     required BuildContext context,
    required String Date,
   }) async {

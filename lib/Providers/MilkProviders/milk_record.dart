@@ -147,7 +147,7 @@ class MilkRecordProvider extends ChangeNotifier {
     try {
       final response = await http.get(url, headers: headers);
 
-         //debugger();
+        // debugger();
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body) as Map<String, dynamic>;
         if (jsonData['success'] == true) {
@@ -155,7 +155,7 @@ class MilkRecordProvider extends ChangeNotifier {
          morningMilk =_milkCountData!['todayMilkCount'][0]['morning'].toString();
           eveningMilk = _milkCountData!['todayMilkCount'][0]['evening'].toString();
          // total =(_milkCountData!['todayMilkCount'][0]['morning']+_milkCountData!['todayMilkCount'][0]['evening']).toString();
-         total=(int.parse(morningMilk)+int.parse(eveningMilk)).toString();
+         total=(double.parse(morningMilk)+double.parse(eveningMilk)).toString();
           notifyListeners();
           //print(_milkCountData!['todayMilkCount'][0]['morning']);
         } else {

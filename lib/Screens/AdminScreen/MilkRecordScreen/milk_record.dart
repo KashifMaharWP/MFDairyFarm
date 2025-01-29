@@ -47,18 +47,18 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
 
 // Method to update the total
   void _updateTotal() {
-    final int morningMilk = int.tryParse(_morningMilkContriller.text) ?? 0;
-    final int eveningMilk = int.tryParse(_eveningMilkContriller.text) ?? 0;
+    final double morningMilk = double.tryParse(_morningMilkContriller.text) ?? 0;
+    final double eveningMilk = double.tryParse(_eveningMilkContriller.text) ?? 0;
 
-    final int totalMilk = morningMilk + eveningMilk;
+    final double totalMilk = morningMilk + eveningMilk;
 
     // Update the total controller
     _totalMilkContriller.text = totalMilk.toString();
   }
 
-  int? morningMilk;
-  int? eveningMilk;
-  int? totalMilk;
+  double? morningMilk;
+  double? eveningMilk;
+  double? totalMilk;
 
   bool isLoading = true; // For loading state
   String? errorMessage; // For error messages
@@ -226,9 +226,9 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
               : Consumer<MilkRecordProvider>(
                 builder: (context, value, child) => 
                  pageHeaderContainer(
-                    totalMilk == null ? "0" : value.total,
-                    morningMilk == null ? "0" :value.morningMilk,
-                    eveningMilk == null ? "0" : value.eveningMilk),
+                    value.total.toString(),
+                   value.morningMilk.toString(),
+                    value.eveningMilk.toString()),
               ),
           SizedBox(
             height: screenHeight * .015,
@@ -380,13 +380,13 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
                                                             on_Tap: () async {
                                                               await Provider.of<MilkProvider>(context, listen: false).upadetMilkData(
                                                                   id: id,
-                                                                  morning: int.parse(
+                                                                  morning: double.parse(
                                                                       _morningMilkContriller
                                                                           .text),
-                                                                  evening: int.parse(
+                                                                  evening: double.parse(
                                                                       _eveningMilkContriller
                                                                           .text),
-                                                                  total: int.parse(
+                                                                  total: double.parse(
                                                                       _totalMilkContriller
                                                                           .text),
                                                                   context:
