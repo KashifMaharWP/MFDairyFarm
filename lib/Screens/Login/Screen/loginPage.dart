@@ -1,16 +1,10 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Providers/auth_provider.dart';
-import 'package:dairyfarmflow/Providers/user_detail.dart';
-import 'package:dairyfarmflow/Screens/Dashboard/Dashboard.dart';
-import 'package:dairyfarmflow/Screens/Dashboard/UserDashboard/user_dashboard.dart';
-import 'package:dairyfarmflow/Screens/Registration/registration_page1.dart';
 import 'package:dairyfarmflow/Widget/customRoundButton.dart';
 import 'package:dairyfarmflow/Widget/textFieldWithIconWidget.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../Class/textSizing.dart';
 import '../../../Widget/Text1.dart';

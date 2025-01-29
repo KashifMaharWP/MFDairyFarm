@@ -24,7 +24,7 @@ class _VendorListState extends State<VendorList> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Vendor List"),
+        title: const Text("Vendor List"),
         backgroundColor: Colors.white,
       ),
       body: Consumer<MilkProvider>(
@@ -52,13 +52,13 @@ class _VendorListState extends State<VendorList> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          CircleAvatar(
+                          const CircleAvatar(
                             radius: 25,
                               backgroundColor: Colors.black87,
                               backgroundImage: AssetImage("lib/assets/vendorMan.png"),
                           ),
-                          SizedBox(width: 10,),
-                          Text(vendor.name,style: TextStyle(
+                          const SizedBox(width: 10,),
+                          Text(vendor.name,style: const TextStyle(
                             fontSize: 16
                           ),),
                         ],

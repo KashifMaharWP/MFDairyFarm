@@ -1,7 +1,6 @@
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
-import 'package:dairyfarmflow/Model/Medical/details_model.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -82,7 +81,7 @@ class _MedicalDetailState extends State<MedicalDetail> {
             children: [
               // Show the '<' button to go to the previous month, if it's  the current year
               IconButton(
-                  icon: Icon(Icons.keyboard_arrow_left_sharp),
+                  icon: const Icon(Icons.keyboard_arrow_left_sharp),
                   color: Colors.white,
                   onPressed: () {
                     // if (DateTime(_selectedMonth.year, _selectedMonth.month - 1, 1)
@@ -107,11 +106,12 @@ class _MedicalDetailState extends State<MedicalDetail> {
               // Display the current selected month in the middle
               Text(
                 monthName,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               // Show the '>' button to go to the next month, if it's not the current month
               IconButton(
-                icon: Icon(Icons.keyboard_arrow_right_sharp),
+                icon: const Icon(Icons.keyboard_arrow_right_sharp),
                 color: Colors.white,
                 onPressed: () {
                   if (_selectedMonth.month != _currentMonth.month) {
@@ -161,44 +161,44 @@ class _MedicalDetailState extends State<MedicalDetail> {
                     return Consumer<AddMedical>(
                         builder: (context, addMedical, child) {
                       return GestureDetector(
-                        onTap: ()async{
-                             showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('Choose an action'),
-                                  actions: <Widget>[
-                                    
-                                    // Delete action
-                                    TextButton(
-                                      onPressed: () async {
-                                        // Call the deleteCow method from CowsProvider
-                                       await addMedical.DeleteMedicalRecord(
-                              context, record.sId.toString());
-                                        // Close the dialog after deletion
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Row(
-                                        children: [
-                                          Icon(Icons.delete,
-                                              color: Colors.red), // Delete icon
-                                          SizedBox(width: 8),
-                                          Text('Delete',
-                                              style:
-                                                  TextStyle(color: Colors.red)),
-                                        ],
-                                      ),
+                        onTap: () async {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Choose an action'),
+                                actions: <Widget>[
+                                  // Delete action
+                                  TextButton(
+                                    onPressed: () async {
+                                      // Call the deleteCow method from CowsProvider
+                                      await addMedical.DeleteMedicalRecord(
+                                          context, record.sId.toString());
+                                      // Close the dialog after deletion
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Row(
+                                      children: [
+                                        Icon(Icons.delete,
+                                            color: Colors.red), // Delete icon
+                                        SizedBox(width: 8),
+                                        Text('Delete',
+                                            style:
+                                                TextStyle(color: Colors.red)),
+                                      ],
                                     ),
-                                  ],
-                                );
-                              },
-                            );
+                                  ),
+                                ],
+                              );
+                            },
+                          );
 
-                         await Provider.of<AddMedical>(context, listen: false)
-                          .fetchMedicalDetails(context, widget.id,
-                              DateFormat('MMM yyyy').format(_selectedMonth));
-                                  
-                          
+                          await Provider.of<AddMedical>(context, listen: false)
+                              .fetchMedicalDetails(
+                                  context,
+                                  widget.id,
+                                  DateFormat('MMM yyyy')
+                                      .format(_selectedMonth));
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
@@ -330,8 +330,8 @@ class _MedicalDetailState extends State<MedicalDetail> {
     return Container(
       color: Colors.red,
       alignment: Alignment.centerRight,
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Icon(Icons.delete, color: Colors.white, size: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: const Icon(Icons.delete, color: Colors.white, size: 20),
     );
   }
 }

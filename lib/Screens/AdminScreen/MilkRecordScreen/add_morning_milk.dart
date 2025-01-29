@@ -117,7 +117,7 @@ SimpleToast.showErrorToast(context, "Field Entry Error", "Please Enter all field
               runAlignment: WrapAlignment.center,
               crossAxisAlignment: WrapCrossAlignment.start,
               children: [
-                Icon(Icons.calendar_month),
+                const Icon(Icons.calendar_month),
                 Text1(fontColor: blackColor, fontSize: header6, text: "Date"),
               ],
             ),

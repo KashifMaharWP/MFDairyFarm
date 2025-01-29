@@ -1,10 +1,7 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:dairyfarmflow/API/global_api.dart';
-import 'package:dairyfarmflow/Model/Medical/details_model.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
-import 'package:dairyfarmflow/Screens/AdminScreen/VacinationScreen/medical_detail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -20,20 +17,20 @@ class AnimalRegistratinProvider extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
   String message = '';
-  String _milkCount='';
- String get milkCount =>_milkCount;
- bool _isDataFetched=false;
- AnimalDetailModel? animalDetail;
- String _vacineCount='';
+  String _milkCount = '';
+  String get milkCount => _milkCount;
+  bool _isDataFetched = false;
+  AnimalDetailModel? animalDetail;
+  String _vacineCount = '';
 
- String get vacineCount=>_vacineCount;
+  String get vacineCount => _vacineCount;
 
- bool get isDataFetched=> _isDataFetched;
+  bool get isDataFetched => _isDataFetched;
 
- setIsDataFetched(bool value){
-  _isDataFetched=value;
-  notifyListeners();
- }
+  setIsDataFetched(bool value) {
+    _isDataFetched = value;
+    notifyListeners();
+  }
   // get message => _message;
 
   Future<void> uploadAnimalData(BuildContext context, String animalNumber,
@@ -65,7 +62,7 @@ class AnimalRegistratinProvider extends ChangeNotifier {
     request.fields['animalNumber'] = animalNumber;
     request.fields['breed'] = breed;
     request.fields['age'] = int.parse(age).toString();
-    
+
     // Send request and handle response
     try {
       var response = await request.send();
@@ -87,134 +84,140 @@ class AnimalRegistratinProvider extends ChangeNotifier {
       SimpleToast.showErrorToast(context, "Error Message", message);
     }
   }
-   fetchCows(BuildContext context) async {
-  
-  var headers = {
-    'Authorization':
-        'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
-  };
-  var request = http.Request(
-    'GET',
-    Uri.parse('${GlobalApi.baseApi}${GlobalApi.getAnimal}'),
-  );
 
-  request.headers.addAll(headers);
-  http.StreamedResponse response = await request.send();
-  if (response.statusCode == 200) {
-    final jsonString = await response.stream.bytesToString();
-    final jsonData = json.decode(jsonString);
-    return CowsResponse.fromJson(jsonData);
-  } else {
-    if (kDebugMode) {
-      print("Error: ${response.reasonPhrase}");
+  fetchCows(BuildContext context) async {
+    var headers = {
+      'Authorization':
+          'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
+    };
+    var request = http.Request(
+      'GET',
+      Uri.parse('${GlobalApi.baseApi}${GlobalApi.getAnimal}'),
+    );
+
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      final jsonString = await response.stream.bytesToString();
+      final jsonData = json.decode(jsonString);
+      return CowsResponse.fromJson(jsonData);
+    } else {
+      if (kDebugMode) {
+        print("Error: ${response.reasonPhrase}");
+      }
+      return null;
     }
-    return null;
   }
-}
 
- UpdateMilkRecord(String id, morningMilk,eveningMilk,totalMilk,BuildContext context,)async{
+  UpdateMilkRecord(
+    String id,
+    morningMilk,
+    eveningMilk,
+    totalMilk,
+    BuildContext context,
+  ) async {
     try {
-     // setIsDataFetched(true);
+      // setIsDataFetched(true);
       var headers = {
         'Authorization':
             'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
       };
-      final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.updateCowMilk}$id');
-      final body={
-        "morning":morningMilk,
-        "evening":eveningMilk,
-        "total":totalMilk
+      final url =
+          Uri.parse('${GlobalApi.baseApi}${GlobalApi.updateCowMilk}$id');
+      final body = {
+        "morning": morningMilk,
+        "evening": eveningMilk,
+        "total": totalMilk
       };
-      final response = await http.patch(url,body: body, headers: headers);
+      final response = await http.patch(url, body: body, headers: headers);
       //debugger();
       if (response.statusCode == 200) {
-       // cowList = cowsModelList;
-       
-       // setIsDataFetched(false);
+        // cowList = cowsModelList;
+
+        // setIsDataFetched(false);
       } else {
         SimpleToast.showErrorToast(context, "Error", "Failed to load cows.");
-      //  setIsDataFetched(false);
+        //  setIsDataFetched(false);
       }
     } catch (e) {
       SimpleToast.showErrorToast(context, "Error", e.toString());
-    //  setIsDataFetched(false);
+      //  setIsDataFetched(false);
     }
   }
 
-
-
-   getAnimalDetailById(BuildContext context, String id,month)async{
+  getAnimalDetailById(BuildContext context, String id, month) async {
     setIsDataFetched(true);
-    final url = Uri.parse("${GlobalApi.baseApi}${GlobalApi.getAnimalDetailById}$id&date=${month}");
+    final url = Uri.parse(
+        "${GlobalApi.baseApi}${GlobalApi.getAnimalDetailById}$id&date=$month");
     print(url);
 
     var headers = {
-    'Authorization':
-        'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
-  };
+      'Authorization':
+          'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
+    };
 
-    try{
-      final response = await http.get(url,headers: headers);
-      AnimalDetailModel detailModel = AnimalDetailModel.fromJson(json.decode(response.body));
+    try {
+      final response = await http.get(url, headers: headers);
+      AnimalDetailModel detailModel =
+          AnimalDetailModel.fromJson(json.decode(response.body));
       //debugger();
-      if(response.statusCode==200){
-        _milkCount =detailModel.milkCount.toString();
-        animalDetail=detailModel;
-        
+      if (response.statusCode == 200) {
+        _milkCount = detailModel.milkCount.toString();
+        animalDetail = detailModel;
+
         setIsDataFetched(false);
       }
-    }catch(error){
-      
-    }
+    } catch (error) {}
   }
 
-  getVacineDetail(BuildContext context,String month,year, id,)async{
+  getVacineDetail(
+    BuildContext context,
+    String month,
+    year,
+    id,
+  ) async {
     setIsDataFetched(true);
-    final url = Uri.parse("${GlobalApi.baseApi}${GlobalApi.getVacineDetail}$id/$month");
+    final url =
+        Uri.parse("${GlobalApi.baseApi}${GlobalApi.getVacineDetail}$id/$month");
     print(url);
 
     var headers = {
-    'Authorization':
-        'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
-  };
+      'Authorization':
+          'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
+    };
 
-    try{
-      final response = await http.get(url,headers: headers);
-     // MedicalDetailModel detailModel = MedicalDetailModel.fromJson(json.decode(response.body));
-    
+    try {
+      final response = await http.get(url, headers: headers);
+      // MedicalDetailModel detailModel = MedicalDetailModel.fromJson(json.decode(response.body));
+
       //debugger();
-      if(response.statusCode==200){
-        final data=jsonDecode(response.body);
-        _vacineCount =data['vaccinationCount'].toString();
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        _vacineCount = data['vaccinationCount'].toString();
         //animalDetail=detailModel;
         setIsDataFetched(false);
       }
-    }catch(error){
-      
-    }
+    } catch (error) {}
   }
 
-
-  deleteMilk(String id, BuildContext context)async{
-   // setIsDataFetched(true);
+  deleteMilk(String id, BuildContext context) async {
+    // setIsDataFetched(true);
     final url = Uri.parse("${GlobalApi.baseApi}${GlobalApi.deleteCowMilk}$id");
     print(url);
 
     var headers = {
-    'Authorization':
-        'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
-  };
+      'Authorization':
+          'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
+    };
 
-    try{
-      final response = await http.delete(url,headers: headers);
-     // MedicalDetailModel detailModel = MedicalDetailModel.fromJson(json.decode(response.body));
-    
+    try {
+      final response = await http.delete(url, headers: headers);
+      // MedicalDetailModel detailModel = MedicalDetailModel.fromJson(json.decode(response.body));
+
       //debugger();
-      if(response.statusCode==200){
-      //  setIsDataFetched(false);
+      if (response.statusCode == 200) {
+        //  setIsDataFetched(false);
       }
-    }catch(error){
-      
-    }
+    } catch (error) {}
   }
 }

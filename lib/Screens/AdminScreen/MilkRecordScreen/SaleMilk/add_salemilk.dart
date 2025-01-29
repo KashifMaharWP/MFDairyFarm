@@ -7,7 +7,6 @@ import 'package:dairyfarmflow/Model/vendorResponse.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/milk_provider.dart';
 
 import 'package:dairyfarmflow/Providers/user_detail.dart';
-import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/milk_record.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:dairyfarmflow/Widget/customRoundButton.dart';
 import 'package:dairyfarmflow/Widget/textFieldWidget1.dart';
@@ -16,11 +15,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-
-
 class AddMilkSale extends StatefulWidget {
-  
-  const AddMilkSale({super.key,});
+  const AddMilkSale({
+    super.key,
+  });
 
   @override
   State<AddMilkSale> createState() => _AddMilkSaleState();
@@ -37,7 +35,8 @@ class _AddMilkSaleState extends State<AddMilkSale> {
   @override
   Widget build(BuildContext context) {
     final isLoading = Provider.of<MilkProvider>(context).isLoading;
-    final vendors = Provider.of<MilkProvider>(context).vendors; // Fetch vendors list
+    final vendors =
+        Provider.of<MilkProvider>(context).vendors; // Fetch vendors list
     final isVendorLoading = Provider.of<MilkProvider>(context).isLoading;
 
     String token =
@@ -62,7 +61,8 @@ class _AddMilkSaleState extends State<AddMilkSale> {
           child: Column(
             children: [
               SizedBox(height: paragraph / 6),
-              customForm(vendors, isVendorLoading), // Pass vendors and loading state
+              customForm(
+                  vendors, isVendorLoading), // Pass vendors and loading state
               SizedBox(height: paragraph / 2),
               customRoundedButton(
                 loading: isLoading,
@@ -99,46 +99,47 @@ class _AddMilkSaleState extends State<AddMilkSale> {
             customTextFormField("Vendor Name", CupertinoIcons.person),
             isVendorLoading
                 ? const Center(child: CircularProgressIndicator())
-                :DropdownButtonFormField<String>(
-  value: selectedVendorId,
-  hint: const Text("Select Vendor"),
-  decoration: InputDecoration(
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12.0), // Rounded corners
-    ),
-    enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(
-        color: Colors.grey, // Border color
-        width: 1.0, // Border width
-      ),
-      borderRadius: BorderRadius.circular(12.0),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(
-        color: Colors.black26, // Focused border color
-        width: 1.0, // Focused border width
-      ),
-      borderRadius: BorderRadius.circular(12.0),
-    ),
-    filled: true,
-    fillColor: Colors.white, // Background color
-    contentPadding: EdgeInsets.symmetric(
-      vertical: 15.0,
-      horizontal: 10.0,
-    ), // Padding inside the form field
-  ),
-  onChanged: (value) {
-    setState(() {
-      selectedVendorId = value; // Store selected vendor ID
-    });
-  },
-  items: vendors.map((vendor) {
-    return DropdownMenuItem<String>(
-      value: vendor.id, // Use vendor ID as the value
-      child: Text(vendor.name), // Show vendor name
-    );
-  }).toList(),
-),
+                : DropdownButtonFormField<String>(
+                    value: selectedVendorId,
+                    hint: const Text("Select Vendor"),
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius:
+                            BorderRadius.circular(12.0), // Rounded corners
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.grey, // Border color
+                          width: 1.0, // Border width
+                        ),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.black26, // Focused border color
+                          width: 1.0, // Focused border width
+                        ),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white, // Background color
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 15.0,
+                        horizontal: 10.0,
+                      ), // Padding inside the form field
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedVendorId = value; // Store selected vendor ID
+                      });
+                    },
+                    items: vendors.map((vendor) {
+                      return DropdownMenuItem<String>(
+                        value: vendor.id, // Use vendor ID as the value
+                        child: Text(vendor.name), // Show vendor name
+                      );
+                    }).toList(),
+                  ),
             SizedBox(height: paragraph),
             customTextFormField("Date", CupertinoIcons.calendar),
             dateContainer(),
@@ -150,7 +151,6 @@ class _AddMilkSaleState extends State<AddMilkSale> {
               isPasswordField: false,
             ),
             SizedBox(height: paragraph),
-            
           ],
         ),
       ),

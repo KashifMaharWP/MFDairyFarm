@@ -1,21 +1,12 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:dairyfarmflow/Class/textSizing.dart';
-import 'package:dairyfarmflow/Model/feed_inventory.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
-import 'package:simple_toast_message/simple_toast.dart';
-import '../../../API/global_api.dart';
 import '../../../Providers/FeedProviders/feed_provider.dart';
 import '../../../Class/colorPallete.dart';
 import '../../../Class/screenMediaQuery.dart';
-import '../../../Providers/user_detail.dart';
 import '../../../Widget/Text1.dart';
 
 class FeedRecord extends StatefulWidget {
@@ -46,7 +37,8 @@ class _FeedRecordState extends State<FeedRecord> {
     feedProvider.fetchFeedConsumption(
         context, DateFormat('MMM').format(_selectedMonth).toLowerCase());
 
-        feedProvider.fetchFeed(context, DateFormat('EEE MMM dd yyyy').format(_selectedMonth).toLowerCase());
+    feedProvider.fetchFeed(context,
+        DateFormat('EEE MMM dd yyyy').format(_selectedMonth).toLowerCase());
   }
 
   void _goToNextMonth() {
@@ -57,7 +49,8 @@ class _FeedRecordState extends State<FeedRecord> {
     final feedProvider = Provider.of<FeedProvider>(context, listen: false);
     feedProvider.fetchFeedConsumption(
         context, DateFormat('MMM').format(_selectedMonth).toLowerCase());
-        feedProvider.fetchFeed(context, DateFormat('EEE MMM dd yyyy').format(_selectedMonth).toLowerCase());
+    feedProvider.fetchFeed(context,
+        DateFormat('EEE MMM dd yyyy').format(_selectedMonth).toLowerCase());
   }
 
   @override
@@ -71,7 +64,8 @@ class _FeedRecordState extends State<FeedRecord> {
       final feedProvider = Provider.of<FeedProvider>(context, listen: false);
       feedProvider.fetchFeedConsumption(
           context, DateFormat('MMM').format(_selectedMonth).toLowerCase());
-          feedProvider.fetchFeed(context, DateFormat('EEE MMM dd yyyy').format(_selectedMonth).toLowerCase());
+      feedProvider.fetchFeed(context,
+          DateFormat('EEE MMM dd yyyy').format(_selectedMonth).toLowerCase());
     });
   }
 
@@ -92,9 +86,8 @@ class _FeedRecordState extends State<FeedRecord> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              
               IconButton(
-                icon: Icon(Icons.keyboard_arrow_left_sharp),
+                icon: const Icon(Icons.keyboard_arrow_left_sharp),
                 color: Colors.white,
                 onPressed: () {
                   _goToPreviousMonth(); // Go to the previous month and fetch data
@@ -102,10 +95,11 @@ class _FeedRecordState extends State<FeedRecord> {
               ),
               Text(
                 DateFormat('MMM yyyy').format(_selectedMonth),
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               IconButton(
-                icon: Icon(Icons.keyboard_arrow_right_sharp),
+                icon: const Icon(Icons.keyboard_arrow_right_sharp),
                 color: Colors.white,
                 onPressed: () {
                   if (_selectedMonth.month != _currentMonth.month) {
@@ -114,23 +108,24 @@ class _FeedRecordState extends State<FeedRecord> {
                   // Go to the next month and fetch data
                 },
               ),
-
-             
             ],
           ),
         ),
-
         actions: [
-Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 8),
-  child: GestureDetector(
-                onTap: (){
-
-                  _updateFeedSheet(Provider.of<FeedProvider>(context,listen: false).feedTotal.toString());
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: GestureDetector(
+                onTap: () {
+                  _updateFeedSheet(
+                      Provider.of<FeedProvider>(context, listen: false)
+                          .feedTotal
+                          .toString());
                 },
-                child: Icon(Icons.add_circle,size: 30,)
-               ),
-)
+                child: const Icon(
+                  Icons.add_circle,
+                  size: 30,
+                )),
+          )
         ],
       ),
       body: Column(
@@ -207,7 +202,8 @@ Padding(
                         )),
                   ))
               : pageHeaderContainer(
-                  context,),
+                  context,
+                ),
           SizedBox(height: screenHeight * .015),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -231,12 +227,12 @@ Padding(
                   [];
               return Flexible(
                 child: GridView.builder(
-                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10, // Spacing between columns
-                mainAxisSpacing: 2, // Spacing between rows
-                childAspectRatio:
-                    screenWidth / (screenHeight / 1.8), ),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10, // Spacing between columns
+                    mainAxisSpacing: 2, // Spacing between rows
+                    childAspectRatio: screenWidth / (screenHeight / 1.8),
+                  ),
                   itemCount: feedConsumed.length,
                   itemBuilder: (context, index) {
                     final feed = feedConsumed[index];
@@ -245,7 +241,7 @@ Padding(
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: Text('Choose an action'),
+                            title: const Text('Choose an action'),
                             actions: <Widget>[
                               // Update action
                               // TextButton(
@@ -266,24 +262,32 @@ Padding(
                               // ),
                               // Delete action
                               TextButton(
-                                onPressed: ()async {
+                                onPressed: () async {
                                   await Provider.of<FeedProvider>(context,
                                           listen: false)
-                                      .DeleteFeed( feed.id.toString(),context);
-                                      final feedProvider = Provider.of<FeedProvider>(context, listen: false);
-    await  feedProvider.fetchFeedConsumption(
-          context, DateFormat('MMM').format(_selectedMonth).toLowerCase());
-      await    feedProvider.fetchFeed(context, DateFormat('MMM yyyy').format(_selectedMonth).toLowerCase());
+                                      .DeleteFeed(feed.id.toString(), context);
+                                  final feedProvider =
+                                      Provider.of<FeedProvider>(context,
+                                          listen: false);
+                                  await feedProvider.fetchFeedConsumption(
+                                      context,
+                                      DateFormat('MMM')
+                                          .format(_selectedMonth)
+                                          .toLowerCase());
+                                  await feedProvider.fetchFeed(
+                                      context,
+                                      DateFormat('MMM yyyy')
+                                          .format(_selectedMonth)
+                                          .toLowerCase());
                                   Navigator.of(context).pop();
                                 },
                                 // onPressed: () async {
                                 //   // Call the deleteFeed method from FeedProvider
-                                  
 
-                                  // Close the dialog after deletion
-                                  //Navigator.of(context).pop();
+                                // Close the dialog after deletion
+                                //Navigator.of(context).pop();
                                 // },
-                                child: Row(
+                                child: const Row(
                                   children: [
                                     Icon(Icons.delete,
                                         color: Colors.red), // Delete icon
@@ -306,7 +310,7 @@ Padding(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                             Container(
+                              Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
                                 ),
@@ -338,38 +342,40 @@ Padding(
                                 ],
                               ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
                                     children: [
-                                      
                                       Text1(
                                         fontColor: lightBlackColor,
                                         fontSize: 12,
                                         text: "${feed.morning} Kg",
                                       ),
-                                      Image.asset("lib/assets/sun.png",width: 16,),
+                                      Image.asset(
+                                        "lib/assets/sun.png",
+                                        width: 16,
+                                      ),
                                     ],
                                   ),
                                   Row(
                                     children: [
-                                      
                                       Text1(
                                         fontColor: lightBlackColor,
                                         fontSize: screenWidth * .05,
                                         text: "${feed.evening} Kg",
                                       ),
-                                      Image.asset("lib/assets/moon.png",width: 16),
+                                      Image.asset("lib/assets/moon.png",
+                                          width: 16),
                                     ],
                                   ),
-                                  
                                 ],
                               ),
                               Text1(
-                                    fontColor: blackColor,
-                                    fontSize: screenWidth * .05,
-                                    text: "Total : ${feed.total} Kg",
-                                  ),
+                                fontColor: blackColor,
+                                fontSize: screenWidth * .05,
+                                text: "Total : ${feed.total} Kg",
+                              ),
                             ],
                           ),
                         ),
@@ -386,94 +392,100 @@ Padding(
   }
 
   void _updateFeedSheet(String feed) {
-  // Controllers to manage input fields
-  final TextEditingController feedController = TextEditingController();
- feedController.text=feed;
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-    ),
-    builder: (BuildContext context) {
-      return Padding(
-      padding: EdgeInsets.only(
-        left: 16.0,
-        right: 16.0,
-        top: 16.0,
-        bottom: MediaQuery.of(context).viewInsets.bottom, // Adjust for keyboard
+    // Controllers to manage input fields
+    final TextEditingController feedController = TextEditingController();
+    feedController.text = feed;
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-        child: Container(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Update Total Feed',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-              
-                  GestureDetector(
-                    onTap: (){
-
-                      Navigator.pop(context);
-                    },
-                    child: Icon(Icons.cancel_sharp,size: 30,))
-                ],
-              ),
-              SizedBox(height: 40),
-              // Cow ID Field
-              TextField(
-                controller: feedController,
-                //readOnly: true, // Prevent editing Cow ID
-                decoration: InputDecoration(
-                  labelText: 'Feed',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10)
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                ),
-              ),
-              SizedBox(height: 16),
-              // Breed Type Field
-             GestureDetector(
-              onTap: ()async{
-                final provider=Provider.of<FeedProvider>(context,listen: false);
-                final subtractedAmout=int.parse(feed)-int.parse(feedController.text);
-                
-              await provider.UpdateInventory(feedAmount: -subtractedAmout,context: context,id: provider.feedId.toString());
-              await provider.fetchFeed(context, DateFormat('EEE MMM dd yyyy').format(_selectedMonth).toLowerCase());
-               Navigator.pop(context);
-                
-               
-              },
-              child: Container(
-               height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(10)
-                ),
-                child: Center(child: Text("Update Feed"))),
-             )
-            ],
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 16.0,
+            right: 16.0,
+            top: 16.0,
+            bottom:
+                MediaQuery.of(context).viewInsets.bottom, // Adjust for keyboard
           ),
-        ),
-      );
-    },
-  );
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Update Total Feed',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(
+                          Icons.cancel_sharp,
+                          size: 30,
+                        ))
+                  ],
+                ),
+                const SizedBox(height: 40),
+                // Cow ID Field
+                TextField(
+                  controller: feedController,
+                  //readOnly: true, // Prevent editing Cow ID
+                  decoration: InputDecoration(
+                    labelText: 'Feed',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                // Breed Type Field
+                GestureDetector(
+                  onTap: () async {
+                    final provider =
+                        Provider.of<FeedProvider>(context, listen: false);
+                    final subtractedAmout =
+                        int.parse(feed) - int.parse(feedController.text);
+
+                    await provider.UpdateInventory(
+                        feedAmount: -subtractedAmout,
+                        context: context,
+                        id: provider.feedId.toString());
+                    await provider.fetchFeed(
+                        context,
+                        DateFormat('EEE MMM dd yyyy')
+                            .format(_selectedMonth)
+                            .toLowerCase());
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: const Center(child: Text("Update Feed"))),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 }
-}
-
-
-
 
 Widget pageHeaderContainer(
-    BuildContext context,) {
+  BuildContext context,
+) {
   return Material(
       elevation: 6,
       borderRadius: const BorderRadius.only(
@@ -496,14 +508,13 @@ Widget pageHeaderContainer(
             padding: const EdgeInsets.all(8),
             child: Consumer<FeedProvider>(builder: (context, provider, child) {
               if (provider.isLoading) {
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               } else {
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    wrapCircleContainer(
-                        "${provider.feedTotal}", "Total"),
+                    wrapCircleContainer("${provider.feedTotal}", "Total"),
                     SizedBox(
                       width: paragraph / 4,
                     ),

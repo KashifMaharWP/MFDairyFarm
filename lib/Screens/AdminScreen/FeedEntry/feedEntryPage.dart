@@ -101,7 +101,7 @@ class _feedEntryPageState extends State<feedEntryPage> {
               runAlignment: WrapAlignment.center,
               crossAxisAlignment: WrapCrossAlignment.start,
               children: [
-                Icon(Icons.calendar_month),
+                const Icon(Icons.calendar_month),
                 Text1(fontColor: blackColor, fontSize: header6, text: "Date"),
               ],
             ),
@@ -137,7 +137,7 @@ class _feedEntryPageState extends State<feedEntryPage> {
         }
       },
       child: Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         width: double.infinity,
         height: screenHeight / 10,
         decoration: BoxDecoration(

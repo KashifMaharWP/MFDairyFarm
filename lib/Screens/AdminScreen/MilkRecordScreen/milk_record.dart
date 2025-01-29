@@ -135,7 +135,7 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
         title: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(width: 10,),
+            const SizedBox(width: 10,),
             Image.asset(
               "lib/assets/milk.png",
               width: 30,
@@ -456,7 +456,7 @@ class _MilkRecordScreenState extends State<MilkRecordScreen> {
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 8,
                                   ),
                                   Column(

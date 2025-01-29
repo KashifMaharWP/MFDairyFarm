@@ -2,11 +2,8 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
-import 'package:dairyfarmflow/Model/Worker/task_model.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/worker_provider.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
-import 'package:dairyfarmflow/ReuseableWidgets/row_withtext_andimage.dart';
-import 'package:dairyfarmflow/Screens/AdminScreen/AnimalRecord/animalRecord.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/FeedEntry/feedEntryPage.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/SaleMilk/add_salemilk.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/milk_record.dart';
@@ -21,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../Notifications/notification_screen.dart';
+import '../../../Providers/MilkProviders/milk_record.dart';
 
 class UserDashboard extends StatefulWidget {
   const UserDashboard({super.key});
@@ -62,10 +60,10 @@ class _UserDashboardState extends State<UserDashboard> {
   }
 
   @override
-void dispose() {
-  // Cancel any ongoing tasks or subscriptions here
-  super.dispose();
-}
+  void dispose() {
+    // Cancel any ongoing tasks or subscriptions here
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +96,8 @@ void dispose() {
                                   right: screenWidth * .045,
                                   top: screenHeight * .025),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
                                     children: [
@@ -121,18 +120,22 @@ void dispose() {
                                             right: screenWidth * .02,
                                             top: screenHeight * .035),
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text1(
                                                 fontColor: whiteColor,
                                                 fontSize: 25,
                                                 text: "Welcome"),
                                             Consumer<UserDetail>(
-                                              builder: (context, value, child) =>
+                                              builder: (context, value,
+                                                      child) =>
                                                   Text1(
                                                       fontColor: whiteColor,
-                                                      fontSize: screenWidth * .05,
+                                                      fontSize:
+                                                          screenWidth * .05,
                                                       text: "${value.name}"),
                                             ),
                                           ],
@@ -148,12 +151,12 @@ void dispose() {
                           SizedBox(
                             height: screenHeight * .01,
                           ),
-      
+
                           // Padding(
                           //   padding: const EdgeInsets.only(left: 8, right: 8),
                           //   child: wrapContainer(),
                           // ),
-      
+
                           //  pageHeaderContainer(),
                         ],
                       ),
@@ -280,8 +283,8 @@ void dispose() {
                 //         const DailyRecordScreen()),
                 //   ],
                 // ),
-                viewContainer("Medical", "lib/assets/medical.png",
-                    const AnimalList()),
+                viewContainer(
+                    "Medical", "lib/assets/medical.png", const AnimalList()),
                 SizedBox(
                   height: paragraph,
                 ),
@@ -294,9 +297,7 @@ void dispose() {
                 viewContainer("Milk Sale", "lib/assets/milkSale.png",
                     const AddMilkSale()),
 
-                viewContainer("Feed", "lib/assets/feed.png",
-                 feedEntryPage()),
-
+                viewContainer("Feed", "lib/assets/feed.png", feedEntryPage()),
               ],
             ),
             SizedBox(
@@ -304,10 +305,11 @@ void dispose() {
             ),
             // viewContainer(
             //     "Add Milk", "lib/assets/addMilk.jpg", const AnimalRecord()),
-          Text("Task",style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold
-          ),),SizedBox(
+            const Text(
+              "Daily Milk Sold Record",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
               height: 10,
             ),
             Container(
@@ -317,78 +319,140 @@ void dispose() {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Consumer<WorkerProvider>(
-  builder: (context, workerProvider, child) {
-    final tasks = workerProvider.TaskList?.tasks;
+                child: Consumer<MilkRecordProvider>(
+                    builder: (context, milkProvider, child) {
+                  return FutureBuilder(
+                    future: milkProvider.fetchMilkSoldByDate(
+                      context,
+                      DateFormat('EEE MMM dd yyyy').format(DateTime.now()),
+                    ),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.data == null ||
+                          snapshot.data!.isEmpty) {
+                        return const Center(
+                            child: Text('No Data Available for Selected Date'));
+                      } else if (snapshot.hasData) {
+                        // Display the list of milk sold records
+                        return ListView.builder(
+                          itemCount: snapshot.data?.length,
+                          itemBuilder: (context, index) {
+                            final record = snapshot.data?[index];
 
-    if (workerProvider.isTaskLoading) {
-      return const Center(child: CircularProgressIndicator());
-    } else if (tasks != null && tasks.isNotEmpty) {
-      return ListView.builder(
-        itemCount: tasks.length,
-        itemBuilder: (context, index) {
-          final usertask = tasks[index];
-          // Create a ValueNotifier for each task's checkbox state
-          final checkboxValueNotifier = ValueNotifier<bool>(
-            usertask.taskStatus ?? false,
-          );
+                            return Container(
+                              width: double.infinity,
+                              height: 80,
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(8.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    blurRadius: 6,
+                                    offset: const Offset(2, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // Vendor Name
+                                  Row(
+                                    children: [
+                                      const CircleAvatar(
+                                        radius: 20,
+                                        backgroundImage: AssetImage(
+                                            "lib/assets/vendorMan.png"),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        record?.vendor?.name ?? "Unknown",
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                    ],
+                                  ),
 
-          return Container(
-            margin: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
-            //padding: EdgeInsets.all(10),
-           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-        spreadRadius: 5,
-        blurRadius: 7,
-        offset: Offset(0, 3),
-            )]
-           ),
-            child: ListTile(
-              leading: CircleAvatar(
-                radius: 20,
-                backgroundColor: Colors.greenAccent,
-                child: Icon(Icons.task,color: Colors.white,),
-              ),
-              title: Text1(
-                fontColor: blackColor,
-                fontSize: header1,
-                text: usertask.description.toString(),
-              ),
-              // subtitle:Icon(usertask.taskStatus.toString()=='true'?Icons.check:Icons.close) ,
-              // // Text1(
-              // //   fontColor: lightBlackColor,
-              // //   fontSize: header5,
-              // //   text: usertask.taskStatus.toString(),
-              // // ),
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text('Task Description'),
-                    content: Text(usertask.description ?? 'No Description Available'),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text('Close'),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          );
-        },
-      );
-    } else {
-      return const Center(child: Text('No data available'));
-    }
-  },
-)
-
-                )
+                                  // Amount Sold
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "${record?.amountSold} ltr",
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Image.asset(
+                                        "lib/assets/milkSale.png",
+                                        width: 30,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            );
+                            // Container(
+                            //   margin: EdgeInsets.symmetric(
+                            //       vertical: 5, horizontal: 10),
+                            //   //padding: EdgeInsets.all(10),
+                            //   decoration: BoxDecoration(
+                            //       color: Colors.white,
+                            //       borderRadius: BorderRadius.circular(10),
+                            //       boxShadow: [
+                            //         BoxShadow(
+                            //           color: Colors.grey.withOpacity(0.5),
+                            //           spreadRadius: 5,
+                            //           blurRadius: 7,
+                            //           offset: Offset(0, 3),
+                            //         )
+                            //       ]),
+                            //   child: ListTile(
+                            //     leading: CircleAvatar(
+                            //       radius: 20,
+                            //       backgroundColor: Colors.greenAccent,
+                            //       child: Icon(
+                            //         Icons.task,
+                            //         color: Colors.white,
+                            //       ),
+                            //     ),
+                            //     title: Text1(
+                            //       fontColor: blackColor,
+                            //       fontSize: header1,
+                            //       text: usertask.description.toString(),
+                            //     ),
+                            //     // subtitle:Icon(usertask.taskStatus.toString()=='true'?Icons.check:Icons.close) ,
+                            //     // // Text1(
+                            //     // //   fontColor: lightBlackColor,
+                            //     // //   fontSize: header5,
+                            //     // //   text: usertask.taskStatus.toString(),
+                            //     // // ),
+                            //     onTap: () {
+                            //       showDialog(
+                            //         context: context,
+                            //         builder: (context) => AlertDialog(
+                            //           title: Text('Task Description'),
+                            //           content: Text(usertask.description ??
+                            //               'No Description Available'),
+                            //           actions: [
+                            //             TextButton(
+                            //               onPressed: () => Navigator.pop(context),
+                            //               child: Text('Close'),
+                            //             ),
+                            //           ],
+                            //         ),
+                            //       );
+                            //     },
+                            //   ),
+                            // );
+                          },
+                        );
+                      } else {
+                        return const Center(child: Text('No data available'));
+                      }
+                    },
+                  );
+                }))
           ],
         ),
       ),

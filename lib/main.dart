@@ -11,7 +11,6 @@ import 'package:dairyfarmflow/Providers/auth_provider.dart';
 import 'package:dairyfarmflow/Providers/register_user_provider.dart';
 import 'package:dairyfarmflow/Providers/registration_provider.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
-import 'package:dairyfarmflow/Screens/Login/Screen/loginPage.dart';
 import 'package:dairyfarmflow/Screens/SplashScreen/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -56,7 +55,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         routes: MyRoutes.getRoutes(),
         debugShowCheckedModeBanner: false,
-        home: SplashScreen(),
+        home: const SplashScreen(),
       ),
     );
   }

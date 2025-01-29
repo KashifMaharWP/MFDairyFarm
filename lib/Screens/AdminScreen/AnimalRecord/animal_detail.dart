@@ -1,19 +1,11 @@
-import 'dart:convert';
-import 'dart:developer';
-import 'package:dairyfarmflow/API/global_api.dart';
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
-import 'package:dairyfarmflow/Model/AnimalDetails/animal_detail_model.dart';
-import 'package:dairyfarmflow/Model/feed_consume.dart';
-import 'package:dairyfarmflow/Providers/CowProvider/cows_provider.dart';
 import 'package:dairyfarmflow/Providers/animal_registratin_provider.dart';
-import 'package:dairyfarmflow/Providers/user_detail.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
 class AnimalDetail extends StatefulWidget {
   String tag, url, id;
@@ -54,7 +46,10 @@ class _AnimalDetailState extends State<AnimalDetail> {
               context, widget.id, DateFormat('MMM').format(_selectedMonth));
       Provider.of<AnimalRegistratinProvider>(context, listen: false)
           .getVacineDetail(
-              context, DateFormat('MMM yyyy').format(_selectedMonth),_selectedMonth.year, widget.id);
+              context,
+              DateFormat('MMM yyyy').format(_selectedMonth),
+              _selectedMonth.year,
+              widget.id);
     });
   }
 
@@ -78,7 +73,7 @@ class _AnimalDetailState extends State<AnimalDetail> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
-                  icon: Icon(Icons.keyboard_arrow_left_sharp),
+                  icon: const Icon(Icons.keyboard_arrow_left_sharp),
                   color: Colors.white,
                   onPressed: () {
                     _goToPreviousMonth();
@@ -91,10 +86,11 @@ class _AnimalDetailState extends State<AnimalDetail> {
                   }),
               Text(
                 monthName,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               IconButton(
-                icon: Icon(Icons.keyboard_arrow_right_sharp),
+                icon: const Icon(Icons.keyboard_arrow_right_sharp),
                 color: Colors.white,
                 onPressed: () {
                   if (_selectedMonth.month != _currentMonth.month) {
@@ -153,7 +149,7 @@ class _AnimalDetailState extends State<AnimalDetail> {
                     ReuseableWidget(
                       imgUrl: "lib/assets/medical.png",
                       text1: "Vaccination",
-                      text2: "${animalRegProvider.vacineCount}",
+                      text2: animalRegProvider.vacineCount,
                     ),
                     SizedBox(
                       width: screenWidth * .85,
@@ -167,7 +163,6 @@ class _AnimalDetailState extends State<AnimalDetail> {
           Flexible(
             child: Consumer<AnimalRegistratinProvider>(
               builder: (context, animalProvider, child) {
-                
                 if (animalProvider.isDataFetched) {
                   return const Center(child: CircularProgressIndicator());
                 } else {
@@ -180,59 +175,64 @@ class _AnimalDetailState extends State<AnimalDetail> {
                       final animalList = animal[index];
                       return GestureDetector(
                         onTap: () {
-                           showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('Choose an action'),
-                                  actions: <Widget>[
-                                    // Update action
-                                    TextButton(
-                                      onPressed: () {
-    Navigator.of(context).pop(); // Close the dialog first
-    _showUpdateCowSheet(animalList.sId.toString(),
-    animalList.morning.toString(),
-    animalList.evening.toString(),
-    animalProvider
-    ); // Call the function with parentheses
-  },
-                                      child: Row(
-                                        children: [
-                                          Icon(Icons.edit,
-                                              color: Colors.blue), // Edit icon
-                                          SizedBox(width: 8),
-                                          Text('Update',
-                                              style: TextStyle(
-                                                  color: Colors.blue)),
-                                        ],
-                                      ),
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Choose an action'),
+                                actions: <Widget>[
+                                  // Update action
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // Close the dialog first
+                                      _showUpdateCowSheet(
+                                          animalList.sId.toString(),
+                                          animalList.morning.toString(),
+                                          animalList.evening.toString(),
+                                          animalProvider); // Call the function with parentheses
+                                    },
+                                    child: const Row(
+                                      children: [
+                                        Icon(Icons.edit,
+                                            color: Colors.blue), // Edit icon
+                                        SizedBox(width: 8),
+                                        Text('Update',
+                                            style:
+                                                TextStyle(color: Colors.blue)),
+                                      ],
                                     ),
-                                    // Delete action
-                                    TextButton(
-                                      onPressed: () async {
-                                        // Call the deleteCow method from CowsProvider
-                                     await provider.deleteMilk(animalList.sId.toString(), context);
-                                      
-                                      await provider.getAnimalDetailById(context, widget.id, DateFormat('MMM').format(_selectedMonth));
-                                        // Close the dialog after deletion
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Row(
-                                        children: [
-                                          Icon(Icons.delete,
-                                              color: Colors.red), // Delete icon
-                                          SizedBox(width: 8),
-                                          Text('Delete',
-                                              style:
-                                                  TextStyle(color: Colors.red)),
-                                        ],
-                                      ),
+                                  ),
+                                  // Delete action
+                                  TextButton(
+                                    onPressed: () async {
+                                      // Call the deleteCow method from CowsProvider
+                                      await provider.deleteMilk(
+                                          animalList.sId.toString(), context);
+
+                                      await provider.getAnimalDetailById(
+                                          context,
+                                          widget.id,
+                                          DateFormat('MMM')
+                                              .format(_selectedMonth));
+                                      // Close the dialog after deletion
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Row(
+                                      children: [
+                                        Icon(Icons.delete,
+                                            color: Colors.red), // Delete icon
+                                        SizedBox(width: 8),
+                                        Text('Delete',
+                                            style:
+                                                TextStyle(color: Colors.red)),
+                                      ],
                                     ),
-                                  ],
-                                );
-                              },
-                            );
-                          
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(4.0),
@@ -283,8 +283,8 @@ class _AnimalDetailState extends State<AnimalDetail> {
                                           height: 20,
                                           width: 20,
                                           child: Image(
-                                            image:
-                                                AssetImage("lib/assets/sun.png"),
+                                            image: AssetImage(
+                                                "lib/assets/sun.png"),
                                           ),
                                         ),
                                         SizedBox(
@@ -303,8 +303,8 @@ class _AnimalDetailState extends State<AnimalDetail> {
                                           height: 20,
                                           width: 20,
                                           child: Image(
-                                            image:
-                                                AssetImage("lib/assets/moon.png"),
+                                            image: AssetImage(
+                                                "lib/assets/moon.png"),
                                           ),
                                         ),
                                         SizedBox(
@@ -335,97 +335,103 @@ class _AnimalDetailState extends State<AnimalDetail> {
     );
   }
 
+  void _showUpdateCowSheet(String cowId, morning, evening, provider) {
+    // Controllers to manage input fields
+    final TextEditingController morningController =
+        TextEditingController(text: morning);
+    final TextEditingController eveningTypeController =
+        TextEditingController(text: evening);
+    //final TextEditingController priceController = TextEditingController(text: price.toString());
 
-  void _showUpdateCowSheet(String cowId, morning,evening, provider) {
-  // Controllers to manage input fields
-  final TextEditingController morningController = TextEditingController(text: morning);
-  final TextEditingController eveningTypeController = TextEditingController(text: evening);
-  //final TextEditingController priceController = TextEditingController(text: price.toString());
-
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-    ),
-    builder: (BuildContext context) {
-      return Padding(
-        padding:  EdgeInsets.only(top: 16,left: 16,right: 10, bottom:MediaQuery.of(context).viewInsets.bottom),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Update Milk Details',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 16),
-            // Cow ID Field
-            TextField(
-              controller: morningController,
-              decoration: InputDecoration(
-                labelText: 'Morning Milk',
-                border: OutlineInputBorder(),
-                filled: true,
-                fillColor: Colors.grey[200],
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(
+              top: 16,
+              left: 16,
+              right: 10,
+              bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Update Milk Details',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-            ),
-            SizedBox(height: 16),
-            // Breed Type Field
-            TextField(
-              controller: eveningTypeController,
-              decoration: InputDecoration(
-                labelText: 'Evening Milk',
-                border: OutlineInputBorder(),
+              const SizedBox(height: 16),
+              // Cow ID Field
+              TextField(
+                controller: morningController,
+                decoration: InputDecoration(
+                  labelText: 'Morning Milk',
+                  border: const OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                ),
               ),
-            ),
-            SizedBox(height: 16),
-            // Price Field
-           
-            SizedBox(height: 16),
-            // Save Button
-            SizedBox(
-              width: double.infinity,
-              child: GestureDetector(
-                onTap: () async{
-                  // Perform update logic
-                  final updatedMorningMilk = morningController.text;
-                  final updatedEveningMilk = eveningTypeController.text;
-                  final updatedTotal = int.parse(updatedMorningMilk)+int.parse(updatedEveningMilk);
-        
-                  // Call provider or API to update cow details
-                await provider.UpdateMilkRecord(
-                    cowId,
-                    updatedMorningMilk,
-                    updatedEveningMilk,
-                    updatedTotal.toString(),
-                    context,
-              
-                  );
-
-                  await provider.getAnimalDetailById(context, widget.id, DateFormat('MMM').format(_selectedMonth));
-            
-                  // Close the bottom sheet after saving
-                  Navigator.pop(context);
-                 
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 14,horizontal: 30),
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(4)
-                  ),
-                  child: Center(child: Text('Save Changes'))),
+              const SizedBox(height: 16),
+              // Breed Type Field
+              TextField(
+                controller: eveningTypeController,
+                decoration: const InputDecoration(
+                  labelText: 'Evening Milk',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-            SizedBox(height: 20,)
-          ],
-        ),
-      );
-    },
-  );
-}
+              const SizedBox(height: 16),
+              // Price Field
 
+              const SizedBox(height: 16),
+              // Save Button
+              SizedBox(
+                width: double.infinity,
+                child: GestureDetector(
+                  onTap: () async {
+                    // Perform update logic
+                    final updatedMorningMilk = morningController.text;
+                    final updatedEveningMilk = eveningTypeController.text;
+                    final updatedTotal = int.parse(updatedMorningMilk) +
+                        int.parse(updatedEveningMilk);
+
+                    // Call provider or API to update cow details
+                    await provider.UpdateMilkRecord(
+                      cowId,
+                      updatedMorningMilk,
+                      updatedEveningMilk,
+                      updatedTotal.toString(),
+                      context,
+                    );
+
+                    await provider.getAnimalDetailById(context, widget.id,
+                        DateFormat('MMM').format(_selectedMonth));
+
+                    // Close the bottom sheet after saving
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 14, horizontal: 30),
+                      decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(4)),
+                      child: const Center(child: Text('Save Changes'))),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
 
 class ReuseableWidget extends StatelessWidget {
