@@ -23,9 +23,9 @@ class FeedConsumptionResponse {
 }
 class FeedConsumption {
   final String? id;
-  final int? morning;
-  final int? evening;
-  final int? total;
+  final num? morning;
+  final num? evening;
+  final num? total;
   final String? date;
   final CreatedBy? createdBy;
   final Cow? cow;

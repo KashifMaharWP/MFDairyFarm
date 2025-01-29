@@ -28,8 +28,8 @@ class InventoryFeedResponse {
 
 class FeedInventory {
   final String id;
-  final int totalAmount;
-  final int availableAmount;
+  final num totalAmount;
+  final num availableAmount;
   final String date;
   final String createdBy;
   final String dairyFarmId;

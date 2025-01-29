@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:dairyfarmflow/API/global_api.dart';
 import 'package:dairyfarmflow/Model/feedInventory.dart';
 import 'package:dairyfarmflow/Model/feed_count.dart';
@@ -13,15 +14,15 @@ class FeedProvider extends ChangeNotifier {
   bool _isloading = false;
   bool get isLoading => _isloading;
   FeedConsumptionResponse? feedConsumeRecord;
-  int? morningFeed = 0;
-  int? eveningFeed = 0;
-  int usedFeed = 0;
+  num? morningFeed = 0;
+  num? eveningFeed = 0;
+  num usedFeed = 0;
   String? errorMessage;
-  int totalFeedFromItem = 0;
-  int totalFeedStored = 0;
-  int feedTotal = 0;
-  int feedAvailable = 0;
-  int feedUsed = 0;
+  num totalFeedFromItem = 0;
+  num totalFeedStored = 0;
+  num feedTotal = 0;
+  num feedAvailable = 0;
+  num feedUsed = 0;
   String? feedId;
   InventoryFeedResponse? feedInventory;
 
@@ -41,6 +42,7 @@ class FeedProvider extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
+       // debugger();
         feedConsumeRecord = FeedConsumptionResponse.fromJson(jsonData);
         _isloading = false;
         notifyListeners(); // Notify listeners with updated data
@@ -52,6 +54,7 @@ class FeedProvider extends ChangeNotifier {
     } catch (e) {
       _isloading = false;
       errorMessage = 'Error: $e';
+      print("Error ${e}");
       notifyListeners(); // Notify listeners in case of an exception
     }
   }
@@ -108,7 +111,7 @@ class FeedProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
         FeedCountResponse feedCount = FeedCountResponse.fromJson(jsonData);
-
+       // debugger();
         // Assuming todayFeedConsumptionCount contains data for the specified date
         morningFeed = feedCount.todayFeedConsumptionCount[0].morning;
         eveningFeed = feedCount.todayFeedConsumptionCount[0].evening;

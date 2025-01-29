@@ -223,8 +223,7 @@ class _FeedRecordState extends State<FeedRecord> {
               return const Center(child: CircularProgressIndicator());
             } else {
               final feedConsumed = feedProvider
-                      .feedConsumeRecord?.feedConsumptionRecordMonthly ??
-                  [];
+                      .feedConsumeRecord?.feedConsumptionRecordMonthly ??[];
               return Flexible(
                 child: GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

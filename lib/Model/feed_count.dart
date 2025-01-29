@@ -31,8 +31,8 @@ class FeedCountResponse {
 
 class FeedConsumptionCount {
   final String? id;
-  final int morning;
-  final int evening;
+  final num morning;
+  final num evening;
 
   FeedConsumptionCount({
     this.id,

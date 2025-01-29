@@ -78,8 +78,8 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
 
     String formattedDate = DateFormat('EEE MMM dd yyyy').format(_selectedDate);
 
-    feedProvider.fetchFeedCount(context, formattedDate);
-    milkProvider.fetchMilkCount(context, formattedDate);
+     feedProvider.fetchFeedCount(context, formattedDate);
+     milkProvider.fetchMilkCount(context, formattedDate);
     await milkProvider.fetchMilkSoldForDate(
         context, _selectedDate.toString(), formattedDate.toString());
     milkProvider.fetchMilkSoldByDate(context, formattedDate);
