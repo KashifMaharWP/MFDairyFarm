@@ -38,9 +38,9 @@ class AnimalDetailModel {
 
 class MilkProductionMonthlyRecord {
   String? sId;
-  int? morning;
-  int? evening;
-  int? total;
+  num? morning;
+  num? evening;
+  num? total;
   String? date;
   CreatedBy? createdBy;
 

@@ -1,11 +1,11 @@
 class TodayMilkRecord {
   final String id;
   final String cowId;
-  final int morning;
+  final num morning;
   final String date;
   final CreatedBy createdBy;
-  final int evening;
-  final int total;
+  final num evening;
+  final num total;
   final Cow cow;
 
   TodayMilkRecord({
