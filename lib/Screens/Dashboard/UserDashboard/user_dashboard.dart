@@ -4,6 +4,7 @@ import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/worker_provider.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/DailyRecord/daily_record_screen.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/FeedEntry/feedEntryPage.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/SaleMilk/add_salemilk.dart';
 import 'package:dairyfarmflow/Screens/AdminScreen/MilkRecordScreen/milk_record.dart';
@@ -298,6 +299,9 @@ class _UserDashboardState extends State<UserDashboard> {
                     const AddMilkSale()),
 
                 viewContainer("Feed", "lib/assets/feed.png", feedEntryPage()),
+
+                viewContainer("Daily Record", "lib/assets/dairyfarm.png",
+                        const DailyRecordScreen()),
               ],
             ),
             SizedBox(
@@ -526,7 +530,7 @@ class _UserDashboardState extends State<UserDashboard> {
               width: screenWidth / 5,
             )),
           ),
-          Text1(fontColor: lightBlackColor, fontSize: paragraph + 4, text: text)
+          Text1(fontColor: lightBlackColor, fontSize: paragraph , text: text)
         ],
       ),
     );
