@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:collection/collection.dart';
 import 'package:dairyfarmflow/Model/soldmilk.dart';
@@ -126,8 +127,7 @@ class MilkRecordProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  Future<void> fetchMilkCount(BuildContext context, String month) async {
+fetchMilkCount(BuildContext context, String month) async {
     _isLoading = true;
     _errorMessage = null;
     // notifyListeners();
@@ -153,12 +153,20 @@ class MilkRecordProvider extends ChangeNotifier {
          total=(double.parse(morningMilk)+double.parse(eveningMilk)).toString();
           notifyListeners();
           //print(_milkCountData!['todayMilkCount'][0]['morning']);
+          
+          return MilkDataRecord(
+        date: month,
+        morningMilk: double.parse(morningMilk)??0,
+        eveningMilk: double.parse(eveningMilk)??0,
+        totalMilk: double.parse(total)??0,
+      );
         } else {
           _errorMessage = jsonData['message'] ?? 'Failed to fetch milk count';
           morningMilk = "0";
           eveningMilk = '0';
           total = "0";
           notifyListeners();
+          return null;
         }
       } else {
         _errorMessage =
@@ -536,4 +544,19 @@ class MilkRecordProvider extends ChangeNotifier {
       print('Error: $e');
     }
   }
+}
+
+
+class MilkDataRecord {
+  final String date;
+  final num morningMilk;
+  final num eveningMilk;
+  final num totalMilk;
+
+  MilkDataRecord({
+    required this.date,
+    required this.morningMilk,
+    required this.eveningMilk,
+    required this.totalMilk,
+  });
 }

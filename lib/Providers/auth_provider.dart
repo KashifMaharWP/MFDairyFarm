@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:dairyfarmflow/API/global_api.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
@@ -25,12 +26,12 @@ class AuthProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
+    debugger();
     try {
       final response = await http.post(
         Uri.parse("${GlobalApi.baseApi}${GlobalApi.signUpAPI}"),
         body: body,
       );
-
       final userJson = jsonDecode(response.body);
      // print(userJson);
 
@@ -87,10 +88,11 @@ class AuthProvider with ChangeNotifier {
 
     try {
       final response = await http.post(
+      
         Uri.parse("${GlobalApi.baseApi}${GlobalApi.loginApi}"),
         body: body,
       );
-
+     // debugger();
       final jsonresponse = jsonDecode(response.body);
       print(jsonresponse);
 

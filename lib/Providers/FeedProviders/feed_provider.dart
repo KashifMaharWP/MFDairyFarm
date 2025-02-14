@@ -4,8 +4,10 @@ import 'package:dairyfarmflow/API/global_api.dart';
 import 'package:dairyfarmflow/Model/feedInventory.dart';
 import 'package:dairyfarmflow/Model/feed_count.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/FeedEntry/feed_record.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_toast_message/simple_toast.dart';
 import '../../Model/feed_consume.dart';
@@ -119,6 +121,12 @@ class FeedProvider extends ChangeNotifier {
 
         _isloading = false;
         notifyListeners(); // Notify listeners after fetching feed count
+        return FeedRecord(
+        date: formattedDate,
+        morningFeed: morningFeed??0,
+        eveningFeed: eveningFeed??0,
+        totalFeed: usedFeed??0,
+      );
       } else {
         _isloading = false;
         errorMessage = response.reasonPhrase;
@@ -132,6 +140,8 @@ class FeedProvider extends ChangeNotifier {
 
     return null;
   }
+
+
 
   // Send morning feed data
   Future<void> sendMorningFeedData({
@@ -248,8 +258,11 @@ class FeedProvider extends ChangeNotifier {
             context, "Feed Added", "${message['message']}");
       } else {
         final message = jsonDecode(response.body);
-        SimpleToast.showErrorToast(
-            context, "Feed Not Added", "${message['message']}");
+       
+            fetchFeed(context, DateFormat('MMM').format(DateTime.now()).toLowerCase());
+         UpdateInventory(context: context,feedAmount:feedAmount.toInt(),id: feedId.toString(),);
+         SimpleToast.showSuccessToast(
+            context, "Feed Added", "${message['message']}");
       }
       _isloading = false;
       notifyListeners();
@@ -329,4 +342,19 @@ class FeedProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+}
+
+
+class FeedRecord {
+  final String date;
+  final num morningFeed;
+  final num eveningFeed;
+  final num totalFeed;
+
+  FeedRecord({
+    required this.date,
+    required this.morningFeed,
+    required this.eveningFeed,
+    required this.totalFeed,
+  });
 }

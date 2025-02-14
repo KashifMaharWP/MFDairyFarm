@@ -1,8 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import 'package:dairyfarmflow/Functions/customDatePicker.dart';
 import 'package:dairyfarmflow/Model/soldmilk.dart';
 import 'package:dairyfarmflow/Providers/FeedProviders/feed_provider.dart';
 import 'package:dairyfarmflow/ReuseableWidgets/reuse_row.dart';
+import 'package:dairyfarmflow/Screens/dailyList.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dairyfarmflow/Class/colorPallete.dart';
@@ -11,11 +14,16 @@ import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
 import 'package:provider/provider.dart';
 import '../../../Providers/MilkProviders/milk_record.dart';
 import '../../../Widget/customRoundButton.dart';
 import '../../../Widget/textFieldWidget1.dart';
 import '../MilkRecordScreen/milk_record.dart';
+
+import 'package:open_file/open_file.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class DailyRecordScreen extends StatefulWidget {
   const DailyRecordScreen({super.key});
@@ -34,7 +42,7 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
   late DateTime _selectedDate;
   DateTime selectedDate = DateTime.now();
   DateTime? pickedDate;
-
+  List<SoldMilkRecord> vendorRecord=[];
   @override
   void initState() {
     super.initState();
@@ -70,6 +78,9 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
     }
   }
 
+
+
+
   // Fetch data for the selected date
   void _fetchDataForSelectedDate() async {
     final feedProvider = Provider.of<FeedProvider>(context, listen: false);
@@ -82,12 +93,74 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
      milkProvider.fetchMilkCount(context, formattedDate);
     await milkProvider.fetchMilkSoldForDate(
         context, _selectedDate.toString(), formattedDate.toString());
-    milkProvider.fetchMilkSoldByDate(context, formattedDate);
+   vendorRecord= await milkProvider.fetchMilkSoldByDate(context, formattedDate);
+
   }
+
+  Future<void> generateMilkReportPdf({
+  required String morningMilk,
+  required String eveningMilk,
+  required String totalMilk,
+  required String totalSold,
+  required String usedFeed,
+  required String morningFeed,
+  required String eveningFeed,
+  required DateTime selectedDate,
+  required List<SoldMilkRecord>? vendorRecord, // Added null safety
+}) async {
+  final pdf = pw.Document();
+
+  pdf.addPage(
+    pw.MultiPage(
+      pageFormat: PdfPageFormat.a4,
+      build: (pw.Context context) => [
+        pw.Center(
+          child: pw.Text(
+            'Milk & Feed Report - ${DateFormat("EEE MMM dd yyyy").format(selectedDate)}',
+            style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold),
+          ),
+        ),
+        pw.SizedBox(height: 20),
+        pw.Text('Milk Record:', style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
+        pw.Text('Morning: ${morningMilk.isNotEmpty ? morningMilk : '0'} Ltr'),
+        pw.Text('Evening: ${eveningMilk.isNotEmpty ? eveningMilk : '0'} Ltr'),
+        pw.Text('Total Milk: ${totalMilk.isNotEmpty ? totalMilk : '0'} Ltr'),
+        pw.Text('Total Sold: ${totalSold.isNotEmpty ? totalSold : '0'} Ltr'),
+        pw.SizedBox(height: 20),
+        pw.Text('Feed Record:', style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
+        pw.Text('Total Used: ${usedFeed.isNotEmpty ? usedFeed : '0'} Kg'),
+        pw.Text('Morning: ${morningFeed.isNotEmpty ? morningFeed : '0'} Kg'),
+        pw.Text('Evening: ${eveningFeed.isNotEmpty ? eveningFeed : '0'} Kg'),
+        pw.SizedBox(height: 20),
+        pw.Text('Vendor Sales:', style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
+        pw.Table.fromTextArray(
+          headers: ['Vendor Name', 'Amount Sold (Ltr)'],
+          data: (vendorRecord?.isNotEmpty ?? false)
+              ? vendorRecord!.map(
+                  (record) => [
+                    record.vendor?.name ?? 'Unknown',
+                    '${record.amountSold ?? 0} Ltr',
+                  ],
+                ).toList()
+              : [['No Data', '0 Ltr']], // Default if no records
+        ),
+      ],
+    ),
+  );
+
+  final output = await getExternalStorageDirectory();
+  final file = File("${output?.path}/milk_feed_report.pdf");
+  await file.writeAsBytes(await pdf.save());
+
+  OpenFile.open(file.path);
+}
+
+
 
   @override
   Widget build(BuildContext context) {
     final milkProvider = Provider.of<MilkRecordProvider>(context);
+    final feedProvider = Provider.of<FeedProvider>(context);
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
@@ -115,8 +188,34 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
                 color: Colors.white,
                 onPressed: _goToNextDay, // Go to the next day
               ),
+
+              
             ],
           ),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.picture_as_pdf),
+          onPressed: () async {
+            if (vendorRecord.isEmpty ) {
+             ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('No records available to export')),
+              );
+            } else {
+              
+
+               await generateMilkReportPdf(
+    morningMilk: milkProvider.morningMilk?? '0',
+    eveningMilk: milkProvider.eveningMilk?? '0',
+    totalMilk: milkProvider.total?? '0',
+    totalSold: vendorRecord[0].amountSold.toString()?? '0',
+    usedFeed: feedProvider.usedFeed.toString()?? '0',
+    morningFeed: feedProvider.morningFeed.toString()?? '0',
+    eveningFeed: feedProvider.eveningFeed.toString() ?? '0',
+    selectedDate: selectedDate ?? DateTime.now(),
+    vendorRecord: vendorRecord ?? []
+  );
+            }
+          },
         ),
       ),
       body: Column(
@@ -617,4 +716,6 @@ Widget circleContainer(String text) {
     child: Center(
         child: Text1(fontColor: blackColor, fontSize: paragraph, text: text)),
   );
+
+  
 }

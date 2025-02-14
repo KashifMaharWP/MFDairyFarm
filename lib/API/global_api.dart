@@ -1,8 +1,8 @@
 import 'package:intl/intl.dart';
 
 class GlobalApi {
-  //static String baseApi = "https://api.customizablewear.com/api/";
-  static String baseApi = "https://sub.icreativezapp.com/api/";
+  static String baseApi = "https://backend.customizablewear.com/api/";
+  //static String baseApi = "https://www.api.customizablewear.com/api/";
   static String loginApi = "user/login";
   static String signUpAPI = "user/signup";
   static String addAnimal = "cow/register";

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dairyfarmflow/Class/textSizing.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -235,6 +237,7 @@ class _FeedRecordState extends State<FeedRecord> {
                   itemCount: feedConsumed.length,
                   itemBuilder: (context, index) {
                     final feed = feedConsumed[index];
+                    
                     return GestureDetector(
                       onTap: () => showDialog(
                         context: context,
