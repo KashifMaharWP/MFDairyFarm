@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
@@ -13,6 +14,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:simple_toast_message/simple_toast.dart';
 
 class AnimalRegistrationPage extends StatefulWidget {
   const AnimalRegistrationPage({super.key});
@@ -95,22 +97,22 @@ class _AnimalRegistrationPageState extends State<AnimalRegistrationPage> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 40, right: 10, left: 10),
+          padding: const EdgeInsets.only(top: 15, right: 10, left: 10),
           child: Column(
             children: [
-              SizedBox(height: paragraph / 6),
+             // SizedBox(height: paragraph / 6),
               GestureDetector(
                 onTap: () {
                   _showImageSourceDialog(context);
                 },
                 child: Container(
-                  margin: EdgeInsets.all(paragraph / 6),
+                  //margin: EdgeInsets.all(paragraph / 6),
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  width: screenWidth,
-                  height: screenHeight / 16,
+                  width: double.infinity,
+                  height: screenHeight / 10,
                   decoration: BoxDecoration(
                     border: Border.all(color: darkGreenColor, width: 1),
-                    borderRadius: BorderRadius.circular(paragraph / 6),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -137,12 +139,14 @@ class _AnimalRegistrationPageState extends State<AnimalRegistrationPage> {
               SizedBox(height: paragraph / 2),
               customForm(),
               SizedBox(height: paragraph / 2),
-              customRoundedButton(
-                loading: false,
-                title: "Save Animal",
-                on_Tap: () async {
-                  //  FocusScope.of(context).unfocus();
-                  await Provider.of<AnimalRegistratinProvider>(context,
+              GestureDetector(
+                onTap: ()async{
+                  
+                  if(_image==null){
+                    SimpleToast.showErrorToast(context, "Error Message", "Image can't be null");
+                  }
+                  else{
+                   await Provider.of<AnimalRegistratinProvider>(context,
                           listen: false)
                       .uploadAnimalData(context, animalId.text, breedType.text,
                           purchasedPrice.text, _image!);
@@ -157,8 +161,47 @@ class _AnimalRegistrationPageState extends State<AnimalRegistrationPage> {
                     ),
                   );
                   Navigator.pop(context);
+                  }
                 },
+                child: Container(
+                  width: screenWidth/1.5,
+                  height: screenHeight/11,
+                  decoration: BoxDecoration(
+                    color: darkGreenColor,
+                    // border: Border.all(color: darkGreenColor, width: 1),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Center(
+                    child: Provider.of<AnimalRegistratinProvider>(context,
+                            listen: false).isLoading?CircularProgressIndicator(color: whiteColor,):Text("Save Animal",style: TextStyle(
+                              color: whiteColor,
+                              fontSize: 10,
+                            ),),
+                  ),
+                ),
               ),
+              // customRoundedButton(
+              //   loading: false,
+              //   title: "Save Animal",
+              //   on_Tap: () async {
+              //     //  FocusScope.of(context).unfocus();
+              //     await Provider.of<AnimalRegistratinProvider>(context,
+              //             listen: false)
+              //         .uploadAnimalData(context, animalId.text, breedType.text,
+              //             purchasedPrice.text, _image!);
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (context) => AnimalDetail(
+              //           tag: "someTag", // pass your tag
+              //           url: "someUrl", // pass your URL
+              //           id: animalId.text, // pass the animal ID (as cowId here)
+              //         ),
+              //       ),
+              //     );
+              //     Navigator.pop(context);
+              //   },
+              // ),
             ],
           ),
         ),

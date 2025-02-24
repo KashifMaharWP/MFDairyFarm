@@ -229,7 +229,6 @@ fetchMilkCount(BuildContext context, String month) async {
                 ?.where((record) => record.date == date)
                 .toList() ??
             [];
-
         return filteredData;
       } else {
         final errorResponse = json.decode(response.body);
@@ -241,6 +240,47 @@ fetchMilkCount(BuildContext context, String month) async {
       return [];
     }
   }
+
+
+  Future<List<SoldMilkRecord>> fetchMilkSoldBetweenDates(
+    BuildContext context, String startDate, String endDate) async {
+  final headers = {
+    'Authorization':
+        'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
+  };
+  final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getSoldMilk}$endDate');
+
+  try {
+    final response = await http.get(url, headers: headers);
+      //debugger();
+    if (response.statusCode == 200) {
+      final soldMilkModel = SoldMilkModel.fromJson(json.decode(response.body));
+      // Convert string dates to DateTime
+       DateTime start = DateTime.parse(startDate);
+      DateTime end = DateTime.parse(endDate);
+      // Filter records within the date range
+      final filteredData = soldMilkModel.monthlyMilkRecord
+              ?.where((record) {
+                DateTime recordDate =
+                    DateFormat("MMM dd yyyy").parse(record.date!);
+                return recordDate.isAfter(start.subtract(Duration(days: 1))) &&
+                    recordDate.isBefore(end.add(Duration(days: 1)));
+              })
+              .toList() ??
+          [];
+
+      return filteredData;
+    } else {
+      final errorResponse = json.decode(response.body);
+      print("Error: ${errorResponse['message']}");
+      return [];
+    }
+  } catch (e) {
+    print("An error occurred: $e");
+    return [];
+  }
+}
+
 
   Future<void> upadetMilkSold(
       {required String id,

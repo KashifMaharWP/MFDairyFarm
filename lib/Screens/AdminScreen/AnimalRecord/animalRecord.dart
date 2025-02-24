@@ -19,9 +19,6 @@ class _AnimalRecordState extends State<AnimalRecord> {
 
   @override
   Widget build(BuildContext context) {
-    
-   
-   
     role = Provider.of<UserDetail>(context).role.toString();
     return Scaffold(
       backgroundColor: Colors.grey.shade100,

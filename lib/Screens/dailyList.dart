@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:dairyfarmflow/Model/soldmilk.dart';
 import 'package:dairyfarmflow/Providers/FeedProviders/feed_provider.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/milk_provider.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/milk_record.dart';
@@ -21,6 +22,7 @@ class DailyList extends StatefulWidget {
 class _DailyListState extends State<DailyList> {
   List<FeedRecord> feedRecords = [];
   List<MilkDataRecord> milkRecords = [];
+  late Future<List<SoldMilkRecord>> futureMilkSold;
   
   @override
   void initState() {
@@ -34,12 +36,13 @@ class _DailyListState extends State<DailyList> {
 // );
 if(mounted){
 fetchFeedCountsForDateRange(
-    context, DateTime(2025, 2, 9), DateTime(2025, 2, 13));
+    context, DateTime(2025, 2, 9), DateTime(2025, 2, 22));
 
 fetchMilkCountsForDateRange(
-    context, DateTime(2025, 2, 9), DateTime(2025, 2, 13));
+    context, DateTime(2025, 2, 9), DateTime(2025, 2, 22));
 
 }
+futureMilkSold = Provider.of<MilkRecordProvider>(context, listen: false).fetchMilkSoldBetweenDates(context, DateTime(2025, 2, 9).toString(), DateTime(2025, 2, 22).toString());
 //  for (DateTime date = DateTime(2025, 2, 9);
 //                   date.isBefore(DateTime(2025, 2, 13).add(const Duration(days: 1)));
 //                   date = date.add(const Duration(days: 1))) {
@@ -181,58 +184,84 @@ Widget build(BuildContext context) {
         }
         return Column(
           children: [
-            Expanded(
-              child: ListView.builder(
-                  itemCount: feedRecords.length,
-                  itemBuilder: (context, index) {
-                    final record = feedRecords[index];
-                    return Card(
-              margin: const EdgeInsets.all(8.0),
-              child: ListTile(
-                title: Text('Date: ${record.date}'),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Morning: ${record.morningFeed}'),
-                    Text('Evening: ${record.eveningFeed}'),
-                    Text(
-                      'Total: ${record.totalFeed}',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-                    );
-                  },
-                    ),
-            ),
+          //   Expanded(
+          //     child: ListView.builder(
+          //         itemCount: feedRecords.length,
+          //         itemBuilder: (context, index) {
+          //           final record = feedRecords[index];
+          //           return Card(
+          //     margin: const EdgeInsets.all(8.0),
+          //     child: ListTile(
+          //       title: Text('Date: ${record.date}'),
+          //       subtitle: Column(
+          //         crossAxisAlignment: CrossAxisAlignment.start,
+          //         children: [
+          //           Text('Morning: ${record.morningFeed}'),
+          //           Text('Evening: ${record.eveningFeed}'),
+          //           Text(
+          //             'Total: ${record.totalFeed}',
+          //             style: const TextStyle(fontWeight: FontWeight.bold),
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //           );
+          //         },
+          //           ),
+          //   ),
           
-           Expanded(
-             child: ListView.builder(
-                  itemCount: milkRecords.length,
-                  itemBuilder: (context, index) {
-                    final record = milkRecords[index];
-                    return Card(
-              margin: const EdgeInsets.all(8.0),
-              child: ListTile(
-                title: Text('Date: ${record.date}'),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Morning: ${record.morningMilk}'),
-                    Text('Evening: ${record.eveningMilk}'),
-                    Text(
-                      'Total: ${record.totalMilk}',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-                    );
-                  },
-                    ),
-           ),
+          //  Expanded(
+          //    child: ListView.builder(
+          //         itemCount: milkRecords.length,
+          //         itemBuilder: (context, index) {
+          //           final record = milkRecords[index];
+          //           return Card(
+          //     margin: const EdgeInsets.all(8.0),
+          //     child: ListTile(
+          //       title: Text('Date: ${record.date}'),
+          //       subtitle: Column(
+          //         crossAxisAlignment: CrossAxisAlignment.start,
+          //         children: [
+          //           Text('Morning: ${record.morningMilk}'),
+          //           Text('Evening: ${record.eveningMilk}'),
+          //           Text(
+          //             'Total: ${record.totalMilk}',
+          //             style: const TextStyle(fontWeight: FontWeight.bold),
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //           );
+          //         },
+          //           ),
+          //  ),
           
+          FutureBuilder<List<SoldMilkRecord>>(
+        future: futureMilkSold,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text("Error: ${snapshot.error}"));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text("No records found"));
+          }
+
+          List<SoldMilkRecord> records = snapshot.data!;
+
+          return ListView.builder(
+            itemCount: records.length,
+            itemBuilder: (context, index) {
+              SoldMilkRecord record = records[index];
+              return ListTile(
+                title: Text("Amount Sold: ${record.amountSold}"),
+                subtitle: Text("Date: ${record.date}"),
+                trailing: Text("Total Payment: \$${record.totalPayment}"),
+              );
+            },
+          );
+        },
+      ),
           ],
         );
       },
