@@ -2,7 +2,7 @@ class AnimalDetailModel {
   bool? success;
   String? message;
   List<MilkProductionMonthlyRecord>? milkProductionMonthlyRecord;
-  int? milkCount;
+  num? milkCount;
 
   AnimalDetailModel(
       {this.success,

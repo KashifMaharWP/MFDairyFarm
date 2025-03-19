@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:dairyfarmflow/API/global_api.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
@@ -167,7 +168,9 @@ class AnimalRegistratinProvider extends ChangeNotifier {
 
         setIsDataFetched(false);
       }
-    } catch (error) {}
+    } catch (error) {
+      SimpleToast.showErrorToast(context, "Error", error.toString());
+    }
   }
 
   getVacineDetail(

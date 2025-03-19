@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:dairyfarmflow/Class/colorPallete.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Class/textSizing.dart';
+import 'package:dairyfarmflow/Model/AnimalDetails/AnimalRecordPDF.dart';
 import 'package:dairyfarmflow/Providers/animal_registratin_provider.dart';
 import 'package:dairyfarmflow/Widget/Text1.dart';
 import 'package:flutter/material.dart';
@@ -42,12 +45,12 @@ class _AnimalDetailState extends State<AnimalDetail> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       Provider.of<AnimalRegistratinProvider>(context, listen: false)
-          .getAnimalDetailById(
-              context, widget.id, DateFormat('MMM').format(_selectedMonth));
+          .getAnimalDetailById(context, widget.id,
+              DateFormat('EEE MMM dd yyyy').format(_selectedMonth));
       Provider.of<AnimalRegistratinProvider>(context, listen: false)
           .getVacineDetail(
               context,
-              DateFormat('MMM yyyy').format(_selectedMonth),
+              DateFormat('EEE MMM dd yyyy').format(_selectedMonth),
               _selectedMonth.year,
               widget.id);
     });
@@ -80,8 +83,11 @@ class _AnimalDetailState extends State<AnimalDetail> {
                     WidgetsBinding.instance.addPostFrameCallback((_) async {
                       Provider.of<AnimalRegistratinProvider>(context,
                               listen: false)
-                          .getAnimalDetailById(context, widget.id,
-                              DateFormat('MMM').format(_selectedMonth));
+                          .getAnimalDetailById(
+                              context,
+                              widget.id,
+                              DateFormat('EEE MMM dd yyyy')
+                                  .format(_selectedMonth));
                     });
                   }),
               Text(
@@ -98,8 +104,11 @@ class _AnimalDetailState extends State<AnimalDetail> {
                     WidgetsBinding.instance.addPostFrameCallback((_) async {
                       Provider.of<AnimalRegistratinProvider>(context,
                               listen: false)
-                          .getAnimalDetailById(context, widget.id,
-                              DateFormat('MMM').format(_selectedMonth));
+                          .getAnimalDetailById(
+                              context,
+                              widget.id,
+                              DateFormat('EEE MMM dd yyyy')
+                                  .format(_selectedMonth));
                     });
                   }
                 },
@@ -107,6 +116,11 @@ class _AnimalDetailState extends State<AnimalDetail> {
             ],
           ),
         ),
+        actions: [
+          IconButton(onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>AnimalRecordPDF(id: widget.id,)));
+          }, icon: Icon(Icons.picture_as_pdf))
+        ],
       ),
       body: Column(
         children: [
@@ -213,7 +227,7 @@ class _AnimalDetailState extends State<AnimalDetail> {
                                       await provider.getAnimalDetailById(
                                           context,
                                           widget.id,
-                                          DateFormat('MMM')
+                                          DateFormat('EEE MMM dd yyyy')
                                               .format(_selectedMonth));
                                       // Close the dialog after deletion
                                       Navigator.of(context).pop();
@@ -394,10 +408,11 @@ class _AnimalDetailState extends State<AnimalDetail> {
                 child: GestureDetector(
                   onTap: () async {
                     // Perform update logic
+
                     final updatedMorningMilk = morningController.text;
                     final updatedEveningMilk = eveningTypeController.text;
-                    final updatedTotal = int.parse(updatedMorningMilk) +
-                        int.parse(updatedEveningMilk);
+                    final updatedTotal = double.parse(updatedMorningMilk) +
+                        double.parse(updatedEveningMilk);
 
                     // Call provider or API to update cow details
                     await provider.UpdateMilkRecord(
@@ -409,7 +424,7 @@ class _AnimalDetailState extends State<AnimalDetail> {
                     );
 
                     await provider.getAnimalDetailById(context, widget.id,
-                        DateFormat('MMM').format(_selectedMonth));
+                        DateFormat('EEE MMM dd yyyy').format(_selectedMonth));
 
                     // Close the bottom sheet after saving
                     Navigator.pop(context);

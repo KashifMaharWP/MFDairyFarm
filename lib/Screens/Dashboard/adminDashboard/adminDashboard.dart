@@ -158,8 +158,8 @@ void _createVenddorListSheet() {
               const SizedBox(height: 16),
               // Breed Type Field
              GestureDetector(
-              onTap: (){
-                Provider.of<MilkProvider>(context,listen: false).AddVender(context, vendorNameController.text);
+              onTap: ()async{
+              await Provider.of<MilkProvider>(context,listen: false).AddVender(context, vendorNameController.text);
                 
                Navigator.pop(context);
               },

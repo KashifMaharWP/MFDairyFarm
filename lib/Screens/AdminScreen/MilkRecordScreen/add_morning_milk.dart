@@ -36,10 +36,7 @@ class _AddMorningMilkState extends State<AddMorningMilk> {
   Widget build(BuildContext context) {
     final isLoading = Provider.of<MilkProvider>(context).isLoading;
     cowId.text = widget.id;
-    // final provider = Provider.of<AnimalRegistratinProvider>(context);
-    String token =
-        Provider.of<UserDetail>(context, listen: false).token.toString();
-    print("Token $token");
+    
     return Scaffold(
       appBar: AppBar(
         title: Text1(
@@ -72,7 +69,7 @@ class _AddMorningMilkState extends State<AddMorningMilk> {
                   datepiker.text =
                       DateFormat("EEE MMM dd yyyy").format(selectedDate);
                       if(morningfeed.text.isNotEmpty&& morning.text.isNotEmpty){
-await Provider.of<MilkProvider>(context, listen: false)
+                      await Provider.of<MilkProvider>(context, listen: false)
                       .sendMorningMilkData(
                           cowId: cowId.text,
                           date: datepiker.text,
@@ -103,15 +100,9 @@ SimpleToast.showErrorToast(context, "Field Entry Error", "Please Enter all field
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // customTextFormField("Cow ID", CupertinoIcons.tag_fill),
-            // TextFieldWidget1(
-            //   isReadOnly: true,
-            //   widgetcontroller: cowId,
-            //   fieldName: "Cow Id",
-            //   isPasswordField: false,
-            // ),
+            
             SizedBox(height: paragraph),
-           // customTextFormField("Date", CupertinoIcons.calendar),
+           
             Wrap(
               alignment: WrapAlignment.start,
               runAlignment: WrapAlignment.center,

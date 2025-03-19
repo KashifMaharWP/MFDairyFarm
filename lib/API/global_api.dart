@@ -46,6 +46,14 @@ class GlobalApi {
 
    static String deleteFeedConsumption="feed/deleteFeedConsumtionRecordById/";
    static String UpdateFeedInventory="feedInventory/plusAmount/";
+
+   static String milkRecordBetweenDates="dashboard/cowAnalyticsBetweenTwoDatescowId/";
+  static String monthlyFeedInventory="feedInventory/month/";
+  static String fetchVendorMilkRecord="milkSale/getMilkSaleRecordBtwTwoDatesByVendorId/";
+  static String fetchVendorMonthSale="milkSale/getMilkSaleMonthlyRecordByVendorId/";
   
+  static String fetchMilkRecord="milk/getMilkRecordBetweenTwoDates/";
+  static String fetchFeedConsumption="feed/getFeedConsumtionRecordBtwTwoDates/";
+  static String fetchMilkSale="milkSale/getMilkSaleRecordBtwTwoDates";
   
 }

@@ -133,50 +133,6 @@ class _DashboardState extends State<Dashboard> {
                                       SizedBox(
                                         width: header1 / 1.25,
                                       ),
-                                      // PopupMenuButton(
-                                      //   icon: Icon(
-                                      //     Icons.more_vert_outlined,
-                                      //     size: header1*1.5 ,
-                                      //     color: whiteColor,
-                                      //   ),
-                                      //   elevation: 6,
-                                      //   offset: Offset(header1 * 2,
-                                      //       header1 * 4),
-                                      //   color: Colors.white,
-                                      //   itemBuilder: (context) => [
-                                      //     PopupMenuItem(
-                                      //         value: 1,
-                                      //         child: ListTile(
-                                      //             title: Text1(
-                                      //                 fontColor: blackColor,
-                                      //                 fontSize: header1,
-                                      //                 text: "Option1"))),
-                                      //     PopupMenuItem(
-                                      //         value: 2,
-                                      //         child: ListTile(
-                                      //           title: Text1(
-                                      //               fontColor: blackColor,
-                                      //               fontSize: header1,
-                                      //               text: "Option2"),
-                                      //         )),
-                                      //     PopupMenuItem(
-                                      //         value: 3,
-                                      //         child: ListTile(
-                                      //           title: Text1(
-                                      //               fontColor: blackColor,
-                                      //               fontSize: header1,
-                                      //               text: "Option3"),
-                                      //         )),
-                                      //     PopupMenuItem(
-                                      //         value: 4,
-                                      //         child: ListTile(
-                                      //           title: Text1(
-                                      //               fontColor: blackColor,
-                                      //               fontSize: header1,
-                                      //               text: "Option2"),
-                                      //         )),
-                                      //   ],
-                                      // )
                                     ],
                                   )
                                 ],
