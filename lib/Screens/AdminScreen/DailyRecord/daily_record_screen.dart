@@ -42,7 +42,7 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
   late DateTime _selectedDate;
   DateTime selectedDate = DateTime.now();
   DateTime? pickedDate;
-  List<SoldMilkRecord> vendorRecord=[];
+  List<SoldMilkRecord> vendorRecord = [];
   @override
   void initState() {
     super.initState();
@@ -78,9 +78,6 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
     }
   }
 
-
-
-
   // Fetch data for the selected date
   void _fetchDataForSelectedDate() async {
     final feedProvider = Provider.of<FeedProvider>(context, listen: false);
@@ -89,77 +86,88 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
 
     String formattedDate = DateFormat('EEE MMM dd yyyy').format(_selectedDate);
 
-     feedProvider.fetchFeedCount(context, formattedDate);
-     milkProvider.fetchMilkCount(context, formattedDate);
+    feedProvider.fetchFeedCount(context, formattedDate);
+    await milkProvider.fetchMilkCount(context, formattedDate);
     await milkProvider.fetchMilkSoldForDate(
         context, _selectedDate.toString(), formattedDate.toString());
-   vendorRecord= await milkProvider.fetchMilkSoldByDate(context, formattedDate);
-
+    vendorRecord =
+        await milkProvider.fetchMilkSoldByDate(context, formattedDate);
   }
 
   Future<void> generateMilkReportPdf({
-  required String morningMilk,
-  required String eveningMilk,
-  required String totalMilk,
-  required String totalSold,
-  required String usedFeed,
-  required String morningFeed,
-  required String eveningFeed,
-  required DateTime selectedDate,
-  required List<SoldMilkRecord>? vendorRecord, // Added null safety
-}) async {
-  final pdf = pw.Document();
+    required String morningMilk,
+    required String eveningMilk,
+    required String totalMilk,
+    required String totalSold,
+    required String usedFeed,
+    required String morningFeed,
+    required String eveningFeed,
+    required DateTime selectedDate,
+    required List<SoldMilkRecord>? vendorRecord, // Added null safety
+  }) async {
+    final pdf = pw.Document();
 
-  pdf.addPage(
-    pw.MultiPage(
-      pageFormat: PdfPageFormat.a4,
-      build: (pw.Context context) => [
-        pw.Center(
-          child: pw.Text(
-            'Milk & Feed Report - ${DateFormat("EEE MMM dd yyyy").format(selectedDate)}',
-            style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold),
+    pdf.addPage(
+      pw.MultiPage(
+        pageFormat: PdfPageFormat.a4,
+        build: (pw.Context context) => [
+          pw.Center(
+            child: pw.Text(
+              'Milk & Feed Report - ${DateFormat("EEE MMM dd yyyy").format(selectedDate)}',
+              style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold),
+            ),
           ),
-        ),
-        pw.SizedBox(height: 20),
-        pw.Text('Milk Record:', style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
-        pw.Text('Morning: ${morningMilk.isNotEmpty ? morningMilk : '0'} Ltr'),
-        pw.Text('Evening: ${eveningMilk.isNotEmpty ? eveningMilk : '0'} Ltr'),
-        pw.Text('Total Milk: ${totalMilk.isNotEmpty ? totalMilk : '0'} Ltr'),
-        pw.Text('Total Sold: ${totalSold.isNotEmpty ? totalSold : '0'} Ltr'),
-        pw.SizedBox(height: 20),
-        pw.Text('Feed Record:', style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
-        pw.Text('Total Used: ${usedFeed.isNotEmpty ? usedFeed : '0'} Kg'),
-        pw.Text('Morning: ${morningFeed.isNotEmpty ? morningFeed : '0'} Kg'),
-        pw.Text('Evening: ${eveningFeed.isNotEmpty ? eveningFeed : '0'} Kg'),
-        pw.SizedBox(height: 20),
-        pw.Text('Vendor Sales:', style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
-        pw.Table.fromTextArray(
-          headers: ['Vendor Name', 'Amount Sold (Ltr)'],
-          data: (vendorRecord?.isNotEmpty ?? false)
-              ? vendorRecord!.map(
-                  (record) => [
-                    record.vendor?.name ?? 'Unknown',
-                    '${record.amountSold ?? 0} Ltr',
-                  ],
-                ).toList()
-              : [['No Data', '0 Ltr']], // Default if no records
-        ),
-      ],
-    ),
-  );
+          pw.SizedBox(height: 20),
+          pw.Text('Milk Record:',
+              style:
+                  pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
+          pw.Text('Morning: ${morningMilk.isNotEmpty ? morningMilk : '0'} Ltr'),
+          pw.Text('Evening: ${eveningMilk.isNotEmpty ? eveningMilk : '0'} Ltr'),
+          pw.Text('Total Milk: ${totalMilk.isNotEmpty ? totalMilk : '0'} Ltr'),
+          pw.Text('Total Sold: ${totalSold.isNotEmpty ? totalSold : '0'} Ltr'),
+          pw.SizedBox(height: 20),
+          pw.Text('Feed Record:',
+              style:
+                  pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
+          pw.Text('Total Used: ${usedFeed.isNotEmpty ? usedFeed : '0'} Kg'),
+          pw.Text('Morning: ${morningFeed.isNotEmpty ? morningFeed : '0'} Kg'),
+          pw.Text('Evening: ${eveningFeed.isNotEmpty ? eveningFeed : '0'} Kg'),
+          pw.SizedBox(height: 20),
+          pw.Text('Vendor Sales:',
+              style:
+                  pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
+          pw.Table.fromTextArray(
+            headers: ['Vendor Name', 'Amount Sold (Ltr)'],
+            data: (vendorRecord?.isNotEmpty ?? false)
+                ? vendorRecord!
+                    .map(
+                      (record) => [
+                        record.vendor?.name ?? 'Unknown',
+                        '${record.amountSold ?? 0} Ltr',
+                      ],
+                    )
+                    .toList()
+                : [
+                    ['No Data', '0 Ltr']
+                  ], // Default if no records
+          ),
+        ],
+      ),
+    );
 
-  final output = await getExternalStorageDirectory();
-  final file = File("${output?.path}/milk_feed_report.pdf");
-  await file.writeAsBytes(await pdf.save());
+    final output = await getExternalStorageDirectory();
+    final file = File("${output?.path}/milk_feed_report.pdf");
+    await file.writeAsBytes(await pdf.save());
 
-  OpenFile.open(file.path);
-}
-
-
+    OpenFile.open(file.path);
+  }
 
   @override
   Widget build(BuildContext context) {
     final milkProvider = Provider.of<MilkRecordProvider>(context);
+    print("Morning Milk: ${milkProvider.morningMilk}");
+    print("Evening Milk: ${milkProvider.eveningMilk}");
+    print("Total Milk: ${milkProvider.total}");
     final feedProvider = Provider.of<FeedProvider>(context);
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
@@ -188,32 +196,30 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
                 color: Colors.white,
                 onPressed: _goToNextDay, // Go to the next day
               ),
-
-              
             ],
           ),
         ),
         leading: IconButton(
           icon: Icon(Icons.picture_as_pdf),
           onPressed: () async {
-            if (vendorRecord.isEmpty ) {
-             ScaffoldMessenger.of(context).showSnackBar(
+            if (vendorRecord.isEmpty) {
+              ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('No records available to export')),
               );
             } else {
-              
-
-               await generateMilkReportPdf(
-    morningMilk: milkProvider.morningMilk?? '0',
-    eveningMilk: milkProvider.eveningMilk?? '0',
-    totalMilk: milkProvider.total?? '0',
-    totalSold: vendorRecord[0].amountSold.toString()?? '0',
-    usedFeed: feedProvider.usedFeed.toString()?? '0',
-    morningFeed: feedProvider.morningFeed.toString()?? '0',
-    eveningFeed: feedProvider.eveningFeed.toString() ?? '0',
-    selectedDate: selectedDate ?? DateTime.now(),
-    vendorRecord: vendorRecord ?? []
-  );
+              await generateMilkReportPdf(
+                morningMilk: milkProvider.morningMilk ?? '0',
+                eveningMilk: milkProvider.eveningMilk ?? '0',
+                totalMilk: milkProvider.total ?? '0',
+                totalSold: vendorRecord.isNotEmpty
+                    ? vendorRecord[0].amountSold.toString()
+                    : '0',
+                usedFeed: feedProvider.usedFeed.toString() ?? '0',
+                morningFeed: feedProvider.morningFeed.toString() ?? '0',
+                eveningFeed: feedProvider.eveningFeed.toString() ?? '0',
+                selectedDate: selectedDate,
+                vendorRecord: vendorRecord,
+              );
             }
           },
         ),
@@ -716,6 +722,4 @@ Widget circleContainer(String text) {
     child: Center(
         child: Text1(fontColor: blackColor, fontSize: paragraph, text: text)),
   );
-
-  
 }

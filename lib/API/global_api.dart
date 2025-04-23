@@ -9,15 +9,15 @@ class GlobalApi {
   static String getAnimal = "cow/getCows";
   static String deleteAnimal = 'cow/';
   static String updateAnimal = 'cow/updateCow';
-  static String getMilkCount =
-      'milk/getMilkCountRecordByDate/';
+  static String getMilkCount = 'milk/getMilkCountRecordByDate/';
   static String addMorningFeed = "feed/morningFeed";
   static String getMilkRecord = 'milk/getMilkRecordByDate/';
   static String addEveningFeed = "feed/eveningFeed";
   static String updateMilkRecord = 'milk/updateMilkRecordById';
   static String getFeedConsumption = 'feed/getFeedConsumtionRecordByMonth/';
-  static String getFeedConsumptionCount =
-      'feed/getTodayFeedConsumtionCount/';
+  static String getFeedConsumptionCount = 'feed/getTodayFeedConsumtionCount/';
+  static String getFeedConsumtionRecordBtwTwoDates =
+      'feed/getFeedConsumtionRecordBtwTwoDates/';
   static String addMorningMilk = "milk/morningMilkProduction";
   static String addEveningMilk = "milk/eveningMilkProduction";
   static String addFeedAmount = "feedInventory/addFeed";
@@ -30,22 +30,20 @@ class GlobalApi {
   static String updateMilkSold = "milkSale/updateMilkSaleRecordById/";
   static String daleteMilkSold = "milkSale/deleteMilkSaleRecordById/";
   static String addTask = "task/create";
-  static String getAllTasks ="task/getTasks";
-  static String getTaskById ="task/getTaskByUserId/";
-  static String taskStatus ='task/toggleTask/';
-  static String getAnimalDetailById ='milk/getMilkRecordOfMonthById?id=';
-  static String getVacineDetail="medicalRecord/getCowMedicalRecord/";
-  static String deleteVacine="medicalRecord/deleteMedicalRecord/";
+  static String getAllTasks = "task/getTasks";
+  static String getTaskById = "task/getTaskByUserId/";
+  static String taskStatus = 'task/toggleTask/';
+  static String getAnimalDetailById = 'milk/getMilkRecordOfMonthById?id=';
+  static String getVacineDetail = "medicalRecord/getCowMedicalRecord/";
+  static String deleteVacine = "medicalRecord/deleteMedicalRecord/";
 
-  static String addVendor="milkSaleVendor/";
-  static String fetchVendorList="milkSaleVendor/";
+  static String addVendor = "milkSaleVendor/";
+  static String fetchVendorList = "milkSaleVendor/";
 
-  static String updateCowMilk="milk/updateMilkRecordById/";
-  static String deleteCowMilk="milk/deleteMilkRecordById/";
-   static String feedInventory="feedInventory/";
+  static String updateCowMilk = "milk/updateMilkRecordById/";
+  static String deleteCowMilk = "milk/deleteMilkRecordById/";
+  static String feedInventory = "feedInventory/";
 
-   static String deleteFeedConsumption="feed/deleteFeedConsumtionRecordById/";
-   static String UpdateFeedInventory="feedInventory/plusAmount/";
-  
-  
+  static String deleteFeedConsumption = "feed/deleteFeedConsumtionRecordById/";
+  static String UpdateFeedInventory = "feedInventory/plusAmount/";
 }

@@ -127,7 +127,8 @@ class MilkRecordProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-fetchMilkCount(BuildContext context, String month) async {
+
+  fetchMilkCount(BuildContext context, String month) async {
     _isLoading = true;
     _errorMessage = null;
     // notifyListeners();
@@ -142,24 +143,37 @@ fetchMilkCount(BuildContext context, String month) async {
     try {
       final response = await http.get(url, headers: headers);
 
-        // debugger();
+      // debugger();
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body) as Map<String, dynamic>;
         if (jsonData['success'] == true) {
           _milkCountData = jsonData;
-         morningMilk =_milkCountData!['todayMilkCount'][0]['morning'].toString();
-          eveningMilk = _milkCountData!['todayMilkCount'][0]['evening'].toString();
-         // total =(_milkCountData!['todayMilkCount'][0]['morning']+_milkCountData!['todayMilkCount'][0]['evening']).toString();
-         total=(double.parse(morningMilk)+double.parse(eveningMilk)).toString();
+          morningMilk =
+              _milkCountData?['todayMilkCount']?[0]?['morning']?.toString() ??
+                  "0";
+          eveningMilk =
+              _milkCountData?['todayMilkCount']?[0]?['evening']?.toString() ??
+                  "0";
+          total =
+              (double.tryParse(morningMilk)! + double.tryParse(eveningMilk)!)
+                  .toString();
+          // morningMilk =
+          //     _milkCountData!['todayMilkCount'][0]['morning'].toString();
+          // eveningMilk =
+          //     _milkCountData!['todayMilkCount'][0]['evening'].toString();
+          // // total =(_milkCountData!['todayMilkCount'][0]['morning']+_milkCountData!['todayMilkCount'][0]['evening']).toString();
+          // total = (double.parse(morningMilk) + double.parse(eveningMilk))
+          //     .toString();
           notifyListeners();
+
           //print(_milkCountData!['todayMilkCount'][0]['morning']);
-          
+
           return MilkDataRecord(
-        date: month,
-        morningMilk: double.parse(morningMilk)??0,
-        eveningMilk: double.parse(eveningMilk)??0,
-        totalMilk: double.parse(total)??0,
-      );
+            date: month,
+            morningMilk: double.parse(morningMilk) ?? 0,
+            eveningMilk: double.parse(eveningMilk) ?? 0,
+            totalMilk: double.parse(total) ?? 0,
+          );
         } else {
           _errorMessage = jsonData['message'] ?? 'Failed to fetch milk count';
           morningMilk = "0";
@@ -241,46 +255,44 @@ fetchMilkCount(BuildContext context, String month) async {
     }
   }
 
-
   Future<List<SoldMilkRecord>> fetchMilkSoldBetweenDates(
-    BuildContext context, String startDate, String endDate) async {
-  final headers = {
-    'Authorization':
-        'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
-  };
-  final url = Uri.parse('${GlobalApi.baseApi}${GlobalApi.getSoldMilk}$endDate');
+      BuildContext context, String startDate, String endDate) async {
+    final headers = {
+      'Authorization':
+          'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
+    };
+    final url =
+        Uri.parse('${GlobalApi.baseApi}${GlobalApi.getSoldMilk}$endDate');
 
-  try {
-    final response = await http.get(url, headers: headers);
+    try {
+      final response = await http.get(url, headers: headers);
       //debugger();
-    if (response.statusCode == 200) {
-      final soldMilkModel = SoldMilkModel.fromJson(json.decode(response.body));
-      // Convert string dates to DateTime
-       DateTime start = DateTime.parse(startDate);
-      DateTime end = DateTime.parse(endDate);
-      // Filter records within the date range
-      final filteredData = soldMilkModel.monthlyMilkRecord
-              ?.where((record) {
-                DateTime recordDate =
-                    DateFormat("MMM dd yyyy").parse(record.date!);
-                return recordDate.isAfter(start.subtract(Duration(days: 1))) &&
-                    recordDate.isBefore(end.add(Duration(days: 1)));
-              })
-              .toList() ??
-          [];
+      if (response.statusCode == 200) {
+        final soldMilkModel =
+            SoldMilkModel.fromJson(json.decode(response.body));
+        // Convert string dates to DateTime
+        DateTime start = DateTime.parse(startDate);
+        DateTime end = DateTime.parse(endDate);
+        // Filter records within the date range
+        final filteredData = soldMilkModel.monthlyMilkRecord?.where((record) {
+              DateTime recordDate =
+                  DateFormat("MMM dd yyyy").parse(record.date!);
+              return recordDate.isAfter(start.subtract(Duration(days: 1))) &&
+                  recordDate.isBefore(end.add(Duration(days: 1)));
+            }).toList() ??
+            [];
 
-      return filteredData;
-    } else {
-      final errorResponse = json.decode(response.body);
-      print("Error: ${errorResponse['message']}");
+        return filteredData;
+      } else {
+        final errorResponse = json.decode(response.body);
+        print("Error: ${errorResponse['message']}");
+        return [];
+      }
+    } catch (e) {
+      print("An error occurred: $e");
       return [];
     }
-  } catch (e) {
-    print("An error occurred: $e");
-    return [];
   }
-}
-
 
   Future<void> upadetMilkSold(
       {required String id,
@@ -585,7 +597,6 @@ fetchMilkCount(BuildContext context, String month) async {
     }
   }
 }
-
 
 class MilkDataRecord {
   final String date;
