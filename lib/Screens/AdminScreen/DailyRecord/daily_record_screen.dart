@@ -168,9 +168,6 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
   @override
   Widget build(BuildContext context) {
     final milkProvider = Provider.of<MilkRecordProvider>(context);
-    print("Morning Milk: ${milkProvider.morningMilk}");
-    print("Evening Milk: ${milkProvider.eveningMilk}");
-    print("Total Milk: ${milkProvider.total}");
     final feedProvider = Provider.of<FeedProvider>(context);
     return Scaffold(
       backgroundColor: Colors.grey.shade100,

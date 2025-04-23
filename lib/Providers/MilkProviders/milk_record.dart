@@ -157,16 +157,7 @@ class MilkRecordProvider extends ChangeNotifier {
           total =
               (double.tryParse(morningMilk)! + double.tryParse(eveningMilk)!)
                   .toString();
-          // morningMilk =
-          //     _milkCountData!['todayMilkCount'][0]['morning'].toString();
-          // eveningMilk =
-          //     _milkCountData!['todayMilkCount'][0]['evening'].toString();
-          // // total =(_milkCountData!['todayMilkCount'][0]['morning']+_milkCountData!['todayMilkCount'][0]['evening']).toString();
-          // total = (double.parse(morningMilk) + double.parse(eveningMilk))
-          //     .toString();
           notifyListeners();
-
-          //print(_milkCountData!['todayMilkCount'][0]['morning']);
 
           return MilkDataRecord(
             date: month,
