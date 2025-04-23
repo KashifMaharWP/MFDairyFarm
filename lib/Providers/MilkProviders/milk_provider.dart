@@ -1,9 +1,13 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dairyfarmflow/API/global_api.dart';
 import 'package:dairyfarmflow/Functions/showPopsScreen.dart';
+import 'package:dairyfarmflow/Model/AnimalDetails/milkProductionModel.dart';
+import 'package:dairyfarmflow/Model/vendorMilkSalelistModel.dart';
 import 'package:dairyfarmflow/Model/vendorResponse.dart';
 import 'package:dairyfarmflow/Providers/user_detail.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/VendorList/VendorMilkSale.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -342,6 +346,119 @@ class MilkProvider extends ChangeNotifier {
       }
     } catch (error) {
       print('Error fetching vendors: $error');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  getPDFRecord(String id, String initialDate, String finalDate,
+      BuildContext context) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final url = Uri.parse(
+              '${GlobalApi.baseApi}${GlobalApi.milkRecordBetweenDates}$id')
+          .replace(queryParameters: {
+        "startdate": initialDate,
+        "enddate": finalDate
+      });
+
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization':
+            "Bearer ${Provider.of<UserDetail>(context, listen: false).token}"
+      };
+
+      final response = await http.get(url, headers: headers);
+
+      print("API Response: ${response.body}");
+
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        print("API : ${jsonData}");
+        final parsedData = CowDetailsResponse.fromJson(jsonData);
+
+        print("Feed : ${parsedData.feedRecords![0].evening}");
+        return parsedData;
+      } else {
+        print("Failed with status code: ${response.statusCode}");
+        return null;
+      }
+    } catch (error) {
+      print('Error fetching data: $error');
+      return null;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  fetchVendorsRecord(
+      BuildContext context, String id, String initialDate, finalDate) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final url =
+          Uri.parse('${GlobalApi.baseApi}${GlobalApi.fetchVendorMilkRecord}$id')
+              .replace(queryParameters: {
+        "startdate": initialDate,
+        "enddate": finalDate
+      });
+
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization':
+            "Bearer ${Provider.of<UserDetail>(context, listen: false).token}"
+      };
+      final response = await http.get(url, headers: headers);
+       //debugger();
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final vendorResponse = VendorMilkSaleListResponse.fromJson(data);
+        return vendorResponse;
+      } else {
+        throw Exception('Failed to load vendors');
+      }
+    } catch (error) {
+      print('Error fetching vendors: $error');
+      return null;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  fetchVendorsMonthSale(
+      BuildContext context, String id,) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final url =
+          Uri.parse('${GlobalApi.baseApi}${GlobalApi.fetchVendorMonthSale}$id');
+             
+
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization':
+            "Bearer ${Provider.of<UserDetail>(context, listen: false).token}"
+      };
+      final response = await http.get(url, headers: headers);
+       
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        print("Data: ${data}");
+        final vendorResponse = VendorMilkSaleListResponse.fromJson(data);
+        return vendorResponse;
+      } else {
+        throw Exception('Failed to load vendors');
+      }
+    } catch (error) {
+      print('Error fetching vendors: $error');
+      return null;
     } finally {
       _isLoading = false;
       notifyListeners();

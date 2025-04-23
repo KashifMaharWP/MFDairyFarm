@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dairyfarmflow/Class/textSizing.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/feedInventory/feedInventory.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -37,10 +38,10 @@ class _FeedRecordState extends State<FeedRecord> {
     });
     final feedProvider = Provider.of<FeedProvider>(context, listen: false);
     feedProvider.fetchFeedConsumption(
-        context, DateFormat('MMM').format(_selectedMonth).toLowerCase());
+        context, DateFormat('EEE MMM dd yyyy').format(_selectedMonth));
 
     feedProvider.fetchFeed(context,
-        DateFormat('EEE MMM dd yyyy').format(_selectedMonth).toLowerCase());
+        DateFormat('EEE MMM dd yyyy').format(_selectedMonth));
   }
 
   void _goToNextMonth() {
@@ -50,7 +51,7 @@ class _FeedRecordState extends State<FeedRecord> {
     });
     final feedProvider = Provider.of<FeedProvider>(context, listen: false);
     feedProvider.fetchFeedConsumption(
-        context, DateFormat('MMM').format(_selectedMonth).toLowerCase());
+        context, DateFormat('EEE MMM dd yyyy').format(_selectedMonth).toLowerCase());
     feedProvider.fetchFeed(context,
         DateFormat('EEE MMM dd yyyy').format(_selectedMonth).toLowerCase());
   }
@@ -65,9 +66,9 @@ class _FeedRecordState extends State<FeedRecord> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final feedProvider = Provider.of<FeedProvider>(context, listen: false);
       feedProvider.fetchFeedConsumption(
-          context, DateFormat('MMM').format(_selectedMonth).toLowerCase());
+          context, DateFormat('EEE MMM dd yyyy').format(_selectedMonth));
       feedProvider.fetchFeed(context,
-          DateFormat('EEE MMM dd yyyy').format(_selectedMonth).toLowerCase());
+          DateFormat('EEE MMM dd yyyy').format(_selectedMonth));
     });
   }
 
@@ -118,17 +119,28 @@ class _FeedRecordState extends State<FeedRecord> {
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: GestureDetector(
                 onTap: () {
-                  _updateFeedSheet(
-                      Provider.of<FeedProvider>(context, listen: false)
-                          .feedTotal
-                          .toString());
+ Navigator.push(context, MaterialPageRoute(builder: (context)=>FeedInventoryScreen()));
+                  
                 },
                 child: const Icon(
-                  Icons.add_circle,
+                  Icons.visibility,
                   size: 30,
                 )),
           )
         ],
+      ),
+      floatingActionButton: Container(
+        padding: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          color: darkGreenColor,
+          borderRadius: BorderRadius.circular(40)
+        ),
+        child: IconButton(onPressed: (){
+         _updateFeedSheet(
+                        Provider.of<FeedProvider>(context, listen: false)
+                            .feedTotal
+                            .toString());
+        }, icon: Icon(Icons.add,size: 30,weight: 25, color: Colors.white,)),
       ),
       body: Column(
         children: [
@@ -245,24 +257,7 @@ class _FeedRecordState extends State<FeedRecord> {
                           return AlertDialog(
                             title: const Text('Choose an action'),
                             actions: <Widget>[
-                              // Update action
-                              // TextButton(
-                              //   onPressed: () {
-                              //     Navigator.of(context)
-                              //         .pop(); // Close the dialog first
-                              //     _updateFeedSheet(feed!.id.toString()); // Call the function with parentheses
-                              //   },
-                              //   child: Row(
-                              //     children: [
-                              //       Icon(Icons.edit,
-                              //           color: Colors.blue), // Edit icon
-                              //       SizedBox(width: 8),
-                              //       Text('Update',
-                              //           style: TextStyle(color: Colors.blue)),
-                              //     ],
-                              //   ),
-                              // ),
-                              // Delete action
+                           
                               TextButton(
                                 onPressed: () async {
                                   await Provider.of<FeedProvider>(context,
@@ -273,14 +268,14 @@ class _FeedRecordState extends State<FeedRecord> {
                                           listen: false);
                                   await feedProvider.fetchFeedConsumption(
                                       context,
-                                      DateFormat('MMM')
+                                      DateFormat('EEE MMM dd yyyy')
                                           .format(_selectedMonth)
-                                          .toLowerCase());
+                                          );
                                   await feedProvider.fetchFeed(
                                       context,
-                                      DateFormat('MMM yyyy')
+                                      DateFormat('EEE MMM dd yyyy')
                                           .format(_selectedMonth)
-                                          .toLowerCase());
+                                          );
                                   Navigator.of(context).pop();
                                 },
                                 // onPressed: () async {
@@ -461,12 +456,13 @@ class _FeedRecordState extends State<FeedRecord> {
                     await provider.UpdateInventory(
                         feedAmount: -subtractedAmout,
                         context: context,
-                        id: provider.feedId.toString());
+                        id: provider.feedId.toString(),date: DateFormat('EEE MMM dd yyyy')
+                            .format(DateTime.now()));
                     await provider.fetchFeed(
                         context,
                         DateFormat('EEE MMM dd yyyy')
                             .format(_selectedMonth)
-                            .toLowerCase());
+                            );
                     Navigator.pop(context);
                   },
                   child: Container(

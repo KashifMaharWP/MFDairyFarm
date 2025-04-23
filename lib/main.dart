@@ -1,8 +1,10 @@
 import 'package:dairyfarmflow/Class/myRoutes.dart';
 import 'package:dairyfarmflow/Class/screenMediaQuery.dart';
 import 'package:dairyfarmflow/Providers/CowProvider/cows_provider.dart';
+import 'package:dairyfarmflow/Providers/DailyRecordProvider/dailyRecordProvider.dart';
 import 'package:dairyfarmflow/Providers/FeedProviders/feed_provider.dart';
 import 'package:dairyfarmflow/Providers/Filter%20Provider/filter.dart';
+import 'package:dairyfarmflow/Providers/InventoryProviders/InventoryProvider.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/milk_provider.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/milk_record.dart';
 import 'package:dairyfarmflow/Providers/MilkProviders/worker_provider.dart';
@@ -50,7 +52,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => AddMedical(),
-        )
+        ),
+         ChangeNotifierProvider(create: (_) => FeedInventoryProvider()),
+          ChangeNotifierProvider(create: (_) => DairyRecordProvider()),
       ],
       child: MaterialApp(
         routes: MyRoutes.getRoutes(),

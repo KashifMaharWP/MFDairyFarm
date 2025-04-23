@@ -41,7 +41,8 @@ class FeedProvider extends ChangeNotifier {
       final url = Uri.parse(
           '${GlobalApi.baseApi}${GlobalApi.getFeedConsumption}$month');
       final response = await http.get(url, headers: headers);
-
+      print(response.body);
+      
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
        // debugger();
@@ -63,20 +64,22 @@ class FeedProvider extends ChangeNotifier {
 
   fetchFeed(BuildContext context, String month) async {
     _isloading = true;
+     final url = Uri.parse(
+         '${GlobalApi.baseApi}${GlobalApi.feedInventory}month/$month');
+    //final url=Uri.parse("https://backend.customizablewear.com/api/feedInventory/month/Mon Mar 17 2025");
     var headers = {
       'Authorization':
           'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
     };
-    var request = http.Request(
-      'GET',
-      Uri.parse('${GlobalApi.baseApi}${GlobalApi.feedInventory}$month'),
-    );
-
-    request.headers.addAll(headers);
-    //debugger();
-    http.StreamedResponse response = await request.send();
+    // var request = http.Request(
+    //   'GET',
+    //   Uri.parse('${GlobalApi.baseApi}${GlobalApi.feedInventory}$month'),
+    // );
+    final response = await http.get(url, headers: headers);
+  
+   print(response.body);
     if (response.statusCode == 200) {
-      final jsonString = await response.stream.bytesToString();
+      final jsonString = await response.body;
       final jsonData = json.decode(jsonString);
       InventoryFeedResponse feedInventoryResponse =
           InventoryFeedResponse.fromJson(jsonData);
@@ -246,12 +249,11 @@ class FeedProvider extends ChangeNotifier {
       'Authorization':
           'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
     };
-
     final body = jsonEncode({'totalAmount': feedAmount, "date": Date});
 
     try {
-      final response = await http.put(url, headers: headers, body: body);
-
+      final response = await http.post(url, headers: headers, body: body);
+   
       if (response.statusCode == 200) {
         final message = jsonDecode(response.body);
         SimpleToast.showSuccessToast(
@@ -259,8 +261,8 @@ class FeedProvider extends ChangeNotifier {
       } else {
         final message = jsonDecode(response.body);
        
-            fetchFeed(context, DateFormat('MMM').format(DateTime.now()).toLowerCase());
-         UpdateInventory(context: context,feedAmount:feedAmount.toInt(),id: feedId.toString(),);
+            fetchFeed(context, DateFormat('EEE MMM dd yyyy').format(DateTime.now()));
+         UpdateInventory(context: context,feedAmount:feedAmount.toInt(),id: feedId.toString(), date: Date);
          SimpleToast.showSuccessToast(
             context, "Feed Added", "${message['message']}");
       }
@@ -277,26 +279,27 @@ class FeedProvider extends ChangeNotifier {
   Future<void> UpdateInventory({
     required int feedAmount,
     required String id,
+    required String date,
     required BuildContext context,
   }) async {
     // _isloading = true;
     notifyListeners();
 
-    final url =
-        Uri.parse('${GlobalApi.baseApi}${GlobalApi.UpdateFeedInventory}$id');
+    // final url =
+    //     Uri.parse('${GlobalApi.baseApi}feedInventory/plusAmount/$id');
+    final url=Uri.parse("${GlobalApi.baseApi}${GlobalApi.UpdateFeedInventory}$id");
     final headers = {
       'Content-Type': 'application/json',
       'Authorization':
           'Bearer ${Provider.of<UserDetail>(context, listen: false).token}'
-    };
-
+    };  
+   
     final body = jsonEncode({
       'addAmount': feedAmount,
+      "date":date
     });
-    //debugger();
     try {
       final response = await http.patch(url, headers: headers, body: body);
-
       if (response.statusCode == 200) {
         final message = jsonDecode(response.body);
 

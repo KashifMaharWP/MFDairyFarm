@@ -33,22 +33,6 @@ class _AnimalRecordWidgetState extends State<AnimalRecordWidget> {
     });
   }
 
-  // Future<void> deleteCow(BuildContext context, String cowId) async {
-  //   print('Function called');
-  //   try {
-  //     final headers = {
-  //       'Authorization':
-  //           'Bearer ${Provider.of<UserDetail>(context, listen: false).token}',
-  //     };
-  //     final url =
-  //         Uri.parse('${GlobalApi.baseApi}${GlobalApi.deleteAnimal}/$cowId');
-  //     final response = await http.delete(url, headers: headers);
-  //     print(response.statusCode);
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<CowsProvider>(
@@ -222,24 +206,7 @@ class _AnimalRecordWidgetState extends State<AnimalRecordWidget> {
                                       fit: BoxFit.fill,
                                     )),
                               ),
-                              // role == "Admin"
-                              //     ? InkWell(
-                              //         onTap: () {
-                              //           Navigator.push(
-                              //               context,
-                              //               MaterialPageRoute(
-                              //                   builder: (context) =>
-                              //                       feedEntryPage(
-                              //                         id: cow.id,
-                              //                       )));
-                              //         },
-                              //         child: Icon(
-                              //           Icons.more_vert,
-                              //           color: darkGreenColor,
-                              //           size: screenWidth * .070,
-                              //         ),
-                              //       )
-                              //     : const Center(),
+                              
                             ],
                           ),
                           const SizedBox(

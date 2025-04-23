@@ -1,10 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dairyfarmflow/Functions/customDatePicker.dart';
 import 'package:dairyfarmflow/Model/soldmilk.dart';
 import 'package:dairyfarmflow/Providers/FeedProviders/feed_provider.dart';
 import 'package:dairyfarmflow/ReuseableWidgets/reuse_row.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/DailyRecord/dailyRecordPDF.dart';
+import 'package:dairyfarmflow/Screens/AdminScreen/VendorList/VendorMilkSale.dart';
 import 'package:dairyfarmflow/Screens/dailyList.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -87,7 +90,7 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
     String formattedDate = DateFormat('EEE MMM dd yyyy').format(_selectedDate);
 
     feedProvider.fetchFeedCount(context, formattedDate);
-    await milkProvider.fetchMilkCount(context, formattedDate);
+    milkProvider.fetchMilkCount(context, formattedDate);
     await milkProvider.fetchMilkSoldForDate(
         context, _selectedDate.toString(), formattedDate.toString());
     vendorRecord =
@@ -224,6 +227,21 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
           },
         ),
       ),
+      floatingActionButton: Container(
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            color: darkGreenColor, borderRadius: BorderRadius.circular(40)),
+        child: IconButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => DailyRecordPDF()));
+            },
+            icon: Icon(
+              Icons.visibility,
+              size: 25,
+              color: Colors.white,
+            )),
+      ),
       body: Column(
         children: [
           pageHeaderContainer(),
@@ -250,190 +268,202 @@ class _DailyRecordScreenState extends State<DailyRecordScreen> {
                     itemBuilder: (context, index) {
                       final record = dailyRecords[index];
 
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Slidable(
-                          startActionPane: ActionPane(
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => VendorMilkSaleList(
+                                        vendorID: record.vendor!.id.toString(),
+                                      )));
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Slidable(
+                            startActionPane: ActionPane(
+                                motion: const DrawerMotion(),
+                                children: [
+                                  SlidableAction(
+                                    onPressed: (context) {
+                                      vendorName.text =
+                                          record.vendor!.name.toString();
+                                      amountSold.text =
+                                          record.amountSold.toString();
+                                      totalPayment.text =
+                                          record.totalPayment.toString();
+                                      datePicker.text = record.date.toString();
+
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return SingleChildScrollView(
+                                            child: AlertDialog(
+                                              title: Center(
+                                                child: Text1(
+                                                    fontColor: blackColor,
+                                                    fontSize: header5,
+                                                    text: "Update"),
+                                              ),
+                                              content: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  customTextFormField(
+                                                    "Vendor Name",
+                                                  ),
+                                                  TextFieldWidget1(
+                                                      keyboardtype:
+                                                          TextInputType.number,
+                                                      widgetcontroller:
+                                                          vendorName,
+                                                      fieldName: "Vendor Name",
+                                                      isPasswordField: false),
+                                                  SizedBox(
+                                                    height: screenHeight * .025,
+                                                  ),
+                                                  customTextFormField(
+                                                    "Milk Ltr",
+                                                  ),
+                                                  TextFieldWidget1(
+                                                      keyboardtype:
+                                                          TextInputType.number,
+                                                      widgetcontroller:
+                                                          amountSold,
+                                                      fieldName: "Milk Ltr",
+                                                      isPasswordField: false),
+                                                  SizedBox(
+                                                    height: screenHeight * .025,
+                                                  ),
+
+                                                  dateContainer(),
+                                                  // customTextFormField(
+                                                  //   "Date",
+                                                  // ),
+                                                  // TextFieldWidget1(
+                                                  //     widgetcontroller:
+                                                  //         datePicker,
+                                                  //     fieldName: "Date",
+                                                  //     isPasswordField: false),
+                                                  SizedBox(
+                                                    height: screenHeight * .025,
+                                                  ),
+                                                  Center(
+                                                    child: customRoundedButton(
+                                                        loading: false,
+                                                        title: "Update",
+                                                        on_Tap: () async {
+                                                          // print(record.sId);
+                                                          datePicker
+                                                              .text = DateFormat(
+                                                                  "EEE MMM dd yyyy")
+                                                              .format(
+                                                                  selectedDate);
+                                                          await Provider.of<MilkRecordProvider>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .upadetMilkSold(
+                                                                  id: record.id
+                                                                      .toString(),
+                                                                  vendorName:
+                                                                      vendorName
+                                                                          .text,
+                                                                  datePicker:
+                                                                      datePicker
+                                                                          .text,
+                                                                  amountSold: int.parse(
+                                                                      amountSold
+                                                                          .text),
+                                                                  totalPayment:
+                                                                      0,
+                                                                  context:
+                                                                      context);
+                                                          Navigator.pop(
+                                                              context);
+                                                        }),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    backgroundColor: Colors.blue,
+                                    icon: Icons.edit,
+                                    label: 'Edit',
+                                  ),
+                                ]),
+                            endActionPane: ActionPane(
                               motion: const DrawerMotion(),
                               children: [
                                 SlidableAction(
-                                  onPressed: (context) {
-                                    vendorName.text =
-                                        record.vendor!.name.toString();
-                                    amountSold.text =
-                                        record.amountSold.toString();
-                                    totalPayment.text =
-                                        record.totalPayment.toString();
-                                    datePicker.text = record.date.toString();
-
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return SingleChildScrollView(
-                                          child: AlertDialog(
-                                            title: Center(
-                                              child: Text1(
-                                                  fontColor: blackColor,
-                                                  fontSize: header5,
-                                                  text: "Update"),
-                                            ),
-                                            content: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                customTextFormField(
-                                                  "Vendor Name",
-                                                ),
-                                                TextFieldWidget1(
-                                                    keyboardtype:
-                                                        TextInputType.number,
-                                                    widgetcontroller:
-                                                        vendorName,
-                                                    fieldName: "Vendor Name",
-                                                    isPasswordField: false),
-                                                SizedBox(
-                                                  height: screenHeight * .025,
-                                                ),
-                                                customTextFormField(
-                                                  "Milk Ltr",
-                                                ),
-                                                TextFieldWidget1(
-                                                    keyboardtype:
-                                                        TextInputType.number,
-                                                    widgetcontroller:
-                                                        amountSold,
-                                                    fieldName: "Milk Ltr",
-                                                    isPasswordField: false),
-                                                SizedBox(
-                                                  height: screenHeight * .025,
-                                                ),
-
-                                                dateContainer(),
-                                                // customTextFormField(
-                                                //   "Date",
-                                                // ),
-                                                // TextFieldWidget1(
-                                                //     widgetcontroller:
-                                                //         datePicker,
-                                                //     fieldName: "Date",
-                                                //     isPasswordField: false),
-                                                SizedBox(
-                                                  height: screenHeight * .025,
-                                                ),
-                                                Center(
-                                                  child: customRoundedButton(
-                                                      loading: false,
-                                                      title: "Update",
-                                                      on_Tap: () async {
-                                                        // print(record.sId);
-                                                        datePicker
-                                                            .text = DateFormat(
-                                                                "EEE MMM dd yyyy")
-                                                            .format(
-                                                                selectedDate);
-                                                        await Provider.of<
-                                                                    MilkRecordProvider>(
-                                                                context,
-                                                                listen: false)
-                                                            .upadetMilkSold(
-                                                                id: record.id
-                                                                    .toString(),
-                                                                vendorName:
-                                                                    vendorName
-                                                                        .text,
-                                                                datePicker:
-                                                                    datePicker
-                                                                        .text,
-                                                                amountSold:
-                                                                    int.parse(
-                                                                        amountSold
-                                                                            .text),
-                                                                totalPayment: 0,
-                                                                context:
-                                                                    context);
-                                                        Navigator.pop(context);
-                                                      }),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    );
+                                  onPressed: (context) async {
+                                    await Provider.of<MilkRecordProvider>(
+                                            context,
+                                            listen: false)
+                                        .deleteMilkSold(
+                                            id: record.id.toString(),
+                                            context: context);
+                                    setState(() {});
                                   },
-                                  backgroundColor: Colors.blue,
-                                  icon: Icons.edit,
-                                  label: 'Edit',
-                                ),
-                              ]),
-                          endActionPane: ActionPane(
-                            motion: const DrawerMotion(),
-                            children: [
-                              SlidableAction(
-                                onPressed: (context) async {
-                                  await Provider.of<MilkRecordProvider>(context,
-                                          listen: false)
-                                      .deleteMilkSold(
-                                          id: record.id.toString(),
-                                          context: context);
-                                  setState(() {});
-                                },
-                                backgroundColor: Colors.red,
-                                icon: Icons.delete,
-                                label: 'Delete',
-                              )
-                            ],
-                          ),
-                          child: Container(
-                            width: double.infinity,
-                            height: 80,
-                            padding: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(8.0),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  blurRadius: 6,
-                                  offset: const Offset(2, 2),
-                                ),
+                                  backgroundColor: Colors.red,
+                                  icon: Icons.delete,
+                                  label: 'Delete',
+                                )
                               ],
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                // Vendor Name
-                                Row(
-                                  children: [
-                                    const CircleAvatar(
-                                      radius: 20,
-                                      backgroundImage: AssetImage(
-                                          "lib/assets/vendorMan.png"),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      record.vendor?.name ?? "Unknown",
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                  ],
-                                ),
+                            child: Container(
+                              width: double.infinity,
+                              height: 80,
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(8.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    blurRadius: 6,
+                                    offset: const Offset(2, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // Vendor Name
+                                  Row(
+                                    children: [
+                                      const CircleAvatar(
+                                        radius: 20,
+                                        backgroundImage: AssetImage(
+                                            "lib/assets/vendorMan.png"),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        record.vendor?.name ?? "Unknown",
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                    ],
+                                  ),
 
-                                // Amount Sold
-                                Row(
-                                  children: [
-                                    Text(
-                                      "${record.amountSold} ltr",
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Image.asset(
-                                      "lib/assets/milkSale.png",
-                                      width: 30,
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                  // Amount Sold
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "${record.amountSold} ltr",
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Image.asset(
+                                        "lib/assets/milkSale.png",
+                                        width: 30,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
